@@ -1,7 +1,5 @@
 class Account():
     def __init__(self, id, username, password, email):
-        #Crate DB table here if it doesn't exist yet
-        #Set parameters:
         self.id = id
         self.username = username
         self.password = password
@@ -12,11 +10,11 @@ class Account():
     def create(self):
         pass
 
-    #Static: read from the database based on arguments and return an instance of this class
+    #Static: read from the database based on arguments and return instances of the class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Account()
+    def read(**kwargs) -> list:
+        return [Account()]
 
     #Update the account in the DB
     def update(self, username = None, password = None, email = None):
@@ -40,8 +38,8 @@ class Student(Account):
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Student()
+    def read(**kwargs) -> list:
+        return [Student()]
 
     #Update the account in the DB
     def update(self, username = None, password = None, email = None, balance = None, status = None):
@@ -62,8 +60,8 @@ class Staff(Account):
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Staff()
+    def read(**kwargs) -> list:
+        return [Staff()]
 
     #Update the account in the DB
     def update(self, username = None, password = None, email = None):
@@ -90,8 +88,8 @@ class Item():
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Item()
+    def read(**kwargs) -> list:
+        return [Item()]
 
     #Update the account in the DB
     def update(self, name = None, description = None, quantity = None, category = None):
@@ -114,8 +112,8 @@ class Cart():
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Cart()
+    def read(**kwargs) -> list:
+        return [Cart()]
 
     #Update the account in the DB
     def update(self, studentId = None):
@@ -140,8 +138,8 @@ class CartItem():
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return CartItem()
+    def read(**kwargs) -> list:
+        return [CartItem()]
 
     #Update the account in the DB
     def update(self, quantity = None, cartId = None, itemId = None):
@@ -169,8 +167,8 @@ class Rental():
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return Rental()
+    def read(**kwargs) -> list:
+        return [Rental()]
 
     #Update the account in the DB
     def update(self, pickup_date_time = None, return_date_time = None, status = None, studentId = None):
@@ -195,8 +193,8 @@ class RentalItem():
     #Static: read from the database based on arguments and return an instance of this class
     #A separate function to build the SQL query from kwargs will be used
     @staticmethod
-    def read(**kwargs):
-        return RentalItem()
+    def read(**kwargs) -> list:
+        return [RentalItem()]
 
     #Update the account in the DB
     def update(self, status = None, itemId = None, rentalId = None):
