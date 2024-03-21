@@ -20,7 +20,7 @@ class Account():
     def update(self, username = None, password = None, email = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -45,7 +45,7 @@ class Student(Account):
     def update(self, username = None, password = None, email = None, balance = None, status = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -67,7 +67,7 @@ class Staff(Account):
     def update(self, username = None, password = None, email = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -95,7 +95,7 @@ class Item():
     def update(self, name = None, description = None, quantity = None, category = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -119,7 +119,7 @@ class Cart():
     def update(self, studentId = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -145,7 +145,7 @@ class CartItem():
     def update(self, quantity = None, cartId = None, itemId = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -174,7 +174,7 @@ class Rental():
     def update(self, pickup_date_time = None, return_date_time = None, status = None, studentId = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
 
@@ -200,6 +200,6 @@ class RentalItem():
     def update(self, status = None, itemId = None, rentalId = None):
         pass
 
-    #Archive the account
+    #Archive
     def delete(self):
         pass
