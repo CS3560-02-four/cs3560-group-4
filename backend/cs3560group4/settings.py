@@ -75,8 +75,12 @@ WSGI_APPLICATION = "cs3560group4.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "cs3650_group4",
+        "USER": "postgres",
+        "PASSWORD": "udemy",
+        "HOST": "192.168.50.45",
+        "PORT": "5432"
     }
 }
 
