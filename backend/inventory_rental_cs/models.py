@@ -49,29 +49,10 @@ class Student(Account):
     def delete(self):
         pass
 
-class Staff(Account):
-    #Constructor is inherited from Account
 
-    #Create an account in DB
-    #Uses this class instance's fields
-    def create(self):
-        pass
 
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [Staff()]
-
-    #Update the account in the DB
-    def update(self, username = None, password = None, email = None):
-        pass
-
-    #Archive
-    def delete(self):
-        pass
-
-    
+# EXAMPLE DAO DESIGN WITH ITEM CLASS    
+# THIS ITEM CLASS IS AN ENTITY AND ONLY HOLDS DATA    
 class Item():
     def __init__(self, id, name, descritpion, quantity, category):
         self.id = id
@@ -80,24 +61,8 @@ class Item():
         self.quantity = quantity
         self.category = category
 
-    #Create an account in DB
-    #Uses this class instance's fields
-    def create(self):
-        pass
 
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [Item()]
 
-    #Update the account in the DB
-    def update(self, name = None, description = None, quantity = None, category = None):
-        pass
-
-    #Archive
-    def delete(self):
-        pass
 
 class Cart():
     def __init__(self, id, studentId):
