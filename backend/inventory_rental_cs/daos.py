@@ -35,28 +35,25 @@ class ItemDao:
     #get item by keyword args, for example:
     #get_item(id=1)
     #get_item(name="laptop", category="Laptops")
-    #etc   
-    def get_item(**kwargs):
+    #etc
+    #returns list of matching item objects
+    def get_item(**kwargs) -> list[models.Item]:
         cursor = connection.cursor()
         query = "SELECT * FROM item WHERE "
         for i in kwargs.items():
             query += f"{i[0]}='{i[1]}' AND "
         query = query.strip("AND ")
         cursor.execute(query)
-        rows = cursor.fetchall()
-        columns = [c.name for c in cursor.description]
-        result = []
-        for row in rows:
-            result.append(dict(zip(columns, row)))
+        rows = cursor.fetchall() #returns list of tuples
+        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
         return result
     
     #get all items
-    def get_all_items():
+    #returns list of item objects
+    def get_all_items() -> list[models.Item]:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM item")
         rows = cursor.fetchall()
-        columns = [c.name for c in cursor.description]
-        result = []
-        for row in rows:
-            result.append(dict(zip(columns, row)))
+        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
         return result
+        

@@ -4,12 +4,12 @@ from . import daos, models
 
 # Create your views here.
 
-#test api view, return Json with all items in category Laptops
 def test(request):
     data = daos.ItemDao.get_item(category="Laptops")
-    return JsonResponse(data, safe=False)
+    print(data)
+    return HttpResponse(data)
 
-#test, returns Json with all items
 def test2(request):
     data = daos.ItemDao.get_all_items()
-    return JsonResponse(data, safe=False)
+    print(data)
+    return HttpResponse(data)
