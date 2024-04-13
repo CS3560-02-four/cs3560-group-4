@@ -57,3 +57,35 @@ class ItemDao:
         result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
         return result
         
+#DAO for CartItem
+class CartItemDao:
+    #insert CartItem into db
+    def insert_cart_item(cart_item: models.CartItem):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO cart_item (cart_item_id, item_id, quantity, account_id)\
+                       VALUES ({cart_item.id},{cart_item.item_id},{cart_item.quantity},{cart_item.account_id})")
+        
+    #only update quantity
+    #all other attributes of CartItem are its id and foreign keys
+    def update_cart_item_quantity(cart_item_id, new_quantity):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE cart_item\
+                       SET quantity={new_quantity}\
+                        WHERE cart_item_id={cart_item_id}")
+        
+    def delete_cart_item(card_item_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM cart_item\
+                       WHERE cart_item_id={card_item_id}")
+        
+    def get_cart_item(**kwargs) -> list[models.CartItem]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM card_item WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+        query = query.strip("AND ")
+        cursor.execute(query)
+        rows = cursor.fetchall() #returns list of tuples
+        result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
+        return result
+    

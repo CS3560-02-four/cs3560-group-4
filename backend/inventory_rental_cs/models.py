@@ -24,10 +24,10 @@ class Item():
 
 
 class CartItem():
-    def __init__(self, id, item_id, student_id, quantity):
+    def __init__(self, id, item_id, account_id, quantity):
         self.id = id
         self.item_id = item_id
-        self.student_id = student_id
+        self.account_id = account_id
         self.quantity = quantity
 
 
