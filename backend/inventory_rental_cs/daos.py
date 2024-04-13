@@ -91,7 +91,7 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
-    #specific methods: add cart item for student or get all of a student's cart items
+    #special methods: add cart item for student or get all of a student's cart items
     #get cart items associated with a student account
     
     #add specified item to the cart of the specified student
