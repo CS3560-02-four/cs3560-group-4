@@ -62,8 +62,8 @@ class CartItemDao:
     #insert CartItem into db
     def insert_cart_item(cart_item: models.CartItem):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO cart_item (cart_item_id, item_id, quantity, account_id)\
-                       VALUES ({cart_item.id},{cart_item.item_id},{cart_item.quantity},{cart_item.account_id})")
+        cursor.execute(f"INSERT INTO cart_item (item_id, quantity, account_id)\
+                       VALUES ({cart_item.item_id},{cart_item.quantity},{cart_item.account_id})")
         
     #only update quantity
     #all other attributes of CartItem are its id and foreign keys
@@ -73,11 +73,13 @@ class CartItemDao:
                        SET quantity={new_quantity}\
                         WHERE cart_item_id={cart_item_id}")
         
+    #delete cart item by id
     def delete_cart_item(card_item_id):
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM cart_item\
                        WHERE cart_item_id={card_item_id}")
         
+    #get cart item by keyword args - general READ method
     def get_cart_item(**kwargs) -> list[models.CartItem]:
         cursor = connection.cursor()
         query = "SELECT * FROM card_item WHERE "
@@ -86,6 +88,23 @@ class CartItemDao:
         query = query.strip("AND ")
         cursor.execute(query)
         rows = cursor.fetchall() #returns list of tuples
+        result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
+        return result
+    
+    #specific methods: add cart item for student or get all of a student's cart items
+    #get cart items associated with a student account
+    
+    #add specified item to the cart of the specified student
+    def add_item_to_cart(account_id, item: models.Item, quantity=1):
+        cart_item = models.CartItem(0, item.id, account_id, quantity)
+        CartItemDao.insert_cart_item(cart_item)
+    
+    #get all cart items assigned to the specified account
+    def get_student_cart_items(account_id) -> list[models.CartItem]:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM cart_item\
+                       WHERE account_id={account_id}")
+        rows = cursor.fetchall()
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
