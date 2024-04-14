@@ -91,26 +91,3 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
-    #special methods: 
-    #add cart item for student or get all of a student's cart items
-    #get cart items associated with a student account
-    #get item info
-    
-    #add specified item to the cart of the specified student
-    def add_item_to_cart(account_id, item: models.Item, quantity=1):
-        cart_item = models.CartItem(0, item.id, account_id, quantity)
-        CartItemDao.insert_cart_item(cart_item)
-    
-    #get all cart items assigned to the specified account
-    def get_student_cart_items(account_id) -> list[models.CartItem]:
-        cursor = connection.cursor()
-        cursor.execute(f"SELECT * FROM cart_item\
-                       WHERE account_id={account_id}")
-        rows = cursor.fetchall()
-        result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
-        return result
-    
-    #get details on specified cart item
-    #returns corresponding Item
-    def get_item_info(cart_item: models.CartItem) -> models.Item:
-        return ItemDao.get_item(item_id=cart_item.item_id)[0]
