@@ -13,3 +13,13 @@ def test2(request):
     data = daos.ItemDao.get_all_items()
     print(data)
     return HttpResponse(data)
+
+def test3(request):
+    cart_item = models.CartItem(0, 1, 6, 1)
+    daos.CartItemDao.insert_cart_item(cart_item)
+    return HttpResponse()
+
+def test4(request):
+    cart_item = models.CartItem(0, 1, 6, 1)
+    item = daos.CartItemDao.get_item_info(cart_item)
+    return HttpResponse(item.name)

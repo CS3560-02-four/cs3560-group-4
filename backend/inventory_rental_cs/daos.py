@@ -91,8 +91,10 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
-    #special methods: add cart item for student or get all of a student's cart items
+    #special methods: 
+    #add cart item for student or get all of a student's cart items
     #get cart items associated with a student account
+    #get item info
     
     #add specified item to the cart of the specified student
     def add_item_to_cart(account_id, item: models.Item, quantity=1):
@@ -108,3 +110,7 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
+    #get details on specified cart item
+    #returns corresponding Item
+    def get_item_info(cart_item: models.CartItem) -> models.Item:
+        return ItemDao.get_item(item_id=cart_item.item_id)[0]
