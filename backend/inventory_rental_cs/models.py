@@ -43,22 +43,22 @@ class Rental():
 
     #Create an account in DB
     #Uses this class instance's fields
-    def create(self):
-        pass
+    # def create(self):
+    #     pass
 
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [Rental()]
+    # #Static: read from the database based on arguments and return an instance of this class
+    # #A separate function to build the SQL query from kwargs will be used
+    # @staticmethod
+    # def read(**kwargs) -> list:
+    #     return [Rental()]
 
-    #Update the account in the DB
-    def update(self, pickup_date_time = None, return_date_time = None, status = None, studentId = None):
-        pass
+    # #Update the account in the DB
+    # def update(self, pickup_date_time = None, return_date_time = None, status = None, studentId = None):
+    #     pass
 
-    #Archive
-    def delete(self):
-        pass
+    # #Archive
+    # def delete(self):
+    #     pass
 
 class RentalItem():
     def __init__(self, id, status, itemId, rentalId):

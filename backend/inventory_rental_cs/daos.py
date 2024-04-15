@@ -70,7 +70,7 @@ class CartItemDao:
     def update_cart_item_quantity(cart_item_id, new_quantity):
         cursor = connection.cursor()
         cursor.execute(f"UPDATE cart_item\
-                       SET quantity={new_quantity}\
+                        SET quantity={new_quantity}\
                         WHERE cart_item_id={cart_item_id}")
         
     #delete cart item by id
@@ -91,3 +91,29 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
+# DAO for Rental Appointment/Reservation
+class RentalDao:
+    # Make Appointment use case
+    # rental: Instance of the Rental Model Class
+    def insert_rental(rental: models.Rental):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO rental (rental_id, status, pickup_datetime, return_datetime, account_id) \
+                        VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.studentId})")
+
+    # Confirm Pickup and Confirm Return use cases (pending, picked up, returned)
+    # rental_id: Specific database rental appointment id
+    # status: Rental appointment new status
+    def update_rental_status(rental_id, status):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental\
+                        SET status='{status}'\
+                        WHERE rental_id={rental_id}")
+        
+    # Cancel Reservation use case
+    # rental_id: Specific database rental appointment id
+    def delete_rental(rental_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM rental\
+                        WHERE rental_id = {rental_id}")
+        
+# TODO: Rental Item and its functions -Tony
