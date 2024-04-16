@@ -23,3 +23,9 @@ def test4(request):
     cart_item = models.CartItem(0, 1, 6, 1)
     item = daos.CartItemDao.get_item_info(cart_item)
     return HttpResponse(item.name)
+
+def test5(request):
+    daos.ItemDao.delete_item(22)
+    daos.ItemDao.delete_item(23)
+    daos.ItemDao.delete_item(24)
+    return HttpResponse()

@@ -79,7 +79,7 @@ DATABASES = {
         "NAME": "cs3560_group4",
         "USER": "postgres",
         "PASSWORD": "udemy",
-        "HOST": "192.168.50.45",
+        "HOST": "172.20.10.4",
         "PORT": "5432"
     }
 }

@@ -7,7 +7,7 @@ class ItemDao:
     def insert_item(item: models.Item):
         cursor = connection.cursor()
         cursor.execute(f"INSERT INTO item (name, description, quantity, category)\
-                        VALUES ({item.name},{item.description},{item.quantity},{item.category})")
+                        VALUES ('{item.name}','{item.description}',{item.quantity},'{item.category}')")
     
     #add new item, pass instance of Item class
     def update_item(item: models.Item):
@@ -62,8 +62,8 @@ class CartItemDao:
     #insert CartItem into db
     def insert_cart_item(cart_item: models.CartItem):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO cart_item (item_id, quantity, account_id)\
-                       VALUES ({cart_item.item_id},{cart_item.quantity},{cart_item.account_id})")
+        cursor.execute(f"INSERT INTO cart_item (quantity, account_id)\
+                       VALUES ({cart_item.quantity},{cart_item.account_id})")
         
     #only update quantity
     #all other attributes of CartItem are its id and foreign keys
