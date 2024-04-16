@@ -7,5 +7,6 @@ urlpatterns = [
     path("allitems/", views.test2),
     path("insertcartitem/", views.test3),
     path("cartiteminfo/", views.test4),
-    path("insertitem/", views.test5)
+    path("insertitem/", views.test5),
+    path("getaccount/", views.test5)
 ]

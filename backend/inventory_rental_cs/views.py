@@ -25,7 +25,6 @@ def test4(request):
     return HttpResponse(item.name)
 
 def test5(request):
-    daos.ItemDao.delete_item(22)
-    daos.ItemDao.delete_item(23)
-    daos.ItemDao.delete_item(24)
-    return HttpResponse()
+    data = daos.AccountDao.get_account(first_name='Milosz')
+    print(data[0].username)
+    return HttpResponse(data)

@@ -1,6 +1,12 @@
 from django.db import connection
 from . import models
 
+#NOTE: when using the INSERT methods and passing an object instance into them,
+#it doesn't matter what ID you give the object - ID's are generated automatically
+#by the DB. Every time you create an instance of a class to insert it into the DB,
+#just set the id to 0. I would put 0 as a default value but python doesn't let me 
+#since id is the first parameter of all constructors
+
 #EXAMPLE DATA ACCESS OBJECT FOR ITEM - INCLUDES ALL CRUD METHODS
 class ItemDao:
     #add new item, pass instance of Item class
@@ -91,3 +97,65 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
+
+# DAO for Account class
+class AccountDao:
+    #Insert new Account into DB
+    def insert_account(account: models.Account):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO account (username,passoword,email,first_name,last_name,address,admin,student,status,balance)\
+                       VALUES ('{account.username}','{account.password}','{account.email}','{account.first_name}','{account.last_name}','{account.address}',{account.admin},{account.student},'{account.status}',{account.balance}")
+
+    #General UPDATE method for Account
+    #account - instance of Account class
+    #updates all attributes in the DB of the account whose ID matches the object's ID
+    def update_account(account: models.Account):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE account\
+                       SET username='{account.username}'\
+                       SET password='{account.password}'\
+                       SET email='{account.email}'\
+                       SET first_name='{account.first_name}'\
+                       SET last_name='{account.last_name}'\
+                       SET address='{account.address}'\
+                       SET admin={account.admin}\
+                       SET student={account.student}\
+                       SET status='{account.status}'\
+                       SET balance={account.balance}\
+                       WHERE account_id={account.id}")
+        
+    #Quickly update account balance
+    #Pass account ID and new balance as arguments
+    def update_account_balance(account_id, new_balance):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE account\
+                       SET balance={new_balance}\
+                        WHERE id={account_id}")
+        
+    #Quickly update account status
+    #Pass account ID and new status as arguments
+    def update_account_status(account_id, new_status):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE account\
+                       SET status={new_status}\
+                        WHERE id={account_id}")
+        
+    #DELETE an account
+    #find by ID - passed as argument
+    def delete_account(account_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM account\
+                       WHERE id={account_id}")
+        
+    #SELECT account based on keyword args
+    #returns list of Account objects which were found by the query
+    def get_account(**kwargs) -> list[models.Account]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM account WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+        query = query.strip("AND ")
+        cursor.execute(query)
+        rows = cursor.fetchall() #returns list of tuples
+        result = [models.Account(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10]) for r in rows]
+        return result
