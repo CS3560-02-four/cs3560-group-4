@@ -93,27 +93,56 @@ class CartItemDao:
     
 # DAO for Rental Appointment/Reservation
 class RentalDao:
-    # Make Appointment use case
+    # Make Appointment use case - Create
     # rental: Instance of the Rental Model Class
     def insert_rental(rental: models.Rental):
         cursor = connection.cursor()
         cursor.execute(f"INSERT INTO rental (rental_id, status, pickup_datetime, return_datetime, account_id) \
-                        VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.studentId})")
+                        VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.student_id})")
 
-    # Confirm Pickup and Confirm Return use cases (pending, picked up, returned)
+    # TODO: Read rental
+
+    # Confirm Pickup and Confirm Return use cases (pending, picked up, returned) - Update
     # rental_id: Specific database rental appointment id
     # status: Rental appointment new status
+    # Question for team: Would we want to implement the ability to change the pickup/return date? Or just keep it simple and don't?
     def update_rental_status(rental_id, status):
         cursor = connection.cursor()
         cursor.execute(f"UPDATE rental\
                         SET status='{status}'\
                         WHERE rental_id={rental_id}")
         
-    # Cancel Reservation use case
+    # Cancel Reservation use case - Delete
     # rental_id: Specific database rental appointment id
     def delete_rental(rental_id):
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM rental\
-                        WHERE rental_id = {rental_id}")
+                        WHERE rental_id={rental_id}")
+
+# DAO for Rental Items
+class RentalItemDao:
+
+    # Insert a rental item into a rental appointment - Create
+    # rental_item: Instance of the RentalItem Model Class
+    def insert_rental_item(rental_item: models.RentalItem):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO rental_item (rental_item_id, rental_id, item_id, status)\
+                        VALUES ({rental_item.id},{rental_item.rental_id},{rental_item.item_id},'{rental_item.status}')")
         
-# TODO: Rental Item and its functions -Tony
+    # TODO: Read rental_items
+
+    # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
+    # since we'd want to keep track of the status of individual items?)
+    # rental_item_id: ID of rental item to be updated
+    # status: New status of the rental item (good or damaged)
+    def update_rental_item_status(rental_item_id, status):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental_item\
+                        SET status='{status}'\
+                        WHERE rental_item_id={rental_item_id}")
+    
+    # Remove a rental item from the rental appointment - Delete
+    def delete_rental_item(rental_item_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM rental_item\
+                        WHERE rental_item_id={rental_item_id}")

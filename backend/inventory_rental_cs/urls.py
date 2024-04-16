@@ -9,6 +9,9 @@ urlpatterns = [
     path("cartiteminfo/", views.test4),
     path("rentalInsert/", views.test5),
     path("rentalUpdate/", views.test6),
-    path("rentalDelete/", views.test7)
+    path("rentalDelete/", views.test7),
+    path("rentalItemInsert/", views.test8),
+    path("rentalItemUpdate/", views.test9),
+    path("rentalItemDelete/", views.test10)
 
 ]
