@@ -132,7 +132,7 @@ class RentalItemDao:
     # TODO: Read rental_items
 
     # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
-    # since we'd want to keep track of the status of individual items?)
+    # since we'd want to keep track of the status of individual items??)
     # rental_item_id: ID of rental item to be updated
     # status: New status of the rental item (good or damaged)
     def update_rental_item_status(rental_item_id, status):
