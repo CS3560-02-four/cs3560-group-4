@@ -32,56 +32,17 @@ class CartItem():
 
 
 class Rental():
-    #Comment on datetimes: we will use a date time object instead of a raw string, and use a toString(or whatever it's called)
-    #method so that every date time has the same format in the DB
-    def __init__(self, id, pickup_date_time, return_date_time, status, studentId):
+    def __init__(self, id, status, pickup_date_time, return_date_time, student_id):
         self.id = id
+        self.status = status
         self.pickup_date_time = pickup_date_time
         self.return_date_time = return_date_time
-        self.status = status
-        self.studentId = studentId
+        self.student_id = student_id
 
-    #Create an account in DB
-    #Uses this class instance's fields
-    def create(self):
-        pass
-
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [Rental()]
-
-    #Update the account in the DB
-    def update(self, pickup_date_time = None, return_date_time = None, status = None, studentId = None):
-        pass
-
-    #Archive
-    def delete(self):
-        pass
 
 class RentalItem():
-    def __init__(self, id, status, itemId, rentalId):
+    def __init__(self, id, rental_id, item_id, status):
         self.id = id
+        self.rental_id = rental_id
+        self.item_id = item_id
         self.status = status
-        self.itemId = itemId
-        self.rentalId = rentalId
-
-    #Create an account in DB
-    #Uses this class instance's fields
-    def create(self):
-        pass
-
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [RentalItem()]
-
-    #Update the account in the DB
-    def update(self, status = None, itemId = None, rentalId = None):
-        pass
-
-    #Archive
-    def delete(self):
-        pass

@@ -76,7 +76,7 @@ class CartItemDao:
     def update_cart_item_quantity(cart_item_id, new_quantity):
         cursor = connection.cursor()
         cursor.execute(f"UPDATE cart_item\
-                       SET quantity={new_quantity}\
+                        SET quantity={new_quantity}\
                         WHERE cart_item_id={cart_item_id}")
         
     #delete cart item by id
@@ -97,7 +97,6 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
-
 # DAO for Account class
 class AccountDao:
     #Insert new Account into DB
@@ -159,3 +158,103 @@ class AccountDao:
         rows = cursor.fetchall() #returns list of tuples
         result = [models.Account(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10]) for r in rows]
         return result
+
+# DAO for Rental Appointment/Reservation
+class RentalDao:
+    # Make Appointment use case - Create
+    # rental: Instance of the Rental Model Class
+    def insert_rental(rental: models.Rental):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO rental (rental_id, status, pickup_datetime, return_datetime, account_id) \
+                        VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.student_id})")
+
+    # Get Rental by keyword args, for example:
+    # get_rental(rental_id=1)
+    # get_rental(status="pending", account_id="6")
+    # Returns a list of matching Rental objects - Read
+    def get_rental(**kwargs) -> list[models.Rental]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM rental WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+            query = query.strip("AND ")
+            cursor.execute(query)
+            rows  = cursor.fetchall()
+            result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+            return result
+        
+    # Get all Rentals
+    # Returns a list of Rental objects - Read
+    def get_all_rentals() -> list[models.Rental]:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM rental")
+        rows = cursor.fetchall()
+        result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        return result
+
+    # Confirm Pickup and Confirm Return use cases (pending, picked up, returned) - Update
+    # rental_id: Specific database rental appointment id
+    # status: Rental appointment new status
+    # Question for team: Would we want to implement the ability to change the pickup/return date? Or just keep it simple and don't?
+    def update_rental_status(rental_id, status):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental\
+                        SET status='{status}'\
+                        WHERE rental_id={rental_id}")
+        
+    # Cancel Reservation use case - Delete
+    # rental_id: Specific database rental appointment id
+    def delete_rental(rental_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM rental\
+                        WHERE rental_id={rental_id}")
+
+# DAO for Rental Items
+class RentalItemDao:
+
+    # Insert a rental item into a rental appointment - Create
+    # rental_item: Instance of the RentalItem Model Class
+    def insert_rental_item(rental_item: models.RentalItem):
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO rental_item (rental_item_id, rental_id, item_id, status)\
+                        VALUES ({rental_item.id},{rental_item.rental_id},{rental_item.item_id},'{rental_item.status}')")
+    
+    # Get Rental Item by keyword args, for example:
+    # get_rental_item(rental_item_id=1)
+    # get_rental_item(status="good", rental_id="1")
+    # Returns a list of matching Rental Item objects - Read
+    def get_rental_item(**kwargs) -> list[models.RentalItem]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM rental_item WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+            query = query.strip("AND ")
+            cursor.execute(query)
+            rows  = cursor.fetchall()
+            result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+            return result
+        
+    # Get all Rentals Items
+    # Returns a list of Rental Item objects - Read
+    def get_all_rental_items() -> list[models.RentalItem]:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM rental_item")
+        rows = cursor.fetchall()
+        result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+        return result
+    
+    # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
+    # since we'd want to keep track of the status of individual items??)
+    # rental_item_id: ID of rental item to be updated
+    # status: New status of the rental item (good or damaged)
+    def update_rental_item_status(rental_item_id, status):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental_item\
+                        SET status='{status}'\
+                        WHERE rental_item_id={rental_item_id}")
+    
+    # Remove a rental item from the rental appointment - Delete
+    def delete_rental_item(rental_item_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM rental_item\
+                        WHERE rental_item_id={rental_item_id}")
