@@ -3,6 +3,7 @@ import pg from "pg";
 
 const app = express();
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 const db = new pg.Client({
     user: "postgres",
@@ -13,7 +14,7 @@ const db = new pg.Client({
 });
 await db.connect();
 
-app.get("/", async (req, res) => {
+app.post("/", async (req, res) => {
     const query = req.body.query;
     const result = await db.query(query);
     res.send(result.rows);

@@ -1,15 +1,28 @@
-'use client';
+'use server';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { fetchAllItems } from "../lib/dataFetching";
+import ItemField from "../ui/ItemField";
+import { Item } from "../lib/interfaces";
 
-export default function Page() {
-    const pathname = usePathname();
+export default async function Page() {
+    const itemData = await fetchAllItems();
+    const items = itemData.map((data: any) => {
+        const item : Item = {
+            id: data.item_id,
+            name: data.name,
+            description: data.description,
+            quantity: data.quantity,
+            category: data.category
+        };
+        return item;
+    });
 
     return (
-        <div>
+        <div className="flex flex-col gap-4">
             <h1>Cal Poly Pomona Rental Service - CS Department</h1>
-            <Link href={`${pathname}/item`}>Test item link</Link>
+            {items.map((item: Item) => {
+                return <ItemField item={item} />
+            })}
         </div>
     );
 }
