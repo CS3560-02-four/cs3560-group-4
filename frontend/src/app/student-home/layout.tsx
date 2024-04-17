@@ -1,16 +1,14 @@
-import Link from "next/link";
-import Cart from "../ui/Cart";
+'use server';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+import Navbar from "../ui/Navbar";
+import { fetchCartItems } from "../lib/data";
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    const cartItems = await fetchCartItems(3);
+
     return (
         <div>
-            <div className="bg-green-950 text-white h-[100px] flex justify-between">
-                <Link href="/student-home" className="text-6xl">Cal Poly Pomona</Link>
-                <div className="flex gap-10">
-                    <h3 className="text-4xl">User</h3>
-                    <Cart />
-                </div>
-            </div>
+            <Navbar cartItems={cartItems} />
             {children}
         </div>
     );

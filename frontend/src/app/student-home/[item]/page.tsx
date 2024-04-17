@@ -1,17 +1,9 @@
 'use server';
 
-import { fetchItem } from "@/app/lib/dataFetching";
-import { Item } from "@/app/lib/interfaces";
+import { fetchItem } from "@/app/lib/data";
 
 export default async function Page({ params }: { params: { item: number } }) {
-    const itemData = await fetchItem(params.item);
-    const item : Item = {
-        id: itemData[0].item_id,
-        name: itemData[0].name,
-        description: itemData[0].description,
-        quantity: itemData[0].quantity,
-        category: itemData[0].category
-    };
+    const item = await fetchItem(params.item);
 
     return (
         <div>
