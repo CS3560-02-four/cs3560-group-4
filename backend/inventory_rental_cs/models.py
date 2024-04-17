@@ -32,36 +32,17 @@ class CartItem():
 
 
 class Rental():
-    def __init__(self, id, pickup_date_time, return_date_time, status, student_id):
+    def __init__(self, id, status, pickup_date_time, return_date_time, student_id):
         self.id = id
+        self.status = status
         self.pickup_date_time = pickup_date_time
         self.return_date_time = return_date_time
-        self.status = status
         self.student_id = student_id
 
 
 class RentalItem():
-    def __init__(self, id, status, item_id, rental_id):
+    def __init__(self, id, rental_id, item_id, status):
         self.id = id
-        self.status = status
-        self.item_id = item_id
         self.rental_id = rental_id
-
-    #Create an account in DB
-    #Uses this class instance's fields
-    def create(self):
-        pass
-
-    #Static: read from the database based on arguments and return an instance of this class
-    #A separate function to build the SQL query from kwargs will be used
-    @staticmethod
-    def read(**kwargs) -> list:
-        return [RentalItem()]
-
-    #Update the account in the DB
-    def update(self, status = None, itemId = None, rentalId = None):
-        pass
-
-    #Archive
-    def delete(self):
-        pass
+        self.item_id = item_id
+        self.status = status

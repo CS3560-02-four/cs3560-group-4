@@ -100,7 +100,29 @@ class RentalDao:
         cursor.execute(f"INSERT INTO rental (rental_id, status, pickup_datetime, return_datetime, account_id) \
                         VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.student_id})")
 
-    # TODO: Read rental
+    # Get Rental by keyword args, for example:
+    # get_rental(rental_id=1)
+    # get_rental(status="pending", account_id="6")
+    # Returns a list of matching Rental objects - Read
+    def get_rental(**kwargs) -> list[models.Rental]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM rental WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+            query = query.strip("AND ")
+            cursor.execute(query)
+            rows  = cursor.fetchall()
+            result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+            return result
+        
+    # Get all Rentals
+    # Returns a list of Rental objects - Read
+    def get_all_rentals() -> list[models.Rental]:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM rental")
+        rows = cursor.fetchall()
+        result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        return result
 
     # Confirm Pickup and Confirm Return use cases (pending, picked up, returned) - Update
     # rental_id: Specific database rental appointment id
@@ -128,9 +150,31 @@ class RentalItemDao:
         cursor = connection.cursor()
         cursor.execute(f"INSERT INTO rental_item (rental_item_id, rental_id, item_id, status)\
                         VALUES ({rental_item.id},{rental_item.rental_id},{rental_item.item_id},'{rental_item.status}')")
+    
+    # Get Rental Item by keyword args, for example:
+    # get_rental_item(rental_item_id=1)
+    # get_rental_item(status="good", rental_id="1")
+    # Returns a list of matching Rental Item objects - Read
+    def get_rental_item(**kwargs) -> list[models.RentalItem]:
+        cursor = connection.cursor()
+        query = "SELECT * FROM rental_item WHERE "
+        for i in kwargs.items():
+            query += f"{i[0]}='{i[1]}' AND "
+            query = query.strip("AND ")
+            cursor.execute(query)
+            rows  = cursor.fetchall()
+            result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+            return result
         
-    # TODO: Read rental_items
-
+    # Get all Rentals Items
+    # Returns a list of Rental Item objects - Read
+    def get_all_rental_items() -> list[models.RentalItem]:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM rental_item")
+        rows = cursor.fetchall()
+        result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+        return result
+    
     # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
     # since we'd want to keep track of the status of individual items??)
     # rental_item_id: ID of rental item to be updated

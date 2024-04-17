@@ -51,7 +51,7 @@ def test7(request):
 
 # Testing rental item insert
 def test8(request):
-    rental_item = models.RentalItem(0, "good", 1, 1)
+    rental_item = models.RentalItem(1, "damaged", 2, 1)
     daos.RentalItemDao.insert_rental_item(rental_item)
     return HttpResponse()
 
@@ -63,4 +63,16 @@ def test9(request):
 # Testing rental item delete
 def test10(request):
     daos.RentalItemDao.delete_rental_item(0)
+    return HttpResponse()
+
+def test11(request):
+    daos.RentalDao.get_all_rentals()
+    return HttpResponse()
+
+def test12(request):
+    daos.RentalItemDao.get_rental_item(rental_item_id=0)
+    return HttpResponse()
+
+def test13(request):
+    daos.RentalItemDao.get_all_rental_items()
     return HttpResponse()

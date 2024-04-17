@@ -12,6 +12,7 @@ urlpatterns = [
     path("rentalDelete/", views.test7),
     path("rentalItemInsert/", views.test8),
     path("rentalItemUpdate/", views.test9),
-    path("rentalItemDelete/", views.test10)
+    path("rentalItemDelete/", views.test10),
+    path("getRental/", views.test13)
 
 ]
