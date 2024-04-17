@@ -1,7 +1,8 @@
-export default function Home() {
+import Link from "next/link";
+
+//This page will be used as the login page implemented later, for now just a link redirecting to the homepage
+export default function Page() {
   return (
-    <main>
-        <h1>Cal Poly Pomona CS Rental Service</h1>
-    </main>
+    <Link href="./student-home">Home Page</Link>
   );
 }
