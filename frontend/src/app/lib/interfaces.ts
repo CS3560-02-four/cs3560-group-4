@@ -37,3 +37,9 @@ export interface Account {
     cartItems: Array<CartItem> | [];
     rentals: Array<Rental> | [];
 }
+
+export interface FormState {
+    message?: string;
+    error?: string;
+    other?: {};
+}

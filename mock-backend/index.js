@@ -25,16 +25,14 @@ app.post("/login", async (req, res) => {
     const password = req.body.password;
     const dbResponse = await db.query("SELECT password, account_id FROM account WHERE username = $1", [username]);
 
-    if (dbResponse.rows[0].password === password) {
+    if (dbResponse.rows[0].password === password)
         res.json({
-            accountId: dbResponse.rows[0].accountId
-        });
-    }
-    else {
+            accountId: dbResponse.rows[0].account_id
+        })
+    else
         res.json({
-            accountId: -1
-        });
-    }
+            error: "Failed to authenticate user."
+        })
 });
 
 app.listen(8000, () => {

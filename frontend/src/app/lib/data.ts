@@ -18,7 +18,7 @@ export async function fetchAllItems() {
     const itemData = await response.json();
 
     const items = itemData.map((data: any) => {
-        const item : Item = {
+        const item: Item = {
             id: data.item_id,
             name: data.name,
             description: data.description,
@@ -41,7 +41,7 @@ export async function fetchItem(itemId: number) {
     });
     const itemData = await response.json();
 
-    const item : Item = {
+    const item: Item = {
         id: itemData[0].item_id,
         name: itemData[0].name,
         description: itemData[0].description,
@@ -81,22 +81,16 @@ export async function fetchCartItems(accountId: number) {
 
 import { redirect } from "next/navigation";
 export async function authenticateUser(username: string, password: string) {
-    try {
-        const response = await fetch("http://localhost:8000/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        });
-        const responseData = await response.json();
-        return responseData.accountId;
-    }
-    catch (error) {
-        console.log("Error occured while fetching account data.");
-        redirect("/");
-    }
+    const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    });
+    const responseData = await response.json();
+    return responseData;
 }

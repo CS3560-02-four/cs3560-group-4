@@ -1,28 +1,23 @@
 'use client';
 
-import { authenticateUser } from "../lib/data";
-import { redirect } from "next/navigation";
+import { useFormState, useFormStatus } from "react-dom";
+import { authenticateUserAction } from "../lib/actions";
 
 export default function StudentLogin() {
-    async function authenticateUserAction(formData: FormData) {
-        const username = formData.get("username");
-        const password = formData.get("password");
+    const status = useFormStatus();
+    const [state, action] = useFormState(authenticateUserAction, { message: "", error: "" });
 
-        if (username === null || password === null) {
-            throw new Error("Username or password is missing.");
-        }
-
-        const accountId = await authenticateUser(username.toString(), password.toString());
-
-        if (accountId > -1) {
-            redirect(`/student-home/${accountId}`);
-        }
-
-    }
+    const inputFieldStyle = {
+        border: state.error ? "2px solid red" : "2px solid black",
+        color: state.error ? "red" : "black"
+    };
 
     return (
-        <form action="">
-
+        <form action={action}>
+            <input type="text" placeholder="Username" name="username" style={inputFieldStyle} />
+            <input type="password" placeholder="Password" name="password" style={inputFieldStyle} />
+            {state.error ? <h4>{state.error}</h4> : null}
+            <input type="submit" value={status.pending ? "Logging in" : "Login"} />
         </form>
     );
 }
