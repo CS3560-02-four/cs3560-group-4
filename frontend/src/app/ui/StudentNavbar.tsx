@@ -8,7 +8,7 @@ import AccountPopup from "./AccountPopup";
 import { CartItem } from "../lib/interfaces";
 import { useState } from "react";
 
-export default function Navbar({ cartItems } : { cartItems: Array<CartItem> }) {
+export default function StudentNavbar({ cartItems } : { cartItems: Array<CartItem> }) {
     const [cartOpen, setCartOpen] = useState(false);
     const [accountPopupOpen, setAccountPopupOpen] = useState(false);
 

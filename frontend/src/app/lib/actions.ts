@@ -18,8 +18,7 @@ export async function authenticateUserAction(formState: FormState, formData: For
     const response = await authenticateUser(username.toString(), password.toString());
     if (response.accountId) {
         createSession(response.accountId);
-        // redirect(`/student/${response.accountId}`);
-        redirect("/student-home");
+        redirect("/student");
     }
     else {
         return {

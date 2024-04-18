@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function Page() {
   return (
     <div>
-      <Link href="/student">Login as Student</Link>
+      <Link href="/student-login">Login as Student</Link>
       <Link href="">Login as Admin</Link>
     </div>
   );

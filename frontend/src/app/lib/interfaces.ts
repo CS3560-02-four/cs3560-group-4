@@ -41,5 +41,5 @@ export interface Account {
 export interface FormState {
     message?: string;
     error?: string;
-    other?: {};
+    options?: {};
 }

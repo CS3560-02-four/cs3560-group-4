@@ -79,7 +79,6 @@ export async function fetchCartItems(accountId: number) {
     return cartItems;
 }
 
-import { redirect } from "next/navigation";
 export async function authenticateUser(username: string, password: string) {
     const response = await fetch("http://localhost:8000/login", {
         method: "POST",

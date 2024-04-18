@@ -1,6 +1,6 @@
 'use client';
 
-import Navbar from "../ui/Navbar";
+import Navbar from "../ui/StudentNavbar";
 import { CartItem } from "../lib/interfaces";
 import { useContext, useEffect } from "react";
 import { userContext } from "../lib/contexts";
