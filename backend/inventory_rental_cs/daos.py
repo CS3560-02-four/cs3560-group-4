@@ -12,8 +12,8 @@ class ItemDao:
     #add new item, pass instance of Item class
     def insert_item(item: models.Item):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO item (name, description, quantity, category)\
-                        VALUES ('{item.name}','{item.description}',{item.quantity},'{item.category}')")
+        cursor.execute(f"INSERT INTO item (name, description, category)\
+                        VALUES ('{item.name}','{item.description}','{item.category}')")
     
     #add new item, pass instance of Item class
     def update_item(item: models.Item):
@@ -21,16 +21,8 @@ class ItemDao:
         cursor.execute(f"UPDATE item\
                        SET name = {item.name}\
                        SET description = {item.description}\
-                       SET quantity = {item.quantity}\
                        SET category = {item.category}\
                        WHERE item_id = {item.id}")
-        
-    #update item quantity by item_id and pass new quantity
-    def update_item_quantity(item_id, new_quantity):
-        cursor = connection.cursor()
-        cursor.execute(f"UPDATE item\
-                       SET quantity = {new_quantity}\
-                        WHERE item_id = {item_id}")
         
     #delete item by id
     def delete_item(item_id):
