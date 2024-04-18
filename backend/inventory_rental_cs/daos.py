@@ -43,7 +43,7 @@ class ItemDao:
         query = query.strip("AND ")
         cursor.execute(query)
         rows = cursor.fetchall() #returns list of tuples
-        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        result = [models.Item(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
     #get all items
@@ -52,7 +52,7 @@ class ItemDao:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM item")
         rows = cursor.fetchall()
-        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        result = [models.Item(r[0], r[1], r[2], r[3]) for r in rows]
         return result
         
 #DAO for CartItem
