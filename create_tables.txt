@@ -28,7 +28,6 @@ CREATE TABLE item (
     item_id SERIAL PRIMARY KEY,
     name VARCHAR(50),
     description VARCHAR(500),
-    quantity INTEGER,
     category VARCHAR(50)
 );
 
@@ -43,8 +42,8 @@ CREATE TABLE rental (
 );
 
 -- Create the 'rental_item' table
-CREATE TABLE rental_item (
-    rental_item_id SERIAL PRIMARY KEY,
+CREATE TABLE item_unit (
+    item_unit_id SERIAL PRIMARY KEY,
     rental_id INTEGER,
     item_id INTEGER,
     status VARCHAR(20),

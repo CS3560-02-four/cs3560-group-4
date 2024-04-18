@@ -77,15 +77,14 @@ WSGI_APPLICATION = "cs3560group4.wsgi.application"
 ### CHANGE TO YOUR pgAdmin user, password, and your own IP AFTER IMPORTING THE DB
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "cs3560_group4",
         "USER": "postgres",
         "PASSWORD": "udemy",
-        "HOST": "192.168.50.45",
+        "HOST": "192.168.50.237",
         "PORT": "5432"
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
