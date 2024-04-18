@@ -9,7 +9,6 @@ export default async function Page({ params }: { params: { item: number } }) {
         <div className="relative top-40">
             <p>Name: {item.name}</p>
             <p>Description: {item.description}</p>
-            <p>Quantity available: {item.quantity}</p>
             <p>Category: {item.category}</p>
             <button className="h-6 w-[100px] bg-green-950 text-white">
                 Add to Cart

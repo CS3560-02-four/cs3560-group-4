@@ -22,7 +22,6 @@ export async function fetchAllItems() {
             id: data.item_id,
             name: data.name,
             description: data.description,
-            quantity: data.quantity,
             category: data.category
         };
         return item;
@@ -46,7 +45,6 @@ export async function fetchItem(itemId: number) {
         id: itemData[0].item_id,
         name: itemData[0].name,
         description: itemData[0].description,
-        quantity: itemData[0].quantity,
         category: itemData[0].category
     };
     return item;
@@ -74,7 +72,6 @@ export async function fetchCartItems(accountId: number) {
             id: data.cart_item_id,
             item: items.filter((item: Item) => item.id === data.item_id)[0],
             quantity: data.quantity,
-            accountId: accountId
         };
         return cartItem;
     });
