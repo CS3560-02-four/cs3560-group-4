@@ -14,10 +14,12 @@ export default function Navbar({ cartItems } : { cartItems: Array<CartItem> }) {
 
     function handleClickCart() {
         setCartOpen(!cartOpen);
+        setAccountPopupOpen(false);
     }
 
     function handleClickAccount() {
         setAccountPopupOpen(!accountPopupOpen);
+        setCartOpen(false);
     }
 
     return (

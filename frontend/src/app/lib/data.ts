@@ -78,3 +78,25 @@ export async function fetchCartItems(accountId: number) {
 
     return cartItems;
 }
+
+import { redirect } from "next/navigation";
+export async function authenticateUser(username: string, password: string) {
+    try {
+        const response = await fetch("http://localhost:8000/login", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+        const responseData = await response.json();
+        return responseData.accountId;
+    }
+    catch (error) {
+        console.log("Error occured while fetching account data.");
+        redirect("/");
+    }
+}

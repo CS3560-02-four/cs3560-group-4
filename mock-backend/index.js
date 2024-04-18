@@ -20,6 +20,23 @@ app.post("/", async (req, res) => {
     res.send(result.rows);
 });
 
+app.post("/login", async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const dbResponse = await db.query("SELECT password, account_id FROM account WHERE username = $1", [username]);
+
+    if (dbResponse.rows[0].password === password) {
+        res.json({
+            accountId: dbResponse.rows[0].accountId
+        });
+    }
+    else {
+        res.json({
+            accountId: -1
+        });
+    }
+});
+
 app.listen(8000, () => {
     console.log("Mock backend listening on port 8000.");
 });
