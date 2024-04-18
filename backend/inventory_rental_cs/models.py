@@ -40,9 +40,9 @@ class Rental():
         self.student_id = student_id
 
 
-class RentalItem():
+class ItemUnit():
     def __init__(self, id, rental_id, item_id, status):
         self.id = id
-        self.rental_id = rental_id
+        self.rental_id = rental_id # null if not associated with rental
         self.item_id = item_id
         self.status = status
