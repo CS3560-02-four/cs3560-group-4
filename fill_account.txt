@@ -1,0 +1,20 @@
+INSERT INTO account (account_id, username, password, email, first_name, last_name, address, admin, student)
+VALUES 
+(6, 'sarah.adams', 'sunshine789', 'sarah.adams@yahoo.com', 'Sarah', 'Adams', '555 Pine St, San Jose', 1, 0),
+(7, 'michael_w', 'mike123', 'michael.wilson@gmail.com', 'Michael', 'Wilson', '987 Elm St, Santa Ana', 1, 0),
+(8, 'ltaylor', 'taylor456', 'laura.taylor@yahoo.com', 'Laura', 'Taylor', '234 Oak Rd, Riverside', 1, 0),
+(13, 'r_lee82', 'lee789', 'ryan.lee@yahoo.com', 'Ryan', 'Lee', '321 Elm Ave, Berkeley', 1, 0),
+(20, 'admin', 'admin', 'admin@example.com', 'Staff', 'Admin', '3801 W Temple Ave, Pomona', 1, 0),
+(3, 'alex_j', 'password123', 'alex.jones@gmail.com', 'Alex', 'Jones', '321 Maple Ave, Oakland', 0, 1),
+(4, 'emily_brown75', 'brownie123', 'emily.brown@yahoo.com', 'Emily', 'Brown', '567 Cedar Dr, Fresno', 0, 1),
+(5, 'csmith98', 'smitty987', 'chris.smith@gmail.com', 'Chris', 'Smith', '789 Oak Ln, Long Beach', 0, 1),
+(9, 'mark_jackson88', 'marky123', 'mark.jackson@gmail.com', 'Mark', 'Jackson', '456 Birch Ave, Irvine', 0, 1),
+(10, 'jrodriguez', 'jessie456', 'jessica.rodriguez@gmail.com', 'Jessica', 'Rodriguez', '789 Pine Blvd, Anaheim', 0, 1),
+(11, 'dthomas', 'davidthomas', 'david.thomas@yahoo.com', 'David', 'Thomas', '101 Cedar St, Santa Barbara', 0, 1),
+(12, 'amandaclark', 'amanda123', 'amanda.clark@gmail.com', 'Amanda', 'Clark', '876 Maple Ln, Palo Alto', 0, 1),
+(14, 'kgreen', 'katiegreen', 'katie.green@gmail.com', 'Katie', 'Green', '654 Oak St, Santa Cruz', 0, 1),
+(15, 'mhall', 'hall123', 'matthew.hall@yahoo.com', 'Matthew', 'Hall', '789 Pine Dr, Newport Beach', 0, 1),
+(16, 'jennifer.adams90', 'jennifer789', 'jennifer.adams@gmail.com', 'Jennifer', 'Adams', '987 Cedar Blvd, Redding', 0, 1),
+(17, 'jkelly', 'justin123', 'justin.kelly@yahoo.com', 'Justin', 'Kelly', '123 Birch Rd, Bakersfield', 0, 1),
+(18, 'lwright', 'lauren789', 'lauren.wright@gmail.com', 'Lauren', 'Wright', '456 Oak Ln, Santa Rosa', 0, 1),
+(19, 'miloszkryzia', '12345678', 'milosz.kryzia@gmail.com', 'Milosz', 'Kryzia', '834 Pommelo Way, Pomona', 1, 1);
