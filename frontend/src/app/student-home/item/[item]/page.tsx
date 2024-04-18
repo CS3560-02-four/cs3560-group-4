@@ -6,7 +6,7 @@ export default async function Page({ params }: { params: { item: number } }) {
     const item = await fetchItem(params.item);
 
     return (
-        <div>
+        <div className="relative top-40">
             <p>Name: {item.name}</p>
             <p>Description: {item.description}</p>
             <p>Quantity available: {item.quantity}</p>
