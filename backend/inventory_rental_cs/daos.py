@@ -165,8 +165,8 @@ class RentalDao:
     # rental: Instance of the Rental Model Class
     def insert_rental(rental: models.Rental):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO rental (rental_id, status, pickup_datetime, return_datetime, account_id) \
-                        VALUES ({rental.id}, '{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.student_id})")
+        cursor.execute(f"INSERT INTO rental (status, pickup_datetime, return_datetime, account_id) \
+                        VALUES ('{rental.status}', '{rental.pickup_date_time}', '{rental.return_date_time}', {rental.student_id})")
 
     # Get Rental by keyword args, for example:
     # get_rental(rental_id=1)
@@ -209,52 +209,52 @@ class RentalDao:
         cursor.execute(f"DELETE FROM rental\
                         WHERE rental_id={rental_id}")
 
-# DAO for Rental Items
-class RentalItemDao:
+# DAO for ItemUnit
+class ItemUnitDao:
 
     # Insert a rental item into a rental appointment - Create
     # rental_item: Instance of the RentalItem Model Class
-    def insert_rental_item(rental_item: models.RentalItem):
+    def insert_rental_item(item_unit: models.ItemUnit):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO rental_item (rental_item_id, rental_id, item_id, status)\
-                        VALUES ({rental_item.id},{rental_item.rental_id},{rental_item.item_id},'{rental_item.status}')")
+        cursor.execute(f"INSERT INTO item_unit (rental_id, item_id, status)\
+                        VALUES ({item_unit.rental_id},{item_unit.item_id},'{item_unit.status}')")
     
     # Get Rental Item by keyword args, for example:
-    # get_rental_item(rental_item_id=1)
-    # get_rental_item(status="good", rental_id="1")
+    # get_item_unit(item_unit_id=1)
+    # get_item_unit(status="good", rental_id="1")
     # Returns a list of matching Rental Item objects - Read
-    def get_rental_item(**kwargs) -> list[models.RentalItem]:
+    def get_item_unit(**kwargs) -> list[models.ItemUnit]:
         cursor = connection.cursor()
-        query = "SELECT * FROM rental_item WHERE "
+        query = "SELECT * FROM item_unit WHERE "
         for i in kwargs.items():
             query += f"{i[0]}='{i[1]}' AND "
             query = query.strip("AND ")
             cursor.execute(query)
             rows  = cursor.fetchall()
-            result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+            result = [models.ItemUnit(r[0], r[1], r[2], r[3]) for r in rows]
             return result
         
     # Get all Rentals Items
     # Returns a list of Rental Item objects - Read
-    def get_all_rental_items() -> list[models.RentalItem]:
+    def get_all_item_units() -> list[models.ItemUnit]:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM rental_item")
+        cursor.execute("SELECT * FROM item_unit")
         rows = cursor.fetchall()
-        result = [models.RentalItem(r[0], r[1], r[2], r[3]) for r in rows]
+        result = [models.ItemUnit(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
     # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
     # since we'd want to keep track of the status of individual items??)
-    # rental_item_id: ID of rental item to be updated
+    # item_unit_id: ID of rental item to be updated
     # status: New status of the rental item (good or damaged)
-    def update_rental_item_status(rental_item_id, status):
+    def update_item_unit_status(item_unit_id, status):
         cursor = connection.cursor()
-        cursor.execute(f"UPDATE rental_item\
+        cursor.execute(f"UPDATE item_unit\
                         SET status='{status}'\
-                        WHERE rental_item_id={rental_item_id}")
+                        WHERE item_unit_id={item_unit_id}")
     
     # Remove a rental item from the rental appointment - Delete
-    def delete_rental_item(rental_item_id):
+    def delete_item_unit(item_unit_id):
         cursor = connection.cursor()
-        cursor.execute(f"DELETE FROM rental_item\
-                        WHERE rental_item_id={rental_item_id}")
+        cursor.execute(f"DELETE FROM item_unit\
+                        WHERE item_unit_id={item_unit_id}")
