@@ -43,7 +43,7 @@ class ItemDao:
         query = query.strip("AND ")
         cursor.execute(query)
         rows = cursor.fetchall() #returns list of tuples
-        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        result = [models.Item(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
     #get all items
@@ -52,7 +52,7 @@ class ItemDao:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM item")
         rows = cursor.fetchall()
-        result = [models.Item(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        result = [models.Item(r[0], r[1], r[2], r[3]) for r in rows]
         return result
         
 #DAO for CartItem
@@ -60,8 +60,8 @@ class CartItemDao:
     #insert CartItem into db
     def insert_cart_item(cart_item: models.CartItem):
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO cart_item (quantity, account_id)\
-                       VALUES ({cart_item.quantity},{cart_item.account_id})")
+        cursor.execute(f"INSERT INTO cart_item (item_id, quantity, account_id)\
+                       VALUES ({cart_item.item_id},{cart_item.quantity},{cart_item.account_id})")
         
     #only update quantity
     #all other attributes of CartItem are its id and foreign keys
@@ -72,10 +72,10 @@ class CartItemDao:
                         WHERE cart_item_id={cart_item_id}")
         
     #delete cart item by id
-    def delete_cart_item(card_item_id):
+    def delete_cart_item(cart_item_id):
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM cart_item\
-                       WHERE cart_item_id={card_item_id}")
+                       WHERE cart_item_id={cart_item_id}")
         
     #get cart item by keyword args - general READ method
     def get_cart_item(**kwargs) -> list[models.CartItem]:
