@@ -15,9 +15,14 @@ const db = new pg.Client({
 await db.connect();
 
 app.post("/", async (req, res) => {
-    const query = req.body.query;
-    const result = await db.query(query);
-    res.send(result.rows);
+    try {
+        const query = req.body.query;
+        const result = await db.query(query);
+        res.send(result.rows);
+    }
+    catch (error) {
+        res.sendStatus(500);
+    }
 });
 
 app.post("/login", async (req, res) => {

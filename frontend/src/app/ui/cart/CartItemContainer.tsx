@@ -3,23 +3,24 @@
 import { CartItem } from "@/app/lib/interfaces";
 import CartItemField from "./CartItemField";
 import { useState } from "react";
-import { updateCartItemQuantityAction, removeCartItemAction } from "@/app/lib/actions";
+import { updateCartItemQuantity, removeCartItem } from "@/app/lib/data";
 
 export default function CartItemContainer({ cartItems, }: { cartItems: Array<CartItem>, }) {
     const [items, setItems] = useState(cartItems);
 
     //Update quantity on the server
-    function onUpdateItemQuantity(cartItemId: number, quantity: number) {
-        updateCartItemQuantityAction(cartItemId, quantity);
+    function onUpdateItemQuantity(cartItem: CartItem, quantity: number) {
+        updateCartItemQuantity(cartItem.id, quantity);
+        //check for errors
     }
 
     //remove item from cart on the server and from the UI
-    function onRemoveItem(cartItemId: number) {
-        removeCartItemAction(cartItemId);
-        const itemsFiltered = items.filter((item: CartItem) => item.id !== cartItemId);
+    function onRemoveItem(cartItem: CartItem) {
+        removeCartItem(cartItem.id);
+        //check for errors
+        const itemsFiltered = items.filter((item: CartItem) => item.id !== cartItem.id);
         setItems(itemsFiltered);
     }
-
 
     return (
         <div className="relative top-32 flex flex-col gap-7">

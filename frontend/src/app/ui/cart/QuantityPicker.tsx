@@ -18,10 +18,14 @@ export default function QuantityPicker({ itemQuantity, onUpdateQuantity }: { ite
         }
     }
 
+    function handleTextInputChange(event: any) {
+        setQuantity(event.target.value);
+    }
+
     return (
         <div className="flex gap-1">
             <button onClick={decrementQuantity}>-</button>
-            <input type="text" className="w-4" value={quantity}/>
+            <input type="text" className="w-4" onChange={handleTextInputChange} value={quantity}/>
             <button onClick={incrementQuantity}>+</button>
         </div>
     );

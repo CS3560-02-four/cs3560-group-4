@@ -16,8 +16,9 @@ export async function authenticateUserAction(formState: FormState, formData: For
     }
 
     const response = await authenticateUser(username.toString(), password.toString());
-    if (response.accountId) {
-        login(response.accountId);
+    const accountData = response.data;
+    if (accountData.accountId) {
+        login(accountData.accountId);
         redirect("/student");
     }
     else {
@@ -25,14 +26,6 @@ export async function authenticateUserAction(formState: FormState, formData: For
             error: "Failed to authenticate user."
         }
     }
-}
-
-export async function updateCartItemQuantityAction(cartItemId: number, quantity: number) {
-    console.log(`Quantity of item ${cartItemId} updated to ${quantity}.`);
-}
-
-export async function removeCartItemAction(cartItemId: number) {
-    console.log(`Removed item ${cartItemId} from cart.`);
 }
 
 export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {

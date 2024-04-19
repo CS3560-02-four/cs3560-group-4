@@ -2,10 +2,11 @@
  * All function are temp using the mock api.
  * Add error handling later.
 */
-
+'use server';
 import { Item, CartItem, Account, DataResponse } from "./interfaces";
+import { redirect } from "next/navigation";
 
-export async function fetchAllItems() {
+export async function fetchAllItems(): Promise<DataResponse> {
     const response = await fetch('http://localhost:8000/', {
         method: 'POST',
         headers: {
@@ -15,9 +16,9 @@ export async function fetchAllItems() {
             query: "SELECT * FROM item"
         })
     });
-    const itemData = await response.json();
+    const data = await response.json();
 
-    const items = itemData.map((data: any) => {
+    const items = data.map((data: any) => {
         const item: Item = {
             id: data.item_id,
             name: data.name,
@@ -26,10 +27,12 @@ export async function fetchAllItems() {
         };
         return item;
     });
-    return items;
+    return {
+        data: items
+    }
 }
 
-export async function fetchItem(itemId: number) {
+export async function fetchItem(itemId: number): Promise<DataResponse> {
     const response = await fetch('http://localhost:8000/', {
         method: 'POST',
         headers: {
@@ -47,10 +50,12 @@ export async function fetchItem(itemId: number) {
         description: itemData[0].description,
         category: itemData[0].category
     };
-    return item;
+    return {
+        data: item
+    }
 }
 
-export async function fetchCartItems(accountId: number) {
+export async function fetchCartItems(accountId: number): Promise<DataResponse> {
     const response = await fetch('http://localhost:8000/', {
         method: 'POST',
         headers: {
@@ -58,16 +63,17 @@ export async function fetchCartItems(accountId: number) {
         },
         body: JSON.stringify({
             query: `SELECT * FROM cart_item WHERE account_id = ${accountId}`
-        })
+        }),
+        cache: 'no-store'
     });
-    const cartItemData = await response.json();
+    const data = await response.json();
 
-    const items = await Promise.all(cartItemData.map(async (data: any) => {
-        const item: Item = await fetchItem(data.item_id);
-        return item;
+    const items = await Promise.all(data.map(async (data: any) => {
+        const response: DataResponse = await fetchItem(data.item_id);
+        return response.data;
     }));
 
-    const cartItems = cartItemData.map((data: any) => {
+    const cartItems = data.map((data: any) => {
         const cartItem: CartItem = {
             id: data.cart_item_id,
             item: items.filter((item: Item) => item.id === data.item_id)[0],
@@ -76,10 +82,12 @@ export async function fetchCartItems(accountId: number) {
         return cartItem;
     });
 
-    return cartItems;
+    return {
+        data: cartItems
+    }
 }
 
-export async function authenticateUser(username: string, password: string) {
+export async function authenticateUser(username: string, password: string): Promise<DataResponse> {
     const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
@@ -90,13 +98,15 @@ export async function authenticateUser(username: string, password: string) {
             password: password
         })
     });
-    const responseData = await response.json();
-    return responseData;
+    const data = await response.json();
+    return {
+        data: data
+    }
 }
 
-export async function fetchAccountData(accountId: number) {
+export async function fetchAccountData(accountId: number): Promise<DataResponse> {
     try {
-        const accountResponse = await fetch("http://localhost:8000/", {
+        const response = await fetch("http://localhost:8000/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -105,31 +115,93 @@ export async function fetchAccountData(accountId: number) {
                 query: `SELECT * FROM account WHERE account_id = ${accountId}`
             })
         });
-        const accountResponseData = await accountResponse.json();
+        const data = await response.json();
         const account: Account = {
-            id: accountResponseData[0].account_id,
-            username: accountResponseData[0].username,
-            email: accountResponseData[0].email,
-            firstName: accountResponseData[0].first_name,
-            lastName: accountResponseData[0].last_name,
-            address: accountResponseData[0].address,
-            status: accountResponseData[0].status,
-            balance: accountResponseData[0].balance
+            id: data[0].account_id,
+            username: data[0].username,
+            email: data[0].email,
+            firstName: data[0].first_name,
+            lastName: data[0].last_name,
+            address: data[0].address,
+            status: data[0].status,
+            balance: data[0].balance
         }
-        const responseToSend: DataResponse = {
+        return {
             data: account
         }
-        return responseToSend;
     }
     catch (error) {
-        const responseToSend: DataResponse = {
-            error: "An error occured while fetching account data[0]."
+        return {
+            error: "An error occured while fetching account data."
         }
-        return responseToSend;
     }
 }
 
 //temp
-export async function updateCartItemQuantity() {
-    
+export async function updateCartItemQuantity(cartItemId: number, quantity: number) {
+    try {
+        const response = await fetch("http://localhost:8000/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `UPDATE cart_item SET quantity = ${quantity} WHERE cart_item_id = ${cartItemId} RETURNING cart_item_id, quantity`
+            })
+        })
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
+        }
+    }
+    catch (error) {
+        //add error handling
+        redirect("/student/cart");
+    }
+}
+
+//temp
+export async function removeCartItem(cartItemId: number) {
+    try {
+        const response = await fetch("http://localhost:8000/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `DELETE FROM cart_item WHERE cart_item_id = ${cartItemId} RETURNING cart_item_id`
+            })
+        })
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
+        }
+    }
+    catch (error) {
+        //add error handling
+        redirect("/student/cart");
+    }
+}
+
+//temp
+export async function addToCart(accountId: number, itemId: number) {
+    try {
+        const response = await fetch("http://localhost:8000/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `INSERT INTO cart_item (item_id, quantity, account_id) VALUES (${itemId}, 1, ${accountId})`
+            })
+        })
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
+        }
+    }
+    catch (error) {
+        //add error handling
+        redirect("/student")
+    }
 }

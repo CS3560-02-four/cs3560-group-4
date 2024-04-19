@@ -5,11 +5,11 @@ export default function CartItemField({ cartItem, onUpdateItemQuantity, onRemove
 
     //Get new quantity, pass along with this item's id
     function onUpdate(quantity: number) {
-        onUpdateItemQuantity(cartItem.id, quantity);
+        onUpdateItemQuantity(cartItem, quantity);
     }
 
     function removeItem() {
-        onRemoveItem(cartItem.id);
+        onRemoveItem(cartItem);
     }
 
     return (

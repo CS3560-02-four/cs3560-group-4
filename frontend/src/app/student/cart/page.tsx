@@ -1,6 +1,6 @@
 'use server';
 import { cookies } from "next/headers";
-import { CartItem } from "@/app/lib/interfaces";
+import { CartItem, DataResponse } from "@/app/lib/interfaces";
 import { redirect } from "next/navigation";
 import { logout } from "@/app/lib/utils";
 import { fetchCartItems } from "@/app/lib/data";
@@ -13,8 +13,8 @@ export default async function Page() {
         if (accountIdCookieValue !== undefined) {
             const accountId = parseInt(accountIdCookieValue);
             //fetch cart items for account id
-            const cartItems: Array<CartItem> = await fetchCartItems(accountId);
-
+            const response: DataResponse = await fetchCartItems(accountId);
+            const cartItems: Array<CartItem> = response.data;
             return (
                 <div className="flex gap-20 w-full relative top-44">
                     <CartItemContainer cartItems={cartItems} />
