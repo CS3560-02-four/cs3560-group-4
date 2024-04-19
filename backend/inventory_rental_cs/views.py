@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from . import daos, models
 import datetime
+from django.db import connection
 
 # Create your views here.
 
@@ -76,3 +77,21 @@ def test12(request):
 def test13(request):
     daos.ItemUnitDao.get_all_rental_items()
     return HttpResponse()
+
+#example Json response - get all items
+def test_json(request):
+    items = daos.ItemDao.get_all_items() #get list of all items
+    item_attributes = [(i.id, i.name, i.description, i.category) for i in items] #get list of tuples, each containing values of attributes of each item
+    columns = get_column_names("item") #get list of column names
+    result = [] 
+    for i in item_attributes:
+        result.append(dict(zip(columns, i))) #this creates a dictionary for each item, keys are column names and values are the actual attribute values
+        # result is the final list of dictionaries each representing an item
+    return JsonResponse(result, safe=False) #return a Json response with those items - see what this looks like at url inventory_rental_cs/exampleJson
+    
+#helper method to get list of column names for a table
+def get_column_names(table_name):
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
+    column_names = [c[0] for c in cursor.description]
+    return column_names

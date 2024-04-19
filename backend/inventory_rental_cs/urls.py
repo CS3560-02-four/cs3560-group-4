@@ -13,5 +13,6 @@ urlpatterns = [
     path("rentalItemInsert/", views.test8),
     path("rentalItemUpdate/", views.test9),
     path("rentalItemDelete/", views.test10),
-    path("getRental/", views.test13)
+    path("getRental/", views.test13),
+    path("exampleJson/", views.test_json) #USE THIS FOR THE EXAMPLE JSON METHOD
 ]
