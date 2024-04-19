@@ -88,7 +88,7 @@ class CartItemDao:
     #get cart item by keyword args - general READ method
     def get_cart_item(**kwargs) -> list[models.CartItem]:
         cursor = connection.cursor()
-        query = "SELECT * FROM card_item WHERE "
+        query = "SELECT * FROM cart_item WHERE "
         for i in kwargs.items():
             query += f"{i[0]}='{i[1]}' AND "
         query = query.strip("AND ")
