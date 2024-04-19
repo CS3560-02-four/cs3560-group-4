@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from . import daos, models
 import datetime
 from django.db import connection
-
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def test(request):
@@ -95,3 +95,9 @@ def get_column_names(table_name):
     cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
     column_names = [c[0] for c in cursor.description]
     return column_names
+
+@csrf_exempt
+def test_request(request):
+    req_body = request.POST
+    print(req_body)
+    return HttpResponse(req_body)

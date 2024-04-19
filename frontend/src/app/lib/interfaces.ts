@@ -16,7 +16,6 @@ export interface Rental {
     status: string;
     pickupDatetime: string;
     returnDatetime: string;
-    items: Array<ItemUnit> | [];
 }
 
 export interface ItemUnit {
@@ -34,12 +33,15 @@ export interface Account {
     address: string;
     status: string;
     balance: number;
-    cartItems: Array<CartItem> | [];
-    rentals: Array<Rental> | [];
 }
 
 export interface FormState {
     message?: string;
     error?: string;
     options?: {};
+}
+
+export interface DataResponse {
+    data?: any;
+    error?: string;
 }

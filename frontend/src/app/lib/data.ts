@@ -3,7 +3,7 @@
  * Add error handling later.
 */
 
-import { Item, CartItem } from "./interfaces";
+import { Item, CartItem, Account, DataResponse } from "./interfaces";
 
 export async function fetchAllItems() {
     const response = await fetch('http://localhost:8000/', {
@@ -92,4 +92,44 @@ export async function authenticateUser(username: string, password: string) {
     });
     const responseData = await response.json();
     return responseData;
+}
+
+export async function fetchAccountData(accountId: number) {
+    try {
+        const accountResponse = await fetch("http://localhost:8000/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `SELECT * FROM account WHERE account_id = ${accountId}`
+            })
+        });
+        const accountResponseData = await accountResponse.json();
+        const account: Account = {
+            id: accountResponseData[0].account_id,
+            username: accountResponseData[0].username,
+            email: accountResponseData[0].email,
+            firstName: accountResponseData[0].first_name,
+            lastName: accountResponseData[0].last_name,
+            address: accountResponseData[0].address,
+            status: accountResponseData[0].status,
+            balance: accountResponseData[0].balance
+        }
+        const responseToSend: DataResponse = {
+            data: account
+        }
+        return responseToSend;
+    }
+    catch (error) {
+        const responseToSend: DataResponse = {
+            error: "An error occured while fetching account data[0]."
+        }
+        return responseToSend;
+    }
+}
+
+//temp
+export async function updateCartItemQuantity() {
+    
 }

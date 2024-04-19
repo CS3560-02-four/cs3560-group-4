@@ -1,7 +1,8 @@
-export default function AccountPopup() {
+export default function AccountPopup({ firstName, lastName }: { firstName: string, lastName: string }) {
     return (
         <div>
-            Username
+            {firstName}
+            {lastName}
         </div>
     );
 }

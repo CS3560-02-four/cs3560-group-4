@@ -14,7 +14,7 @@ export default function ItemField({ item } : { item: Item }) {
                 <button className="h-4 w-10 bg-green-950 text-white">
                     Add To Cart
                 </button>
-                <Link href={`/student-home/item/${item.id}`} className="h-4 w-10 bg-green-950 text-white">
+                <Link href={`/student/item/${item.id}`} className="h-4 w-10 bg-green-950 text-white">
                     Details
                 </Link>
             </div>

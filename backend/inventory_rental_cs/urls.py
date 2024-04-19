@@ -14,5 +14,6 @@ urlpatterns = [
     path("rentalItemUpdate/", views.test9),
     path("rentalItemDelete/", views.test10),
     path("getRental/", views.test13),
-    path("exampleJson/", views.test_json) #USE THIS FOR THE EXAMPLE JSON METHOD
+    path("exampleJson/", views.test_json), #USE THIS FOR THE EXAMPLE JSON METHOD
+    path("requestTest/", views.test_request)
 ]

@@ -2,7 +2,7 @@
 
 import { FormState } from "./interfaces";
 import { authenticateUser } from "./data";
-import { createSession } from "./utils";
+import { login } from "./utils";
 import { redirect } from "next/navigation";
 
 export async function authenticateUserAction(formState: FormState, formData: FormData): Promise<FormState> {
@@ -17,7 +17,7 @@ export async function authenticateUserAction(formState: FormState, formData: For
 
     const response = await authenticateUser(username.toString(), password.toString());
     if (response.accountId) {
-        createSession(response.accountId);
+        login(response.accountId);
         redirect("/student");
     }
     else {
@@ -25,4 +25,19 @@ export async function authenticateUserAction(formState: FormState, formData: For
             error: "Failed to authenticate user."
         }
     }
+}
+
+export async function updateCartItemQuantityAction(cartItemId: number, quantity: number) {
+    console.log(`Quantity of item ${cartItemId} updated to ${quantity}.`);
+}
+
+export async function removeCartItemAction(cartItemId: number) {
+    console.log(`Removed item ${cartItemId} from cart.`);
+}
+
+export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
+    //confirm rental
+    return {
+        message: "Rental Confirmed"
+    };
 }
