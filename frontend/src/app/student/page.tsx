@@ -1,8 +1,8 @@
 'use server';
 
-import { fetchAllItems } from "../lib/data";
-import ItemField from "../ui/ItemField";
-import { DataResponse, Item } from "../lib/interfaces";
+import { fetchAllItems } from "../../lib/data";
+import ItemField from "@/ui/ItemField";
+import { DataResponse, Item } from "../../lib/interfaces";
 import { cookies } from "next/headers";
 
 export default async function Page() {
