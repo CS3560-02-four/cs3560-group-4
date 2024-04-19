@@ -1,11 +1,11 @@
 'use server';
 import { cookies } from "next/headers";
-import { CartItem, DataResponse } from "@/lib/interfaces";
+import { CartItem, DataResponse } from "@/app/lib/interfaces";
 import { redirect } from "next/navigation";
-import { logout } from "@/lib/utils";
-import { fetchCartItems } from "@/lib/data";
-import CartItemContainer from "@/ui/cart/CartItemContainer";
-import CartSummaryField from "@/ui/cart/CartSummaryField";
+import { logout } from "@/app/lib/utils";
+import { fetchCartItems } from "@/app/lib/data";
+import CartItemContainer from "@/app/ui/cart/CartItemContainer";
+import CartSummaryField from "@/app/ui/cart/CartSummaryField";
 
 export default async function Page() {
     if (cookies().has('account')) {

@@ -1,8 +1,8 @@
 'use server';
 
-import { fetchItem } from "@/lib/data";
+import { fetchItem } from "@/app/lib/data";
 import Link from "next/link";
-import { Item, DataResponse } from "@/lib/interfaces";
+import { Item, DataResponse } from "@/app/lib/interfaces";
 
 export default async function Page({ params }: { params: { item: number } }) {
     const response: DataResponse = await fetchItem(params.item);

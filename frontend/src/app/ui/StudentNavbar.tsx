@@ -24,7 +24,7 @@ export default function StudentNavbar({ account }: { account: Account }) {
                 </div>
             </div>
             <div className="flex h-full w-full justify-end gap-8">
-                    {accountPopupOpen ? <AccountPopup firstName={account.firstName} lastName={account.lastName} /> : null}
+                    {accountPopupOpen ? <AccountPopup account={account} /> : null}
             </div>
         </div>
     );

@@ -1,9 +1,9 @@
 'use client';
 
-import { CartItem } from "@/lib/interfaces";
+import { CartItem } from "@/app/lib/interfaces";
 import CartItemField from "./CartItemField";
 import { useState } from "react";
-import { updateCartItemQuantity, removeCartItem } from "@/lib/data";
+import { updateCartItemQuantity, removeCartItem } from "@/app/lib/data";
 
 export default function CartItemContainer({ cartItems, }: { cartItems: Array<CartItem>, }) {
     const [items, setItems] = useState(cartItems);
