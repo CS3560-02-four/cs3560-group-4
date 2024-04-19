@@ -3,13 +3,13 @@
 import { fetchAllItems } from "../lib/data";
 import ItemField from "../ui/ItemField";
 import { DataResponse, Item } from "../lib/interfaces";
-import { cookies } from "next/headers";
+import { getAccountId } from "../lib/utils";
 
 export default async function Page() {
     const response: DataResponse = await fetchAllItems();
 
     let accountId: number;
-    const accountIdCookieValue = cookies().get('account')?.value;
+    const accountIdCookieValue = getAccountId();
     if (accountIdCookieValue !== undefined) {
         accountId = parseInt(accountIdCookieValue);
     }

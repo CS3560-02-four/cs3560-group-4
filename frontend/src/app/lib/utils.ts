@@ -16,3 +16,9 @@ export function login(accountId: number) {
 export function logout() {
     cookies().delete('account');
 }
+
+//Gets currently logged in user's id
+export function getAccountId() {
+    if (cookies().has('account'))
+        return cookies().get('account')?.value;
+}

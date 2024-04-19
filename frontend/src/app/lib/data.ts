@@ -186,18 +186,36 @@ export async function removeCartItem(cartItemId: number) {
 //temp
 export async function addToCart(accountId: number, itemId: number) {
     try {
-        const response = await fetch("http://localhost:8000/", {
+        //temp
+        //check if item already in cart
+        const isInCartResponse = await fetch("http://localhost:8000/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                query: `INSERT INTO cart_item (item_id, quantity, account_id) VALUES (${itemId}, 1, ${accountId})`
+                query: `SELECT item_id, cart_item_id, quantity FROM cart_item WHERE item_id = ${itemId} AND account_id = ${accountId}`
             })
         })
-        const status = response.status;
-        if (status !== 200) {
-            throw new Error();
+        const responseData = await isInCartResponse.json();
+        console.log(responseData);
+        if (!responseData[0]) {
+            const response = await fetch("http://localhost:8000/", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: `INSERT INTO cart_item (item_id, quantity, account_id) VALUES (${itemId}, 1, ${accountId})`
+                })
+            })
+            const status = response.status;
+            if (status !== 200) {
+                throw new Error();
+            }
+        }
+        else {
+            await updateCartItemQuantity(responseData[0].cart_item_id, responseData[0].quantity + 1);
         }
     }
     catch (error) {
