@@ -250,3 +250,10 @@ class ItemUnitDao:
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM item_unit\
                         WHERE item_unit_id={item_unit_id}")
+    
+    # Change Rental ID of an item unit
+    def update_item_unit_rental(item_unit_id, rental_id):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE item_unit\
+                        SET rental_id='{rental_id}'\
+                        WHERE item_unit_id={item_unit_id}")
