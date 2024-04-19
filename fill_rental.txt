@@ -1,0 +1,4 @@
+INSERT INTO rental (status, pickup_datetime, return_datetime, account_id) VALUES
+('reserved', '2024-03-17 09:00:00', '2024-03-24 09:00:00', 3),
+('active', '2024-07-28 15:00:00', '2024-08-4 15:00:00', 4),
+('complete', '2024-09-10 12:00:00', '2024-09-17 12:00:00', 9)

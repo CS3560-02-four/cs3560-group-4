@@ -28,7 +28,6 @@ CREATE TABLE item (
     item_id SERIAL PRIMARY KEY,
     name VARCHAR(50),
     description VARCHAR(500),
-    quantity INTEGER,
     category VARCHAR(50)
 );
 
