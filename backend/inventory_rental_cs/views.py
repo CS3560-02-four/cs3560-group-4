@@ -230,6 +230,3 @@ def get_column_names(table_name):
     cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
     column_names = [c[0] for c in cursor.description]
     return column_names
-
-
-
