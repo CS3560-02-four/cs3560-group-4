@@ -32,7 +32,7 @@ def get_cart_items(request):
     for i in cart_items:
         item = daos.ItemDao.get_item(item_id=i.item_id)[0] #get Item associated with this CartItem
         item_attrbts = [item.id, item.name, item.description, item.category]
-        cart_item_attrbts = [i.id, i.item_id, i.account_id, i.quantity]
+        cart_item_attrbts = [i.id, i.item_id, i.quantity, i.account_id]
         num_available = len(daos.ItemUnitDao.get_item_unit(item_id=item.id, rental_id=None))
         cart_item_json = dict(zip(cart_item_columns, cart_item_attrbts))
         cart_item_json.update(dict(zip(item_columns, item_attrbts)))

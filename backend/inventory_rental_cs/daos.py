@@ -247,6 +247,17 @@ class ItemUnitDao:
         cursor.execute(f"UPDATE item_unit\
                         SET status='{status}'\
                         WHERE item_unit_id={item_unit_id}")
+        
+    def update_item_unit_rental(item_unit_id, rental_id):
+        cursor = connection.cursor()
+        if rental_id != None:
+            cursor.execute(f"UPDATE item_unit\
+                            SET rental_id='{rental_id}'\
+                            WHERE item_unit_id={item_unit_id}")
+        else:
+            cursor.execute(f"UPDATE item_unit\
+                            SET rental_id=null\
+                            WHERE item_unit_id={item_unit_id}")
     
     # Remove a rental item from the rental appointment - Delete
     def delete_item_unit(item_unit_id):
