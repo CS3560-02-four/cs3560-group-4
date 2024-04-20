@@ -16,14 +16,28 @@ def get_available_items(request):
         if num_available != 0:
             item_attrbts = [i.id, i.name, i.description, i.category]
             item_json = dict(zip(item_columns, item_attrbts))
-            item_json["quantity"] = num_available
+            item_json["available_quantity"] = num_available
             response.append(item_json)
     return JsonResponse(response, safe=False)
 
 # GET ALL CART ITEMS WITH ITEM INFO + AVAILABLE QUANTITY BY ACCOUNT ID
-def get_cart_items(request, account_id):
-    param = request.GET.get("q") #HOW TO DO QUERY PARAMS
-    return HttpResponse(param)
+def get_cart_items(request):
+    response = []
+    #QUERY PARAMS: account_id
+    account_id = request.GET["account_id"]
+    cart_items = daos.CartItemDao.get_cart_item(account_id=account_id) #get all cart items for account
+    cart_item_columns = get_column_names("cart_item")
+    item_columns = get_column_names("item")
+    for i in cart_items:
+        item = daos.ItemDao.get_item(item_id=i.item_id)[0] #get Item associated with this CartItem
+        item_attrbts = [item.id, item.name, item.description, item.category]
+        cart_item_attrbts = [i.id, i.item_id, i.account_id, i.quantity]
+        num_available = len(daos.ItemUnitDao.get_item_unit(item_id=item.id, rental_id=None))
+        cart_item_json = dict(zip(cart_item_columns, cart_item_attrbts))
+        cart_item_json.update(dict(zip(item_columns, item_attrbts)))
+        cart_item_json["available_quantity"] = num_available
+        response.append(cart_item_json)
+    return JsonResponse(response, safe=False)
 
 # ADD ITEM TO CART
 # IF EXISTS INCREASE QUANTITY
