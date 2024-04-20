@@ -45,6 +45,12 @@ def get_cart_items(request):
 # IF EXISTS INCREASE QUANTITY
 # BY ACCOUNT ID AND ITEM ID
 def add_to_cart(request):
+    #Check if item not available
+    item_id = request.GET["item_id"]
+    item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None)
+    if len(item_units_check) == 0:
+        return HttpResponse("Item not available", status=500)
+    
     try:
         #QUERY PARAMS: account_id, item_id
         account_id = request.GET["account_id"]
