@@ -1,6 +1,6 @@
-import { Account } from "../lib/interfaces";
+import { Account } from "../../lib/interfaces";
 import Link from "next/link";
-import { logoutAction } from "../lib/actions";
+import { logoutAction } from "../../lib/actions";
 
 export default function AccountPopup({ account, onRedirect }: { account: Account, onRedirect: Function }) {
 

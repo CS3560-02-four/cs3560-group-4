@@ -4,6 +4,7 @@ export interface Item {
     description: string;
     category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
     availableQuantity?: number;
+    image?: any;
 }
 
 export interface CartItem {

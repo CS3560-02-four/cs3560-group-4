@@ -5,7 +5,7 @@ import CartButton from "./CartButton";
 import AccountButton from "./AccountButton";
 import AccountPopup from "./AccountPopup";
 import { useState } from "react";
-import { Account } from "../lib/interfaces";
+import { Account } from "../../lib/interfaces";
 
 export default function StudentNavbar({ account }: { account: Account }) {
     const [accountPopupOpen, setAccountPopupOpen] = useState(false);

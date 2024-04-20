@@ -1,5 +1,5 @@
 'use server';
-import StudentNavbar from "../ui/StudentNavbar";
+import StudentNavbar from "../ui/navbar/StudentNavbar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { fetchAccountData } from "../lib/data";
