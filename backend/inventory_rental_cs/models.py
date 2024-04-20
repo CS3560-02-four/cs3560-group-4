@@ -1,3 +1,5 @@
+from django.db import models
+
 class Account():
     def __init__(self, id, username, password, email, first_name, last_name, address, admin, student, status='normal', balance=0):
         self.id = id
@@ -45,3 +47,5 @@ class ItemUnit():
         self.rental_id = rental_id # null if not associated with rental
         self.item_id = item_id
         self.status = status
+
+    

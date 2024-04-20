@@ -8,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 # GET ALL ITEMS AVAILABLE FOR RENTAL
 # RETURN ITEMS WITH AVAILABLE QUANTITY
-# TODO: ERROR CATCHING
 def get_available_items(request):
     response = []
     items = daos.ItemDao.get_all_items()
@@ -64,7 +63,6 @@ def add_to_cart(request):
     except IntegrityError:
         return HttpResponse("Error: Account not found or wrong item ID", status=500)
 
-
 #DELETE ALL UNITS OF ITEM FROM CART
 def delete_from_cart(request):
     #QUERY PARAMS: cart_item_id
@@ -108,10 +106,19 @@ def get_rental(request):
         item_info = dict(zip(item_columns, item_attrbts)) #add item general info to dict
         item_info["status"] = i.status #add item unit status to dict
         items.append(item_info) #add to list of items
-    
-    response["items"] = items #add list of items to response
 
+    response["items"] = items #add list of items to response
     return JsonResponse(response, safe=False)
+
+# Cancel rental
+def cancel_rental(request):
+    rental_id = request.GET["rental_id"]
+    daos.RentalDao.update_rental_status(rental_id, "canceled")
+    item_unit = daos.ItemUnitDao.get_item_unit(rental_id=rental_id)
+    rental_id_items = [] 
+    for i in item_unit:
+        daos.ItemUnitDao.update_item_unit_rental(i.id, None)
+    return HttpResponse("Rental successfully canceled", status = 200)   
 
 # Logs a user in.  NOT SURE HOW TO STORE THAT A USER HAS LOGGED IN. 
 @csrf_exempt
@@ -131,7 +138,6 @@ def login(request):
 
 # Gets user rentals based on a request with a valid account_id
 def getUserRentals(request):
-    
     acc_id = request.GET["account_id"]
 
     rentals = daos.RentalDao.get_rental(account_id = acc_id)
@@ -224,3 +230,6 @@ def get_column_names(table_name):
     cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
     column_names = [c[0] for c in cursor.description]
     return column_names
+
+
+

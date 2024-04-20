@@ -13,4 +13,5 @@ urlpatterns = [
     path("accountInfo/", views.getAccountDetails), # Gets account info, use ?account_id=___ in url
     path("rentalDetails/", views.getUserRentals),  # Gets all rentals associated with a user, use ?account_id=___ in url
     path("createAppointment/", views.createRental), # Creates a rental using a user's cart, use ?account_id=___ in url
+    path("rentalCancel/", views.cancel_rental),
 ]
