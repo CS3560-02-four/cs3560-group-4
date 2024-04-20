@@ -22,5 +22,5 @@ urlpatterns = [
     
     # Possibly implement to search by id ?
     # path("single_item/", views.search_item),
-    path("getRental/", views.test13)
+
 ]
