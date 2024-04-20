@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { CartItem, DataResponse } from "@/app/lib/interfaces";
 import { redirect } from "next/navigation";
-import { getAccountId, logout } from "@/app/lib/utils";
+import { getAccountId, logout } from "@/app/lib/cookies";
 import { fetchCartItems } from "@/app/lib/data";
 import CartItemContainer from "@/app/ui/cart/CartItemContainer";
 import CartSummaryField from "@/app/ui/cart/CartSummaryField";

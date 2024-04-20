@@ -1,4 +1,4 @@
-import { Item } from "../lib/interfaces";
+import { Item } from "../../lib/interfaces";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
@@ -13,9 +13,6 @@ export default function ItemField({ item, accountId } : { item: Item, accountId:
             </div>
             <div className="flex gap-5">
                 <AddToCartButton accountId={accountId} item={item} />
-                <Link href={`/student/item/${item.id}`} className="h-4 w-10 bg-green-950 text-white">
-                    Details
-                </Link>
             </div>
         </div>
     );

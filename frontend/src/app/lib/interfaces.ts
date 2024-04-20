@@ -13,7 +13,7 @@ export interface CartItem {
 
 export interface Rental {
     id: number;
-    status: string;
+    status: "reserved" | "active" | "complete";
     pickupDatetime: string;
     returnDatetime: string;
 }

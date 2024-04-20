@@ -2,7 +2,7 @@
 
 import { FormState } from "./interfaces";
 import { authenticateUser } from "./data";
-import { login, logout } from "./utils";
+import { login, logout } from "./cookies";
 import { redirect } from "next/navigation";
 
 export async function authenticateUserAction(formState: FormState, formData: FormData): Promise<FormState> {
@@ -30,7 +30,7 @@ export async function authenticateUserAction(formState: FormState, formData: For
 
 export async function logoutAction() {
     logout();
-    redirect("student-login");
+    redirect("/student-login");
 }
 
 export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {

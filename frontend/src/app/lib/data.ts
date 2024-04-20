@@ -3,7 +3,7 @@
  * Add error handling later.
 */
 'use server';
-import { Item, CartItem, Account, DataResponse } from "./interfaces";
+import { Item, CartItem, Account, DataResponse, Rental } from "./interfaces";
 import { redirect } from "next/navigation";
 
 export async function fetchAllItems(): Promise<DataResponse> {
@@ -221,5 +221,37 @@ export async function addToCart(accountId: number, itemId: number) {
     catch (error) {
         //add error handling
         redirect("/student")
+    }
+}
+
+export async function getRentals(accountId: number): Promise<DataResponse> {
+    try {
+        const response = await fetch("http://localhost:8000/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `SELECT * FROM rental WHERE account_id = ${accountId}`
+            })
+        });
+        const data = await response.json();
+        const rentals: Array<Rental> = data.map((data: any) => {
+            const rental: Rental = {
+                id: data.rental_id,
+                status: data.status,
+                pickupDatetime: data.pickup_datetime,
+                returnDatetime: data.return_datetime
+            }
+            return rental;
+        });
+        return {
+            data: rentals
+        }
+    }
+    catch (error) {
+        return {
+            error: "An error occured while getting user's rentals."
+        }
     }
 }

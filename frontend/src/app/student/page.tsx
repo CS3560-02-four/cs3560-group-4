@@ -1,9 +1,9 @@
 'use server';
 
 import { fetchAllItems } from "../lib/data";
-import ItemField from "../ui/ItemField";
+import ItemField from "../ui/home/ItemField";
 import { DataResponse, Item } from "../lib/interfaces";
-import { getAccountId } from "../lib/utils";
+import { getAccountId } from "../lib/cookies";
 
 export default async function Page() {
     const response: DataResponse = await fetchAllItems();

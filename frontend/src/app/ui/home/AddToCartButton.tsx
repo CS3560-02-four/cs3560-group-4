@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from "next/navigation";
-import { Item } from "../lib/interfaces";
-import { addToCart } from "../lib/data";
+import { Item } from "../../lib/interfaces";
+import { addToCart } from "../../lib/data";
 
 export default function AddToCartButton({ accountId, item }: { accountId: number, item: Item }) {
     const router = useRouter();
