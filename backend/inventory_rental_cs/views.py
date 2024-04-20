@@ -4,78 +4,41 @@ from . import daos, models
 import datetime
 from django.db import connection
 
-# Create your views here.
+# GET ALL ITEMS AVAILABLE FOR RENTAL
+# RETURN ITEMS WITH AVAILABLE QUANTITY
+def get_available_items(request):
+    response = []
+    items = daos.ItemDao.get_all_items()
+    item_columns = get_column_names("item")
+    print(item_columns)
+    for i in items:
+        num_available = len(daos.ItemUnitDao.get_item_unit(item_id=i.id, rental_id=None))
+        if num_available != 0:
+            item_attrbts = [i.id, i.name, i.description, i.category]
+            item_json = dict(zip(item_columns, item_attrbts))
+            item_json["quantity"] = num_available
+            response.append(item_json)
+    return JsonResponse(response, safe=False)
 
-def test(request):
-    data = daos.ItemDao.get_item(category="Laptops")
-    print(data)
-    return HttpResponse(data)
+# GET ALL CART ITEMS WITH ITEM INFO + AVAILABLE QUANTITY BY ACCOUNT ID
+def get_cart_items(request, account_id):
+    param = request.GET.get("q") #HOW TO DO QUERY PARAMS
+    return HttpResponse(param)
 
-def test2(request):
-    data = daos.ItemDao.get_all_items()
-    print(data)
-    return HttpResponse(data)
+# ADD ITEM TO CART
+# IF EXISTS INCREASE QUANTITY
+# BY ACCOUNT ID AND ITEM ID
+def add_to_cart(request, account_id, item_id):
+    return HttpResponse(account_id) # TODO: STATUS RESPONSE
 
-def test3(request):
-    cart_item = models.CartItem(0, 1, 6, 1)
-    daos.CartItemDao.insert_cart_item(cart_item)
-    return HttpResponse()
+def delete_from_cart(request, cart_item_id):
+    return HttpResponse() # TODO: STATUS RESPONSE
 
-def test4(request):
-    cart_item = models.CartItem(0, 1, 6, 1)
-    item = daos.CartItemDao.get_item_info(cart_item)
-    return HttpResponse(item.name)
+# DECREASE OR INCREASE CART ITEM QUANTITY 
+def update_cart_item_quantity(request, cart_item_id, new_quantity):
+    return HttpResponse() # TODO: STATUS REPONSE
 
-# Testing rental insert
-def test5(request):
-    # Create datetime objects using Python's datetime module
-    pickup_date_time = datetime.datetime(2024, 4, 14)
-    return_date_time = datetime.datetime(2024, 5, 14)
-
-    rental = models.Rental(1, pickup_date_time, return_date_time, 'pending', 6)
-    daos.RentalDao.insert_rental(rental)
-    return HttpResponse()
-
-    # TODO: Will need to write get_studentID method to assign the rental to the student, instead of hardcoding it in
-
-# Testing rental update
-def test6(request):
-    daos.RentalDao.update_rental_status(0, 'picked up')
-    return HttpResponse()
-
-    # TODO: Possibly allow staff to modify the pickup/return datetime? (May not be necessary for the sake of time)
-
-# Testing rental delete
-def test7(request):
-    daos.RentalDao.delete_rental(0)
-    return HttpResponse()
-
-# Testing rental item insert
-def test8(request):
-    rental_item = models.ItemUnit(1, "damaged", 2, 1)
-    daos.ItemUnitDao.insert_rental_item(rental_item)
-    return HttpResponse()
-
-# Testing rental item update
-def test9(request):
-    daos.ItemUnitDao.update_rental_item_status(0, 'damaged')
-    return HttpResponse()
-
-# Testing rental item delete
-def test10(request):
-    daos.ItemUnitDao.delete_rental_item(0)
-    return HttpResponse()
-
-def test11(request):
-    daos.RentalDao.get_all_rentals()
-    return HttpResponse()
-
-def test12(request):
-    daos.ItemUnitDao.get_item_unit(rental_item_id=0)
-    return HttpResponse()
-
-def test13(request):
-    daos.ItemUnitDao.get_all_rental_items()
+def cancel_rental(request, rental_id):
     return HttpResponse()
 
 #example Json response - get all items
