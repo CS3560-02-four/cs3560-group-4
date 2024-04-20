@@ -11,7 +11,6 @@ def get_available_items(request):
     response = []
     items = daos.ItemDao.get_all_items()
     item_columns = get_column_names("item")
-    print(item_columns)
     for i in items:
         num_available = len(daos.ItemUnitDao.get_item_unit(item_id=i.id, rental_id=None))
         if num_available != 0:
@@ -53,7 +52,6 @@ def add_to_cart(request):
     if len(existing_cart_items) == 1:
         #Item already exists in cart; update quantity
         cart_item = existing_cart_items[0] #get already existing CartItem
-        print(cart_item.quantity)
         daos.CartItemDao.update_cart_item_quantity(cart_item.id, cart_item.quantity + 1) #update quantity in DB by 1
     else:
         #Item does not exist in cart, create new CartItem with quantity 1
