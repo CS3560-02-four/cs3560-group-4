@@ -15,15 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from rest_framework.routers import DefaultRouter
-# from .views import PostViewSet
-# 
-# router = DefaultRouter()
-# router.registry.extend(post_router.registry)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("inventory_rental/", include("inventory_rental_cs.urls"))
-
-    # path("", include(router.urls))
 ]
