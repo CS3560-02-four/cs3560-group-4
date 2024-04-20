@@ -8,6 +8,5 @@ urlpatterns = [
     path("add-to-cart/", views.add_to_cart), #DONE, add item to an account's cart, account_id and item_id passed as QUERY PARAMETERS
     path("delete-from-cart/", views.delete_from_cart), #DONE, delete all units of an item from account's cart, QUERY PARAMS: cart_item_id
     path("update-cart-item-quantity/", views.update_cart_item_quantity), #DONE, update quantity of an item in cart, QUERY PARAMS: cart_item_id, new_quantity
-
-    path("exampleJson/", views.test_json) #USE THIS FOR THE EXAMPLE JSON METHOD
+    path("get-rental/", views.get_rental), #DONE, get rental info and list of its items, QUERY PARAMS: rental_id
 ]

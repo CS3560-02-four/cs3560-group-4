@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from . import daos, models
 import datetime
-from django.db import connection
+from django.db import IntegrityError, connection
 
 # GET ALL ITEMS AVAILABLE FOR RENTAL
 # RETURN ITEMS WITH AVAILABLE QUANTITY
@@ -44,20 +44,24 @@ def get_cart_items(request):
 # IF EXISTS INCREASE QUANTITY
 # BY ACCOUNT ID AND ITEM ID
 def add_to_cart(request):
-    #QUERY PARAMS: account_id, item_id
-    account_id = request.GET["account_id"]
-    item_id = request.GET["item_id"]
+    try:
+        #QUERY PARAMS: account_id, item_id
+        account_id = request.GET["account_id"]
+        item_id = request.GET["item_id"]
 
-    existing_cart_items = daos.CartItemDao.get_cart_item(account_id=account_id, item_id=item_id)
-    if len(existing_cart_items) == 1:
-        #Item already exists in cart; update quantity
-        cart_item = existing_cart_items[0] #get already existing CartItem
-        daos.CartItemDao.update_cart_item_quantity(cart_item.id, cart_item.quantity + 1) #update quantity in DB by 1
-    else:
-        #Item does not exist in cart, create new CartItem with quantity 1
-        cart_item = models.CartItem(0, item_id, 1, account_id) #new CartItem
-        daos.CartItemDao.insert_cart_item(cart_item) #insert in table in DB
-    return HttpResponse("Item successfully added to cart", status=201)
+        existing_cart_items = daos.CartItemDao.get_cart_item(account_id=account_id, item_id=item_id)
+        if len(existing_cart_items) == 1:
+            #Item already exists in cart; update quantity
+            cart_item = existing_cart_items[0] #get already existing CartItem
+            daos.CartItemDao.update_cart_item_quantity(cart_item.id, cart_item.quantity + 1) #update quantity in DB by 1
+        else:
+            #Item does not exist in cart, create new CartItem with quantity 1
+            cart_item = models.CartItem(0, item_id, 1, account_id) #new CartItem
+            daos.CartItemDao.insert_cart_item(cart_item) #insert in table in DB
+        return HttpResponse("Item successfully added to cart", status=201)
+    except IntegrityError:
+        return HttpResponse("Error: Account not found or wrong item ID", status=500)
+
 
 #DELETE ALL UNITS OF ITEM FROM CART
 def delete_from_cart(request):
@@ -76,24 +80,37 @@ def update_cart_item_quantity(request):
     daos.CartItemDao.update_cart_item_quantity(cart_item_id, new_quantity) #update cart item quantity in DB
     return HttpResponse("Quantity updated", status=201) # TODO: STATUS REPONSE
 
-# def cancel_rental(request, rental_id):
-#     return HttpResponse()
+#GET RENTAL BY RENTAL ID WITH ALL ITEMS WITH INFO
+def get_rental(request):
+    #QUERY PARAMS: rental_id
+    rental_id = request.GET["rental_id"]    
 
-# #GET RENTAL BY RENTAL ID WITH ALL ITEMS WITH INFO AND QUANTITY IN RENTAL
-# def get_rental(request):
-#     return HttpResponse()
+    #add rental info to response
+    try:
+        rental = daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+    except IndexError:
+        return HttpResponse("Error: Rental does not exist", status=500)
 
-#example Json response - get all items
-def test_json(request):
-    items = daos.ItemDao.get_all_items() #get list of all items
-    item_attributes = [(i.id, i.name, i.description, i.category) for i in items] #get list of tuples, each containing values of attributes of each item
-    columns = get_column_names("item") #get list of column names
-    result = [] 
-    for i in item_attributes:
-        result.append(dict(zip(columns, i))) #this creates a dictionary for each item, keys are column names and values are the actual attribute values
-        # result is the final list of dictionaries each representing an item
-    return JsonResponse(result, safe=False) #return a Json response with those items - see what this looks like at url inventory_rental_cs/exampleJson
+    rental_columns = get_column_names("rental")
+    rental_attrbts = [rental.id, rental.status, rental.pickup_date_time, rental.return_date_time, rental.student_id]
+    response = dict(zip(rental_columns, rental_attrbts)) #add rental info to response
+
+    #add item info to response
+    item_columns = get_column_names("item")
+    item_unit_columns = get_column_names("item_unit")
+    item_units = daos.ItemUnitDao.get_item_unit(rental_id=rental_id) #get item units associated with rental
+    items = []
+    for i in item_units:
+        item = daos.ItemDao.get_item(item_id=i.item_id)[0] #get item info
+        item_attrbts = [item.id, item.name, item.description, item.category]
+        item_info = dict(zip(item_columns, item_attrbts)) #add item general info to dict
+        item_info["status"] = i.status #add item unit status to dict
+        items.append(item_info) #add to list of items
     
+    response["items"] = items #add list of items to response
+
+    return JsonResponse(response, safe=False)
+
 #helper method to get list of column names for a table
 def get_column_names(table_name):
     cursor = connection.cursor()
