@@ -23,7 +23,8 @@ export async function fetchAllItems(): Promise<DataResponse> {
             id: data.item_id,
             name: data.name,
             description: data.description,
-            category: data.category
+            category: data.category,
+            availableQuantity: 0
         };
         return item;
     });
@@ -48,7 +49,8 @@ export async function fetchItem(itemId: number): Promise<DataResponse> {
         id: itemData[0].item_id,
         name: itemData[0].name,
         description: itemData[0].description,
-        category: itemData[0].category
+        category: itemData[0].category,
+        availableQuantity: 0
     };
     return {
         data: item

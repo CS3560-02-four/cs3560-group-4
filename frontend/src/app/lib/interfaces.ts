@@ -3,7 +3,7 @@ export interface Item {
     name: string;
     description: string;
     category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
-    availableQuantity?: number;
+    availableQuantity: number;
     image?: any;
 }
 

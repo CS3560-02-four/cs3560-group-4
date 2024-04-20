@@ -1,13 +1,15 @@
 'use client';
 import { useState } from "react";
 
-export default function QuantityPicker({ itemQuantity, onUpdateQuantity }: { itemQuantity: number, onUpdateQuantity: Function }) {
+export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availableQuantity }: { itemQuantity: number, onUpdateQuantity: Function, availableQuantity: number }) {
     const [quantity, setQuantity] = useState(itemQuantity);
 
     function incrementQuantity() {
         const newQuantity = quantity + 1;
-        setQuantity(newQuantity);
-        onUpdateQuantity(newQuantity);
+        if (newQuantity > availableQuantity) {
+            setQuantity(newQuantity);
+            onUpdateQuantity(newQuantity);
+        }
     }
 
     function decrementQuantity() {

@@ -25,7 +25,7 @@ export default function CartItemField({ cartItem, onUpdateItemQuantity, onRemove
                 <div className="text-green-900 text-2xl font-medium">{cartItem.item.name}</div>
                 <div>{cartItem.item.description}</div>
             </div>
-            <QuantityPicker itemQuantity={cartItem.quantity} onUpdateQuantity={onUpdate} />
+            <QuantityPicker itemQuantity={cartItem.quantity} onUpdateQuantity={onUpdate} availableQuantity={cartItem.item.availableQuantity} />
             <div className="flex justify-center">
                 <button onClick={removeItem} className="bg-red-700 text-white rounded text-sm p-2 font-medium w-[10%]">
                     Remove
