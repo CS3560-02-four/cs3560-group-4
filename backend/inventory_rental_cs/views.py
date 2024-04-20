@@ -6,6 +6,7 @@ from django.db import connection
 
 # GET ALL ITEMS AVAILABLE FOR RENTAL
 # RETURN ITEMS WITH AVAILABLE QUANTITY
+# TODO: ERROR CATCHING
 def get_available_items(request):
     response = []
     items = daos.ItemDao.get_all_items()
@@ -48,28 +49,41 @@ def add_to_cart(request):
     account_id = request.GET["account_id"]
     item_id = request.GET["item_id"]
 
-    existing_cart_item = daos.CartItemDao.get_cart_item(account_id=account_id, item_id=item_id)
-    print(existing_cart_item)
-    if len(existing_cart_item) == 1:
+    existing_cart_items = daos.CartItemDao.get_cart_item(account_id=account_id, item_id=item_id)
+    if len(existing_cart_items) == 1:
         #Item already exists in cart; update quantity
-        cart_item = existing_cart_item[0] #get already existing CartItem
+        cart_item = existing_cart_items[0] #get already existing CartItem
         print(cart_item.quantity)
         daos.CartItemDao.update_cart_item_quantity(cart_item.id, cart_item.quantity + 1) #update quantity in DB by 1
     else:
         #Item does not exist in cart, create new CartItem with quantity 1
         cart_item = models.CartItem(0, item_id, 1, account_id) #new CartItem
-        daos.CartItemDao.insert_cart_item(cart_item) #insert in table
-    return HttpResponse("Item added to cart", status=201) #TODO: ERROR CATCHING
+        daos.CartItemDao.insert_cart_item(cart_item) #insert in table in DB
+    return HttpResponse("Item successfully added to cart", status=201)
 
-def delete_from_cart(request, cart_item_id):
-    return HttpResponse() # TODO: STATUS RESPONSE
+#DELETE ALL UNITS OF ITEM FROM CART
+def delete_from_cart(request):
+    #QUERY PARAMS: cart_item_id
+    cart_item_id = request.GET["cart_item_id"]
+
+    daos.CartItemDao.delete_cart_item(cart_item_id) #delete from DB
+    return HttpResponse("Item successfully deleted from cart", status=200) # TODO: STATUS RESPONSE
 
 # DECREASE OR INCREASE CART ITEM QUANTITY 
-def update_cart_item_quantity(request, cart_item_id, new_quantity):
-    return HttpResponse() # TODO: STATUS REPONSE
+def update_cart_item_quantity(request):
+    #QUERY PARAMS: cart_item_id, new_quantity
+    cart_item_id = request.GET["cart_item_id"]
+    new_quantity = request.GET["new_quantity"]
 
-def cancel_rental(request, rental_id):
-    return HttpResponse()
+    daos.CartItemDao.update_cart_item_quantity(cart_item_id, new_quantity) #update cart item quantity in DB
+    return HttpResponse("Quantity updated", status=201) # TODO: STATUS REPONSE
+
+# def cancel_rental(request, rental_id):
+#     return HttpResponse()
+
+# #GET RENTAL BY RENTAL ID WITH ALL ITEMS WITH INFO AND QUANTITY IN RENTAL
+# def get_rental(request):
+#     return HttpResponse()
 
 #example Json response - get all items
 def test_json(request):
