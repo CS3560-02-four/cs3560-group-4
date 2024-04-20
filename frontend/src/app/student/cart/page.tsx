@@ -15,7 +15,7 @@ export default async function Page() {
         const response: DataResponse = await fetchCartItems(accountId);
         const cartItems: Array<CartItem> = response.data;
         return (
-            <div className="flex gap-20 w-full relative top-44">
+            <div className="relative top-32 left-24 flex gap-[500px]">
                 <CartItemContainer cartItems={cartItems} />
                 <CartSummaryField />
             </div>

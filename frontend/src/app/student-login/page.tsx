@@ -11,5 +11,9 @@ export default async function Page() {
     }
 
     //Display login form
-    return <StudentLogin />;
+    return (
+        <div className="flex w-[100vw] h-[100vh] justify-center items-center">
+            <StudentLogin />
+        </div>
+    );
 }

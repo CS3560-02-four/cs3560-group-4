@@ -1,7 +1,7 @@
-export default function AccountButton({ handleClick, popupOpen }: { handleClick: Function, popupOpen: boolean }) {
+export default function AccountButton({ handleClick }: { handleClick: Function }) {
     return (
         <button
-            className={popupOpen ? "text-4xl bg-white text-green-950" : "text-4xl bg-green-950"}
+            className="bg-white text-green-900 rounded text-xl p-2 font-medium"
             onClick={() => { handleClick(); }}>
             Account
         </button>

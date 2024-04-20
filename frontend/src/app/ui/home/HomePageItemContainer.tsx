@@ -17,10 +17,12 @@ export default function HomePageItemContainer({ items, accountId }: { items: Arr
     }
 
     return (
-        <div>
-            {itemsDisplayed.map((item: Item) => {
-                return <ItemField item={item} key={item.id} accountId={accountId} />
-            })}
+        <div className="flex justify-between p-5">
+            <div className="w-[50%] pl-14 flex flex-col gap-10">
+                {itemsDisplayed.map((item: Item) => {
+                    return <ItemField item={item} key={item.id} accountId={accountId} />
+                })}
+            </div>
             <Filter onSetFilter={onSetFilter}/>
         </div>
     );

@@ -14,7 +14,7 @@ export default function AddToCartButton({ accountId, item }: { accountId: number
     }
 
     return (
-        <button className="h-4 w-10 bg-green-950 text-white" onClick={onAddItemToCart}>
+        <button className="bg-green-900 text-white rounded text-l p-2 font-medium" onClick={onAddItemToCart}>
             Add To Cart
         </button>
     );

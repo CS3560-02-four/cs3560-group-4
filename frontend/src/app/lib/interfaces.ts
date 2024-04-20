@@ -3,6 +3,7 @@ export interface Item {
     name: string;
     description: string;
     category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
+    availableQuantity?: number;
 }
 
 export interface CartItem {
@@ -13,9 +14,10 @@ export interface CartItem {
 
 export interface Rental {
     id: number;
-    status: "reserved" | "active" | "complete";
+    status: "reserved" | "active" | "complete" | "canceled";
     pickupDatetime: string;
     returnDatetime: string;
+    itemUnits?: Array<ItemUnit>;
 }
 
 export interface ItemUnit {

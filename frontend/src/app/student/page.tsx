@@ -15,8 +15,7 @@ export default async function Page() {
     if (accountIdCookieValue !== undefined) {
         accountId = parseInt(accountIdCookieValue);
         return (
-            <div className="flex flex-col gap-4">
-                <h1>Cal Poly Pomona Rental Service - CS Department</h1>
+            <div className="flex flex-col gap-4 relative top-24 left-24 justify-center w-[80%]">
                 <HomePageItemContainer items={items} accountId={accountId} />
             </div>
         );

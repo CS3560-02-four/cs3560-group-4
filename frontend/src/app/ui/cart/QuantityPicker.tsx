@@ -24,9 +24,9 @@ export default function QuantityPicker({ itemQuantity, onUpdateQuantity }: { ite
 
     return (
         <div className="flex gap-1">
-            <button onClick={decrementQuantity}>-</button>
-            <input type="text" className="w-4" onChange={handleTextInputChange} value={quantity}/>
-            <button onClick={incrementQuantity}>+</button>
+            <button onClick={decrementQuantity} className="w-9 h-9 bg-gray-200 rounded hover:bg-gray-300">-</button>
+            <input type="text" className="w-6 text-center" onChange={handleTextInputChange} value={quantity} />
+            <button onClick={incrementQuantity} className="w-9 h-9 bg-gray-200 rounded hover:bg-gray-300">+</button>
         </div>
     );
 }

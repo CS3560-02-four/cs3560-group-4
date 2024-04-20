@@ -1,9 +1,11 @@
 'use server';
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-//This page will be used as the login page implemented later, for now just a link redirecting to the homepage
 export default async function Page() {
+  //Admin page is not done yet so redirect to student login page
+  redirect("/student-login");
   return (
     <div>
       <Link href="/student-login">Login as Student</Link>

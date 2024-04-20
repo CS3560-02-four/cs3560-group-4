@@ -23,7 +23,7 @@ export default function CartItemContainer({ cartItems, }: { cartItems: Array<Car
     }
 
     return (
-        <div className="relative top-32 flex flex-col gap-7">
+        <div className="flex flex-col gap-9 w-[50%]">
             {items.map((cartItem: CartItem) => <CartItemField key={cartItem.id} cartItem={cartItem} onUpdateItemQuantity={onUpdateItemQuantity} onRemoveItem={onRemoveItem} />)}
         </div>
     );
