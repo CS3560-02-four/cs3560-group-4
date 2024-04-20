@@ -9,4 +9,8 @@ urlpatterns = [
     path("delete-from-cart/", views.delete_from_cart), #DONE, delete all units of an item from account's cart, QUERY PARAMS: cart_item_id
     path("update-cart-item-quantity/", views.update_cart_item_quantity), #DONE, update quantity of an item in cart, QUERY PARAMS: cart_item_id, new_quantity
     path("get-rental/", views.get_rental), #DONE, get rental info and list of its items, QUERY PARAMS: rental_id
+    path("login/", views.login), # Logs in user, use ?username=____ in url.  ENSURE PASSWORD IS IN request.POST
+    path("accountInfo/", views.getAccountDetails), # Gets account info, use ?account_id=___ in url
+    path("rentalDetails/", views.getUserRentals),  # Gets all rentals associated with a user, use ?account_id=___ in url
+    path("createAppointment/", views.createRental), # Creates a rental using a user's cart, use ?account_id=___ in url
 ]

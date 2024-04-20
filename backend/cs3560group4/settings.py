@@ -78,10 +78,10 @@ WSGI_APPLICATION = "cs3560group4.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "cs3560_group4",
+        "NAME": "CS3560",
         "USER": "postgres",
         "PASSWORD": "udemy",
-        "HOST": "192.168.50.45",
+        "HOST": "localhost",
         "PORT": "5432"
     }
 }
