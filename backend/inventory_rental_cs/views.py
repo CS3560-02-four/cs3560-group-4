@@ -124,15 +124,16 @@ def cancel_rental(request):
 @csrf_exempt
 def login(request):
     req_body = request.POST
-    user = request.GET["username"]
+    user = req_body["username"]
     passw = req_body["password"]
+
     account = daos.AccountDao.get_account(username = user)
     if len(account) < 1:
         return HttpResponse("Username not found", status = 500)
     account = account[0] # "unwrap" the account such that it is not in a list.
     
     if passw == account.password:
-        return JsonResponse([{"account_id" : account.id}], safe=False) # Successful login
+        return JsonResponse({"account_id" : account.id}, safe=False) # Successful login
     else:
         return HttpResponse("Login failed", status = 500) # Failed login
 
@@ -150,8 +151,6 @@ def getUserRentals(request):
     result = [] 
     for i in rental_attributes:
         rental_dict = dict(zip(columns, i)) # Zip together column names and the corresponding value
-        units_in_rental = daos.ItemUnitDao.get_item_unit(rental_id = i[0])
-
         result.append(rental_dict) #this creates a dictionary for each item, keys are column names and values are the actual attribute values
         # result is the final list of dictionaries each representing a rental
     return JsonResponse(result, safe=False) #return a Json response with those items - see what this looks like at url inventory_rental_cs/exampleJson
