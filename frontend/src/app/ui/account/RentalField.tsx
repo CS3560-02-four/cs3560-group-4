@@ -2,8 +2,17 @@
 import { Rental } from "@/app/lib/interfaces";
 import Link from "next/link";
 import { formatDatetime } from "@/app/lib/utils";
+import { cancelRental } from "@/app/lib/data";
+import { useRouter } from "next/navigation";
 
 export default function RentalField({ rental }: { rental: Rental }) {
+    const router = useRouter();
+
+    function onCancelRental() {
+        cancelRental(rental.id);
+        router.refresh();
+    }
+
     return (
         <div className="rounded shadow-md p-4 flex flex-col gap-3">
             <div className="text-green-900 text-2xl font-medium">Rental #{rental.id}</div>
@@ -16,7 +25,7 @@ export default function RentalField({ rental }: { rental: Rental }) {
                         Details
                     </button>
                 </Link>
-                {rental.status === "reserved" ? <button className="bg-red-700 text-white rounded text-sm p-2 font-medium">Cancel Rental Reservation</button> : null}
+                {rental.status === "reserved" ? <button onClick={onCancelRental} className="bg-red-700 text-white rounded text-sm p-2 font-medium">Cancel Rental Reservation</button> : null}
             </div>
         </div>
     );

@@ -17,7 +17,7 @@ export default async function Page() {
         return (
             <div className="relative top-32 left-24 flex gap-[500px]">
                 <CartItemContainer cartItems={cartItems} />
-                <CartSummaryField />
+                <CartSummaryField accountId={accountId} />
             </div>
         );
     }

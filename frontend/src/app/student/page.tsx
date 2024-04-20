@@ -9,7 +9,6 @@ import HomePageItemContainer from "../ui/home/HomePageItemContainer";
 export default async function Page() {
     const response: DataResponse = await fetchAllItems();
     const items = response.data;
-
     let accountId: number;
     const accountIdCookieValue = getAccountId();
     if (accountIdCookieValue !== undefined) {

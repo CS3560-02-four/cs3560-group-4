@@ -130,8 +130,12 @@ def cancel_rental(request):
 @csrf_exempt
 def login(request):
     req_body = request.POST
+    print(req_body)
     user = req_body["username"]
     passw = req_body["password"]
+
+    print(user)
+    print(passw)
 
     account = daos.AccountDao.get_account(username = user)
     if len(account) < 1:

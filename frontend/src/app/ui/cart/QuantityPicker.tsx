@@ -6,7 +6,7 @@ export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availab
 
     function incrementQuantity() {
         const newQuantity = quantity + 1;
-        if (newQuantity > availableQuantity) {
+        if (newQuantity <= availableQuantity) {
             setQuantity(newQuantity);
             onUpdateQuantity(newQuantity);
         }

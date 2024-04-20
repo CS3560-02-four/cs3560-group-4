@@ -1,7 +1,7 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { authenticateUser } from "./data";
+import { authenticateUser, confirmRental, fetchCartItems } from "./data";
 import { login, logout } from "./cookies";
 import { redirect } from "next/navigation";
 
@@ -17,8 +17,8 @@ export async function authenticateUserAction(formState: FormState, formData: For
 
     const response = await authenticateUser(username.toString(), password.toString());
     const accountData = response.data;
-    if (accountData.accountId) {
-        login(accountData.accountId);
+    if (accountData.account_id) {
+        login(accountData.account_id);
         redirect("/student");
     }
     else {
@@ -33,9 +33,8 @@ export async function logoutAction() {
     redirect("/student-login");
 }
 
-export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
-    //confirm rental
-    return {
-        message: "Rental Confirmed"
-    };
+//finish this later to work with FormData
+export async function confirmRentalAction(accountId: number) {
+    await confirmRental(accountId);
+    redirect("/student");
 }

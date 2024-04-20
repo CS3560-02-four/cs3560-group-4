@@ -7,15 +7,7 @@ import { Item, CartItem, Account, DataResponse, Rental } from "./interfaces";
 import { redirect } from "next/navigation";
 
 export async function fetchAllItems(): Promise<DataResponse> {
-    const response = await fetch('http://localhost:8000/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: "SELECT * FROM item"
-        })
-    });
+    const response = await fetch('http://localhost:8000/inventory_rental/get-available-items');
     const data = await response.json();
 
     const items = data.map((data: any) => {
@@ -24,7 +16,7 @@ export async function fetchAllItems(): Promise<DataResponse> {
             name: data.name,
             description: data.description,
             category: data.category,
-            availableQuantity: 0
+            availableQuantity: data.available_quantity
         };
         return item;
     });
@@ -33,74 +25,39 @@ export async function fetchAllItems(): Promise<DataResponse> {
     }
 }
 
-export async function fetchItem(itemId: number): Promise<DataResponse> {
-    const response = await fetch('http://localhost:8000/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: `SELECT * FROM item WHERE item_id = ${itemId}`
-        })
-    });
-    const itemData = await response.json();
-
-    const item: Item = {
-        id: itemData[0].item_id,
-        name: itemData[0].name,
-        description: itemData[0].description,
-        category: itemData[0].category,
-        availableQuantity: 0
-    };
-    return {
-        data: item
-    }
-}
-
 export async function fetchCartItems(accountId: number): Promise<DataResponse> {
-    const response = await fetch('http://localhost:8000/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: `SELECT * FROM cart_item WHERE account_id = ${accountId}`
-        }),
-        cache: 'no-store'
-    });
+    const response = await fetch(`http://localhost:8000/inventory_rental/get-cart-items?account_id=${accountId}`);
     const data = await response.json();
-
-    const items = await Promise.all(data.map(async (data: any) => {
-        const response: DataResponse = await fetchItem(data.item_id);
-        return response.data;
-    }));
-
-    const cartItems = data.map((data: any) => {
-        const cartItem: CartItem = {
+    const cartItems: Array<CartItem> = data.map((data: any) => {
+        const item: CartItem = {
             id: data.cart_item_id,
-            item: items.filter((item: Item) => item.id === data.item_id)[0],
-            quantity: data.quantity,
-        };
-        return cartItem;
+            item: {
+                id: data.item_id,
+                name: data.name,
+                description: data.description,
+                category: data.category,
+                availableQuantity: data.available_quantity,
+            },
+            quantity: data.quantity
+        }
+        return item;
     });
-
     return {
         data: cartItems
     }
 }
 
 export async function authenticateUser(username: string, password: string): Promise<DataResponse> {
-    const response = await fetch("http://localhost:8000/login", {
+    const formBody = [encodeURIComponent("username") + "=" + encodeURIComponent(username), encodeURIComponent("password") + "=" + encodeURIComponent(password)].join("&");
+    const response = await fetch("http://localhost:8000/inventory_rental/login", {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+        body: formBody
     });
     const data = await response.json();
+    console.log(data);
     return {
         data: data
     }
@@ -108,15 +65,7 @@ export async function authenticateUser(username: string, password: string): Prom
 
 export async function fetchAccountData(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch("http://localhost:8000/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `SELECT * FROM account WHERE account_id = ${accountId}`
-            })
-        });
+        const response = await fetch(`http://localhost:8000/inventory_rental/accountInfo?account_id=${accountId}`);
         const data = await response.json();
         const account: Account = {
             id: data[0].account_id,
@@ -142,15 +91,7 @@ export async function fetchAccountData(accountId: number): Promise<DataResponse>
 //temp
 export async function updateCartItemQuantity(cartItemId: number, quantity: number) {
     try {
-        const response = await fetch("http://localhost:8000/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `UPDATE cart_item SET quantity = ${quantity} WHERE cart_item_id = ${cartItemId} RETURNING cart_item_id, quantity`
-            })
-        })
+        const response = await fetch(`http://localhost:8000/inventory_rental/update-cart-item-quantity?cart_item_id=${cartItemId}&new_quantity=${quantity}`);
         const status = response.status;
         if (status !== 200) {
             throw new Error();
@@ -165,15 +106,7 @@ export async function updateCartItemQuantity(cartItemId: number, quantity: numbe
 //temp
 export async function removeCartItem(cartItemId: number) {
     try {
-        const response = await fetch("http://localhost:8000/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `DELETE FROM cart_item WHERE cart_item_id = ${cartItemId} RETURNING cart_item_id`
-            })
-        })
+        const response = await fetch(`http://localhost:8000/inventory_rental/delete-from-cart?cart_item_id=${cartItemId}`);
         const status = response.status;
         if (status !== 200) {
             throw new Error();
@@ -190,34 +123,10 @@ export async function addToCart(accountId: number, itemId: number) {
     try {
         //temp
         //check if item already in cart
-        const isInCartResponse = await fetch("http://localhost:8000/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `SELECT item_id, cart_item_id, quantity FROM cart_item WHERE item_id = ${itemId} AND account_id = ${accountId}`
-            })
-        })
-        const responseData = await isInCartResponse.json();
-        console.log(responseData);
-        if (!responseData[0]) {
-            const response = await fetch("http://localhost:8000/", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    query: `INSERT INTO cart_item (item_id, quantity, account_id) VALUES (${itemId}, 1, ${accountId})`
-                })
-            })
-            const status = response.status;
-            if (status !== 200) {
-                throw new Error();
-            }
-        }
-        else {
-            await updateCartItemQuantity(responseData[0].cart_item_id, responseData[0].quantity + 1);
+        const response = await fetch(`http://localhost:8000/inventory_rental/add-to-cart?account_id=${accountId}&item_id=${itemId}`);
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
         }
     }
     catch (error) {
@@ -228,15 +137,7 @@ export async function addToCart(accountId: number, itemId: number) {
 
 export async function getRentals(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch("http://localhost:8000/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: `SELECT * FROM rental WHERE account_id = ${accountId}`
-            })
-        });
+        const response = await fetch(`http://localhost:8000/inventory_rental/rentalDetails?account_id=${accountId}`);
         const data = await response.json();
         const rentals: Array<Rental> = data.map((data: any) => {
             const rental: Rental = {
@@ -257,3 +158,31 @@ export async function getRentals(accountId: number): Promise<DataResponse> {
         }
     }
 }
+
+export async function confirmRental(accountId: number) {
+    try {
+        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment?account_id=${accountId}`);
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
+        }
+    }
+    catch (error) {
+        redirect("/student/cart");
+    }
+}
+
+export async function cancelRental(rentalId: number) {
+    try {
+        const response = await fetch(`http://localhost:8000/inventory_rental/rentalCancel?rental_id=${rentalId}`);
+        const status = response.status;
+        if (status !== 200) {
+            throw new Error();
+        }
+    }
+    catch (error) {
+        redirect("/student");
+    }
+}
+
+//add getting individual rental

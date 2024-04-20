@@ -41,7 +41,7 @@ export interface Account {
 export interface FormState {
     message?: string;
     error?: string;
-    options?: {};
+    options?: any;
 }
 
 export interface DataResponse {

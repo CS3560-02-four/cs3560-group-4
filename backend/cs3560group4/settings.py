@@ -81,6 +81,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "inventory_rental",
+        "USER": "postgres",
         "PASSWORD": "udemy",
         "HOST": "localhost",
         "PORT": "5432"
