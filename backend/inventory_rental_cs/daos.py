@@ -80,7 +80,7 @@ class CartItemDao:
     #get cart item by keyword args - general READ method
     def get_cart_item(**kwargs) -> list[models.CartItem]:
         cursor = connection.cursor()
-        query = "SELECT * FROM card_item WHERE "
+        query = "SELECT * FROM cart_item WHERE "
         for i in kwargs.items():
             query += f"{i[0]}='{i[1]}' AND "
         query = query.strip("AND ")
@@ -169,11 +169,11 @@ class RentalDao:
         query = "SELECT * FROM rental WHERE "
         for i in kwargs.items():
             query += f"{i[0]}='{i[1]}' AND "
-            query = query.strip("AND ")
-            cursor.execute(query)
-            rows  = cursor.fetchall()
-            result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
-            return result
+        query = query.strip("AND ")
+        cursor.execute(query)
+        rows  = cursor.fetchall()
+        result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
+        return result
         
     # Get all Rentals
     # Returns a list of Rental objects - Read
@@ -219,12 +219,15 @@ class ItemUnitDao:
         cursor = connection.cursor()
         query = "SELECT * FROM item_unit WHERE "
         for i in kwargs.items():
-            query += f"{i[0]}='{i[1]}' AND "
-            query = query.strip("AND ")
-            cursor.execute(query)
-            rows  = cursor.fetchall()
-            result = [models.ItemUnit(r[0], r[1], r[2], r[3]) for r in rows]
-            return result
+            if i[0] == "rental_id" and i[1] == None:
+                query += "rental_id IS null AND"
+            else: 
+                query += f"{i[0]}='{i[1]}' AND "
+        query = query.strip("AND ")
+        cursor.execute(query)
+        rows  = cursor.fetchall()
+        result = [models.ItemUnit(r[0], r[1], r[2], r[3]) for r in rows]
+        return result
         
     # Get all Rentals Items
     # Returns a list of Rental Item objects - Read
@@ -244,6 +247,17 @@ class ItemUnitDao:
         cursor.execute(f"UPDATE item_unit\
                         SET status='{status}'\
                         WHERE item_unit_id={item_unit_id}")
+        
+    def update_item_unit_rental(item_unit_id, rental_id):
+        cursor = connection.cursor()
+        if rental_id != None:
+            cursor.execute(f"UPDATE item_unit\
+                            SET rental_id='{rental_id}'\
+                            WHERE item_unit_id={item_unit_id}")
+        else:
+            cursor.execute(f"UPDATE item_unit\
+                            SET rental_id=null\
+                            WHERE item_unit_id={item_unit_id}")
     
     # Remove a rental item from the rental appointment - Delete
     def delete_item_unit(item_unit_id):

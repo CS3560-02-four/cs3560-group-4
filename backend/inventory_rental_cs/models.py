@@ -1,3 +1,5 @@
+from django.db import models
+
 class Account():
     def __init__(self, id, username, password, email, first_name, last_name, address, admin, student, status='normal', balance=0):
         self.id = id
@@ -23,11 +25,11 @@ class Item():
 
 
 class CartItem():
-    def __init__(self, id, item_id, account_id, quantity):
+    def __init__(self, id, item_id, quantity, account_id):
         self.id = id
         self.item_id = item_id
-        self.account_id = account_id
         self.quantity = quantity
+        self.account_id = account_id
 
 
 class Rental():
@@ -45,3 +47,5 @@ class ItemUnit():
         self.rental_id = rental_id # null if not associated with rental
         self.item_id = item_id
         self.status = status
+
+    
