@@ -25,6 +25,7 @@ def get_cart_items(request):
     response = []
     #QUERY PARAMS: account_id
     account_id = request.GET["account_id"]
+
     cart_items = daos.CartItemDao.get_cart_item(account_id=account_id) #get all cart items for account
     cart_item_columns = get_column_names("cart_item")
     item_columns = get_column_names("item")
@@ -42,8 +43,23 @@ def get_cart_items(request):
 # ADD ITEM TO CART
 # IF EXISTS INCREASE QUANTITY
 # BY ACCOUNT ID AND ITEM ID
-def add_to_cart(request, account_id, item_id):
-    return HttpResponse(account_id) # TODO: STATUS RESPONSE
+def add_to_cart(request):
+    #QUERY PARAMS: account_id, item_id
+    account_id = request.GET["account_id"]
+    item_id = request.GET["item_id"]
+
+    existing_cart_item = daos.CartItemDao.get_cart_item(account_id=account_id, item_id=item_id)
+    print(existing_cart_item)
+    if len(existing_cart_item) == 1:
+        #Item already exists in cart; update quantity
+        cart_item = existing_cart_item[0] #get already existing CartItem
+        print(cart_item.quantity)
+        daos.CartItemDao.update_cart_item_quantity(cart_item.id, cart_item.quantity + 1) #update quantity in DB by 1
+    else:
+        #Item does not exist in cart, create new CartItem with quantity 1
+        cart_item = models.CartItem(0, item_id, 1, account_id) #new CartItem
+        daos.CartItemDao.insert_cart_item(cart_item) #insert in table
+    return HttpResponse("Item added to cart", status=201) #TODO: ERROR CATCHING
 
 def delete_from_cart(request, cart_item_id):
     return HttpResponse() # TODO: STATUS RESPONSE
