@@ -47,8 +47,14 @@ def get_cart_items(request):
 def add_to_cart(request):
     #Check if item not available
     item_id = request.GET["item_id"]
-    item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None)
-    if len(item_units_check) == 0:
+    item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None) #get units not associated with a rental
+    cart_items_check = daos.CartItemDao.get_cart_item(item_id=item_id) #get items already added to cart(s)
+    quantity_in_carts = 0
+    for c in cart_items_check:
+        quantity_in_carts += c.quantity #calculate quantity already in cart(s)
+    sum_available = len(item_units_check) - quantity_in_carts #get total number of available units
+
+    if sum_available == 0:
         return HttpResponse("Item not available", status=500)
     
     try:
