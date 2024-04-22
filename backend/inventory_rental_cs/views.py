@@ -87,7 +87,28 @@ def delete_from_cart(request):
 def update_cart_item_quantity(request):
     #QUERY PARAMS: cart_item_id, new_quantity
     cart_item_id = request.GET["cart_item_id"]
-    new_quantity = request.GET["new_quantity"]
+    new_quantity = int(request.GET["new_quantity"])
+
+    #check if item deleted completely
+    if new_quantity == 0:
+        daos.CartItemDao.delete_cart_item(cart_item_id)
+        return HttpResponse("Quantity updated", status=201)
+
+    #get item id
+    cart_item = daos.CartItemDao.get_cart_item(cart_item_id=cart_item_id)[0]
+    item_id = cart_item.item_id
+
+    #quantity check if increasing
+    if new_quantity > cart_item.quantity:
+        item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None) #get units not associated with a rental
+        cart_items_check = daos.CartItemDao.get_cart_item(item_id=item_id) #get items already added to cart(s)
+        quantity_in_carts = 0
+        for c in cart_items_check:
+            quantity_in_carts += c.quantity #calculate quantity already in cart(s)
+        sum_available = len(item_units_check) - quantity_in_carts #get total number of available units
+
+        if sum_available == 0:
+            return HttpResponse("Item not available", status=500)
 
     daos.CartItemDao.update_cart_item_quantity(cart_item_id, new_quantity) #update cart item quantity in DB
     return HttpResponse("Quantity updated", status=201) # TODO: STATUS REPONSE
