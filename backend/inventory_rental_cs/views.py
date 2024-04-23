@@ -96,7 +96,11 @@ def update_cart_item_quantity(request):
         return HttpResponse("Quantity updated", status=201)
 
     #get item id
-    cart_item = daos.CartItemDao.get_cart_item(cart_item_id=cart_item_id)[0]
+    try:
+        cart_item = daos.CartItemDao.get_cart_item(cart_item_id=cart_item_id)[0]
+    except IndexError:
+        return HttpResponse("Invalid cart item ID", status=500)
+
     item_id = cart_item.item_id
 
     #quantity check if increasing
@@ -104,8 +108,8 @@ def update_cart_item_quantity(request):
         item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None) #get units not associated with a rental
         sum_available = len(item_units_check) #get total number of available units
 
-        if sum_available == 0:
-            return HttpResponse("Item not available", status=500)
+        if new_quantity > sum_available:
+            return HttpResponse("Desired quantity not available", status=500)
 
     daos.CartItemDao.update_cart_item_quantity(cart_item_id, new_quantity) #update cart item quantity in DB
     return HttpResponse("Quantity updated", status=201) # TODO: STATUS REPONSE
