@@ -193,3 +193,22 @@ export async function cancelRental(rentalId: number) {
 }
 
 //add getting individual rental
+export async function getRental(rentalId: number): Promise<DataResponse> {
+    try {
+        const response = await fetch(`http://localhost:8000/inventory_rental/get-rental?rental_id=${rentalId}`);
+        const data = await response.json();
+        const rental: Rental = {
+            id: data.rental_id,
+            status: data.status,
+            pickupDatetime: data.pickup_datetime,
+            returnDatetime: data.return_datetime,
+            itemUnits: data.items
+        };
+        return {
+            data: rental
+        }
+    }
+    catch (error) {
+        redirect("/student/account");
+    }
+}
