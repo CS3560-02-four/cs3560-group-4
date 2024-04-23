@@ -159,9 +159,16 @@ export async function getRentals(accountId: number): Promise<DataResponse> {
     }
 }
 
-export async function confirmRental(accountId: number) {
+export async function confirmRental(accountId: number, pickupDatetime: string, returnDatetime: string) {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment?account_id=${accountId}`);
+        const formBody = [encodeURIComponent("pickup") + "=" + encodeURIComponent(pickupDatetime), encodeURIComponent("return") + "=" + encodeURIComponent(returnDatetime)].join("&");
+        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment?account_id=${accountId}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBody
+        });
         const status = response.status;
         if (status !== 200) {
             throw new Error();

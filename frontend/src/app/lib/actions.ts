@@ -1,8 +1,8 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { authenticateUser, confirmRental, fetchCartItems } from "./data";
-import { login, logout } from "./cookies";
+import { authenticateUser, confirmRental, fetchAccountData } from "./data";
+import { login, logout, getAccountId } from "./cookies";
 import { redirect } from "next/navigation";
 
 export async function authenticateUserAction(formState: FormState, formData: FormData): Promise<FormState> {
@@ -12,7 +12,7 @@ export async function authenticateUserAction(formState: FormState, formData: For
     if (!username || !password) {
         return {
             error: "Username or password is missing.",
-        }
+        };
     }
 
     const response = await authenticateUser(username.toString(), password.toString());
@@ -24,7 +24,7 @@ export async function authenticateUserAction(formState: FormState, formData: For
     else {
         return {
             error: "Failed to authenticate user."
-        }
+        };
     }
 }
 
@@ -33,8 +33,23 @@ export async function logoutAction() {
     redirect("/student-login");
 }
 
-//finish this later to work with FormData
-export async function confirmRentalAction(accountId: number) {
-    await confirmRental(accountId);
-    redirect("/student");
+//add error handling
+export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
+    const pickupDatetime = formData.get("pickup");
+    const returnDatetime = formData.get("return");
+    if (!pickupDatetime || !returnDatetime) {
+        return {
+            error: "Please pick your pickup and return times."
+        };
+    }
+
+    const accountIdCookieValue = getAccountId();
+    if (accountIdCookieValue !== undefined) {
+        const accountId = parseInt(accountIdCookieValue);
+        await confirmRental(accountId, pickupDatetime.toString(), returnDatetime.toString());
+    }
+
+    return {
+        message: "Successfully submitted rental."
+    }
 }
