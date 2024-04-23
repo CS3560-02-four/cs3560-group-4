@@ -8,7 +8,7 @@ import AccountInfoField from "@/app/ui/account/AccountInfoField";
 export default async function Page() {
     const accountIdCookieValue = getAccountId();
     if (accountIdCookieValue !== undefined) {
-        const rentalsResponse: DataResponse = await getRentals(parseInt(accountIdCookieValue));
+        const rentalsResponse: DataResponse = await getRentals(parseInt(accountIdCookieValue)); 
         const accountResponse: DataResponse = await fetchAccountData(parseInt(accountIdCookieValue));
         const rentals: Array<Rental> = rentalsResponse.data;
         const account: Account = accountResponse.data;

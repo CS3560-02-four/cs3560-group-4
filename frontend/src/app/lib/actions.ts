@@ -1,7 +1,7 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { authenticateUser, confirmRental, fetchAccountData } from "./data";
+import { addToCart, authenticateUser, confirmRental, fetchAccountData } from "./data";
 import { login, logout, getAccountId } from "./cookies";
 import { redirect } from "next/navigation";
 

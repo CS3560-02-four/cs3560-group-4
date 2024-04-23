@@ -120,19 +120,15 @@ export async function removeCartItem(cartItemId: number) {
 
 //temp
 export async function addToCart(accountId: number, itemId: number) {
-    try {
         //temp
         //check if item already in cart
         const response = await fetch(`http://localhost:8000/inventory_rental/add-to-cart?account_id=${accountId}&item_id=${itemId}`);
         const status = response.status;
         if (status !== 200) {
-            throw new Error();
+            return {
+                error: "Available item quantity exceeded."
+            }
         }
-    }
-    catch (error) {
-        //add error handling
-        redirect("/student")
-    }
 }
 
 export async function getRentals(accountId: number): Promise<DataResponse> {

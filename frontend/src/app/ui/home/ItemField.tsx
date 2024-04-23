@@ -1,6 +1,5 @@
 import { Item } from "../../lib/interfaces";
 import Image from "next/image";
-import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
 
 export default function ItemField({ item, accountId } : { item: Item, accountId: number }) {

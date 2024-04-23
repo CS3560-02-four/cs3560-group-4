@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { rentalId: string }}) 
                 <div>Rental {rental.id}</div>
                 {<div>Status: {rental.status}</div>}
                 {rental.status === "reserved" ? <button className="bg-red-700 text-white rounded text-sm p-2 font-medium">Cancel Rental Reservation</button> : null}
-                {/* {rental.itemUnits ? <RentalItemContainer items={rental.itemUnits}/> : null} */}
+                {rental.itemUnits ? <RentalItemContainer items={rental.itemUnits}/> : null}
             </div>
         );
     }
