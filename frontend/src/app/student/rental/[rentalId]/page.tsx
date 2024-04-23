@@ -5,8 +5,6 @@ import { redirect } from "next/navigation";
 import { Rental } from "@/app/lib/interfaces";
 
 export default async function Page({ params }: { params: { rentalId: string }}) {
-    //fetch rental here
-    //temp
     const accountIdCookieValue = getAccountId();
     if (accountIdCookieValue !== undefined) {
         const response = await getRental(parseInt(params.rentalId));
