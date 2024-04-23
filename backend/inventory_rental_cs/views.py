@@ -130,12 +130,8 @@ def cancel_rental(request):
 @csrf_exempt
 def login(request):
     req_body = request.POST
-    print(req_body)
     user = req_body["username"]
     passw = req_body["password"]
-
-    print(user)
-    print(passw)
 
     account = daos.AccountDao.get_account(username = user)
     if len(account) < 1:
@@ -147,7 +143,7 @@ def login(request):
     else:
         return HttpResponse("Login failed", status = 500) # Failed login
 
-# Gets user rentals based on a request with a valid account_id
+# Gets user rentals based on a request with a valid account_id 
 def getUserRentals(request):
     acc_id = request.GET["account_id"]
 
@@ -184,6 +180,9 @@ def getAccountDetails(request):
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
 def createRental(request):
 
+    # Get request body
+    req_body = request.POST
+
     # Get account id from url
     acc_id = request.GET["account_id"]
 
@@ -206,9 +205,9 @@ def createRental(request):
     
     # After ensuring that there are enough items to rent out, start creating the rental.
     
-    # TODO Date time getting.
-    pickup_time = datetime.now()
-    return_time = (datetime.now() + timedelta(days = 7))
+    # TODO Date time getting testing.
+    pickup_time = req_body["pickup"]
+    return_time = req_body["return"]
 
     rental = models.Rental(id = 0, status = "reserved", pickup_date_time = pickup_time, return_date_time=return_time, student_id=acc_id)
     daos.RentalDao.insert_rental(rental)
