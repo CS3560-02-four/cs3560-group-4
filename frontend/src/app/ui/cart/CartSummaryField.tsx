@@ -4,7 +4,7 @@ import { confirmRentalAction } from "@/app/lib/actions";
 
 export default function CartSummaryField() {
     const status = useFormStatus();
-    const [state, action] = useFormState(confirmRentalAction, {});
+    const [state, action] = useFormState(confirmRentalAction, { message: "", error: "" });
     return ( // form
         //Pickup datetime field
         //Return datetime field

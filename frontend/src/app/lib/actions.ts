@@ -35,6 +35,7 @@ export async function logoutAction() {
 
 //add error handling
 export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
+    console.log(formData);
     const pickupDatetime = formData.get("pickup");
     const returnDatetime = formData.get("return");
     if (!pickupDatetime || !returnDatetime) {

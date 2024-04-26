@@ -14,12 +14,21 @@ export default async function Page() {
         //fetch cart items for account id
         const response: DataResponse = await fetchCartItems(accountId);
         const cartItems: Array<CartItem> = response.data;
-        return (
-            <div className="relative top-32 left-24 flex gap-[500px]">
-                <CartItemContainer cartItems={cartItems} />
-                <CartSummaryField />
-            </div>
-        );
+        if (cartItems.length !== 0) {
+            return (
+                <div className="relative top-32 left-24 flex gap-[500px]">
+                    <CartItemContainer cartItems={cartItems} />
+                    <CartSummaryField />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className="relative top-32 flex justify-center items-center">
+                    Your cart is empty.
+                </div>
+            );
+        }
     }
     else {
         logout();
