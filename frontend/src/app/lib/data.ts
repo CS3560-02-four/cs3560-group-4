@@ -143,7 +143,7 @@ export async function getRentals(accountId: number): Promise<DataResponse> {
                 returnDatetime: data.return_datetime
             }
             return rental;
-        });
+        }).filter((rental: Rental) => rental.status !== "canceled"); //No need to display canceled rentals
         return {
             data: rentals
         }
@@ -158,7 +158,7 @@ export async function getRentals(accountId: number): Promise<DataResponse> {
 export async function confirmRental(accountId: number, pickupDatetime: string, returnDatetime: string) {
     try {
         const formBody = [encodeURIComponent("pickup") + "=" + encodeURIComponent(pickupDatetime), encodeURIComponent("return") + "=" + encodeURIComponent(returnDatetime)].join("&");
-        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment?account_id=${accountId}`, {
+        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment/?account_id=${accountId}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

@@ -1,7 +1,7 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { addToCart, authenticateUser, confirmRental, fetchAccountData } from "./data";
+import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData } from "./data";
 import { login, logout, getAccountId } from "./cookies";
 import { redirect } from "next/navigation";
 
@@ -50,7 +50,5 @@ export async function confirmRentalAction(formState: FormState, formData: FormDa
         await confirmRental(accountId, pickupDatetime.toString(), returnDatetime.toString());
     }
 
-    return {
-        message: "Successfully submitted rental."
-    }
+    redirect("/student/account");
 }

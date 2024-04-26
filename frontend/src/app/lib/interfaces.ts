@@ -23,8 +23,10 @@ export interface Rental {
 
 export interface ItemUnit {
     id: number;
-    item: Item;
-    status: string;
+    name: string;
+    description: string;
+    category: string;
+    status: "normal" | "damaged";
 }
 
 export interface Account {

@@ -9,7 +9,7 @@ export default function AccountInfoField({ account }: { account: Account }) {
     }
 
     return (
-        <div className="flex flex-col shadow-md gap-4 items-center justify-between p-5">
+        <div className="flex flex-col shadow-md gap-4 items-center justify-between p-5 h-[250px]">
             <div className="text-green-900 text-2xl font-medium">{account.firstName} {account.lastName}</div>
             <div className="text-green-900 text-lg">{account.email}</div>
             <div>Account Balance: {account.balance}</div>

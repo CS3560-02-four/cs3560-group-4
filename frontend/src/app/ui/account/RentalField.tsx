@@ -3,14 +3,12 @@ import { Rental } from "@/app/lib/interfaces";
 import Link from "next/link";
 import { formatDatetime } from "@/app/lib/utils";
 import { cancelRental } from "@/app/lib/data";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export default function RentalField({ rental }: { rental: Rental }) {
-    const router = useRouter();
-
     function onCancelRental() {
         cancelRental(rental.id);
-        router.refresh();
+        redirect("/student/account");
     }
 
     return (
