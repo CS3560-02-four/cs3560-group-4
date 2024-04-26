@@ -158,12 +158,8 @@ def cancel_rental(request):
 @csrf_exempt
 def login(request):
     req_body = request.POST
-    print(req_body)
     user = req_body["username"]
     passw = req_body["password"]
-
-    print(user)
-    print(passw)
 
     account = daos.AccountDao.get_account(username = user)
     if len(account) < 1:
@@ -175,7 +171,7 @@ def login(request):
     else:
         return HttpResponse("Login failed", status = 500) # Failed login
 
-# Gets user rentals based on a request with a valid account_id
+# Gets user rentals based on a request with a valid account_id 
 def getUserRentals(request):
     acc_id = request.GET["account_id"]
 
@@ -212,32 +208,34 @@ def getAccountDetails(request):
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
 def createRental(request):
 
+    # Get request body
+    req_body = request.POST
+
     # Get account id from url
     acc_id = request.GET["account_id"]
 
     # First, ensure that there are items in the cart
     cart_items = daos.CartItemDao.get_cart_item(account_id = acc_id)
-    cart_item_attributes = [(i.id, i.item_id, i.quantity, i.account_id) for i in cart_items]
 
     # Check if there is nothing in cart
     if len(cart_items) < 1:
         return HttpResponse("Nothing in cart", status = 500)
     
-    # Go through each item type, and ensure that there are enough items to rent out.
+    # Go through each item type in cart, and ensure that there are enough items to rent out.
     for cart_item in cart_items:
         # Get all available units
         relevant_units = daos.ItemUnitDao.get_item_unit(item_id = cart_item.item_id, status = "normal", rental_id = None)
 
         # If there are not enough items to rent out, failure.
-        if len(relevant_units) < cart_item_attributes[0][3]:
+        if len(relevant_units) < cart_item.quantity:
             item_name = daos.ItemDao.get_item(item_id = cart_item.item_id)[0].name
             return HttpResponse(f"Not enough of {item_name}", status = 500)
     
     # After ensuring that there are enough items to rent out, start creating the rental.
     
-    # TODO Date time getting.
-    pickup_time = datetime.now()
-    return_time = (datetime.now() + timedelta(days = 7))
+    # TODO Date time getting testing.
+    pickup_time = req_body["pickup"]
+    return_time = req_body["return"]
 
     rental = models.Rental(id = 0, status = "reserved", pickup_date_time = pickup_time, return_date_time=return_time, student_id=acc_id)
     daos.RentalDao.insert_rental(rental)
@@ -258,6 +256,10 @@ def createRental(request):
                 break
             daos.ItemUnitDao.update_item_unit_rental(renting_item.id, rental_id)
             count -= 1
+
+    # Clears cart
+    daos.CartItemDao.clear_cart(acc_id)
+
     # Success
     return HttpResponse("Successfully created rental", status = 200)
                

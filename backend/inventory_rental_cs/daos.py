@@ -89,6 +89,12 @@ class CartItemDao:
         result = [models.CartItem(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
+    # deletes cart items for a given account id
+    def clear_cart(account_id):
+        cursor = connection.cursor()
+        cursor.execute(f"DELETE FROM cart_item\
+                       WHERE account_id='{account_id}'")
+    
 # DAO for Account class
 class AccountDao:
     #Insert new Account into DB
