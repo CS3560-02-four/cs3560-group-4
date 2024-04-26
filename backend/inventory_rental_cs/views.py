@@ -269,3 +269,60 @@ def get_column_names(table_name):
     cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
     column_names = [c[0] for c in cursor.description]
     return column_names
+
+
+#ADMIN ENDPOINTS
+
+def get_all_rentals(request):
+    # combine each rental info with its account info
+    # get list of items for each rental, combine with the rest
+
+    # get column names for rental, item_unit, and account
+    rental_columns = get_column_names("rental")
+    item_unit_columns = get_column_names("item_unit")
+    account_columns = get_column_names("account")
+    account_columns.remove("username")
+    account_columns.remove("password")
+    account_columns.remove("admin")
+    account_columns.remove("student")
+    account_columns.remove("status")
+    account_columns.remove("balance")
+
+    response = []
+
+    #get all rentals
+    rentals = daos.RentalDao.get_all_rentals()
+    
+    #add rentals with their respecitve account info to resposne
+    for r in rentals:
+        #add rental info to a dict
+        rental_attributes = [r.id, r.status, r.pickup_date_time, r.return_date_time, r.student_id]
+        rental_info = dict(zip(rental_columns, rental_attributes))
+        #add account info to a dict
+        account = daos.AccountDao.get_account(account_id=r.student_id)[0]
+        account_attributes = [account.id, account.email, account.first_name, account.last_name, account.address]
+        account_info = dict(zip(account_columns, account_attributes))
+
+        #join rental and account info
+        rental_info.update(account_info)
+
+        #get items associated with rental
+        items_in_rental = daos.ItemUnitDao.get_item_unit(rental_id=r.id)
+        item_list = []
+
+        for i in items_in_rental:
+            #get item unit info and add it to list
+            item_unit_attributes = [i.id, i.rental_id, i.item_id, i.status]
+            item_unit_info = dict(zip(item_unit_columns, item_unit_attributes))
+            item_name = daos.ItemDao.get_item(item_id=i.item_id)[0].name
+            item_unit_info["item_name"] = item_name #add item name in addition to item unit info
+            item_list.append(item_unit_info)
+        
+        # item list complete, add it to rental info
+        rental_info["items"] = item_list
+
+        # add complete rental info to response
+        response.append(rental_info)
+
+    # rental list complete, return response
+    return JsonResponse(response, safe=False)
