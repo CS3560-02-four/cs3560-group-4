@@ -16,7 +16,7 @@ export default async function Page() {
         const cartItems: Array<CartItem> = response.data;
         if (cartItems.length !== 0) {
             return (
-                <div className="relative top-32 left-24 flex gap-[500px]">
+                <div className="relative top-32 flex justify-between px-20">
                     <CartItemContainer cartItems={cartItems} />
                     <CartSummaryField />
                 </div>
