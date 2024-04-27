@@ -57,7 +57,6 @@ export async function authenticateUser(username: string, password: string): Prom
         body: formBody
     });
     const data = await response.json();
-    console.log(data);
     return {
         data: data
     }
