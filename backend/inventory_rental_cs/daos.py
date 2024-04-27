@@ -1,4 +1,5 @@
 from django.db import connection
+import datetime
 from . import models
 
 #NOTE: when using the INSERT methods and passing an object instance into them,
@@ -190,18 +191,35 @@ class RentalDao:
         result = [models.Rental(r[0], r[1], r[2], r[3], r[4]) for r in rows]
         return result
 
-    # Confirm Pickup and Confirm Return use cases (pending, picked up, returned) - Update
-    # rental_id: Specific database rental appointment id
+    # Confirm Pickup and Confirm Return use cases (reserved, active, complete) - Update
+    # rental_id: Specific database rental id
     # status: Rental appointment new status
-    # Question for team: Would we want to implement the ability to change the pickup/return date? Or just keep it simple and don't?
     def update_rental_status(rental_id, status):
         cursor = connection.cursor()
         cursor.execute(f"UPDATE rental\
                         SET status='{status}'\
                         WHERE rental_id={rental_id}")
         
+    # When rental is picked up, update pickup datetime to current datetime
+    # rental_id: Specific database rental id
+    def update_pickup_datetime(rental_id):
+        current_datetime = datetime.datetime.now()
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental\
+                        SET pickup_datetime='{current_datetime}'\
+                        WHERE rental_id={rental_id}")
+        
+    # When rental is returned up, update return datetime to current datetime
+    # rental_id: Specific database rental id
+    def update_return_datetime(rental_id):
+        current_datetime = datetime.datetime.now()
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE rental\
+                        SET return_datetime='{current_datetime}'\
+                        WHERE rental_id={rental_id}")
+        
     # Cancel Reservation use case - Delete
-    # rental_id: Specific database rental appointment id
+    # rental_id: Specific database rental id
     def delete_rental(rental_id):
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM rental\

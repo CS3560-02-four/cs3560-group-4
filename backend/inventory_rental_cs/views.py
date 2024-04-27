@@ -154,6 +154,43 @@ def cancel_rental(request):
         daos.ItemUnitDao.update_item_unit_rental(i.id, None)
     return HttpResponse("Rental successfully canceled", status = 200)   
 
+# Confirm rental pickup
+def confirm_rental_pickup(request):
+    #QUERY PARAMS: rental_id
+    rental_id = request.GET["rental_id"]  
+
+    # Check if rental exists
+    try:
+        rental = daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+    except IndexError:
+        return HttpResponse("Error: Rental does not exist", status=500)
+    
+    daos.RentalDao.update_rental_status(rental_id, "active") # update status to active 
+    daos.RentalDao.update_pickup_datetime(rental_id) # update pickup datetime to current datetime
+
+    return HttpResponse("Rental successfully picked up", status = 200) 
+
+# Confirm rental return and free item units
+def confirm_rental_return(request):
+    #QUERY PARAMS: rental_id
+    rental_id = request.GET["rental_id"]  
+
+    # Check if rental exists
+    try:
+        rental = daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+    except IndexError:
+        return HttpResponse("Error: Rental does not exist", status=500)
+    
+    daos.RentalDao.update_rental_status(rental_id, "complete") # update status to complete 
+    daos.RentalDao.update_return_datetime(rental_id) # update return datetime to current datetime
+
+    # free item units that were in the rental
+    item_unit = daos.ItemUnitDao.get_item_unit(rental_id=rental_id)
+    for i in item_unit:
+        daos.ItemUnitDao.update_item_unit_rental(i.id, None)
+
+    return HttpResponse("Rental successfully returned", status = 200) 
+
 # Logs a user in.  NOT SURE HOW TO STORE THAT A USER HAS LOGGED IN. 
 @csrf_exempt
 def login(request):
