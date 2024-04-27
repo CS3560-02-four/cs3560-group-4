@@ -373,3 +373,26 @@ def change_inventory_quantity(request):
 
         # Item units deleted, return response
         return HttpResponse("Item units successfully deleted from inventory", status=200)
+
+#GET ALL UNITS FOR A GIVEN ITEM
+def get_item_units_for_item(request):
+    # QUERY PARAMS: item_id
+    item_id = request.GET["item_id"]
+
+    item_unit_columns = get_column_names("item_unit")
+    #get list of ItemUnits
+    item_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
+
+    response = []
+
+    #add each item unit to response
+    for i in item_units:
+        item_unit_attributes = [i.id, i.rental_id, i.item_id, i.status]
+        item_unit_data = dict(zip(item_unit_columns, item_unit_attributes))
+        response.append(item_unit_data)
+
+    if len(response) == 0:
+        #Send message if no item units exist with given item ID
+        return HttpResponse("Item not in inventory", status=500)
+
+    return JsonResponse(response, safe=False)
