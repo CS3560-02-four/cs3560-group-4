@@ -206,11 +206,12 @@ def getAccountDetails(request):
     return JsonResponse(result, safe=False)
 
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
+@csrf_exempt
 def createRental(request):
 
     # Get request body
     req_body = request.POST
-
+    print(req_body)
     # Get account id from url
     acc_id = request.GET["account_id"]
 

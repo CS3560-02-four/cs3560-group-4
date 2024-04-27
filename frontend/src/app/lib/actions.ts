@@ -1,7 +1,7 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { addToCart, authenticateUser, confirmRental, fetchAccountData } from "./data";
+import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData } from "./data";
 import { login, logout, getAccountId } from "./cookies";
 import { redirect } from "next/navigation";
 
@@ -33,8 +33,14 @@ export async function logoutAction() {
     redirect("/student-login");
 }
 
+export async function logoutAdmin() {
+    logout();
+    redirect("/admin-login");
+}
+
 //add error handling
 export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
+    console.log(formData);
     const pickupDatetime = formData.get("pickup");
     const returnDatetime = formData.get("return");
     if (!pickupDatetime || !returnDatetime) {
@@ -49,7 +55,5 @@ export async function confirmRentalAction(formState: FormState, formData: FormDa
         await confirmRental(accountId, pickupDatetime.toString(), returnDatetime.toString());
     }
 
-    return {
-        message: "Successfully submitted rental."
-    }
+    redirect("/student/account");
 }
