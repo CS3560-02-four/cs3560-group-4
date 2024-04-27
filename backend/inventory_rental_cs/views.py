@@ -54,7 +54,7 @@ def add_to_cart(request):
     sum_available = len(item_units_check) #get total number of available units
     if sum_available == 0:
         return HttpResponse("Item not available", status=500)
-    
+
     try:
         #QUERY PARAMS: account_id, item_id
         account_id = request.GET["account_id"]
@@ -84,7 +84,7 @@ def delete_from_cart(request):
     daos.CartItemDao.delete_cart_item(cart_item_id) #delete from DB
     return HttpResponse("Item successfully deleted from cart", status=200) # TODO: STATUS RESPONSE
 
-# DECREASE OR INCREASE CART ITEM QUANTITY 
+# DECREASE OR INCREASE CART ITEM QUANTITY
 def update_cart_item_quantity(request):
     #QUERY PARAMS: cart_item_id, new_quantity
     cart_item_id = request.GET["cart_item_id"]
@@ -117,7 +117,7 @@ def update_cart_item_quantity(request):
 #GET RENTAL BY RENTAL ID WITH ALL ITEMS WITH INFO
 def get_rental(request):
     #QUERY PARAMS: rental_id
-    rental_id = request.GET["rental_id"]    
+    rental_id = request.GET["rental_id"]
 
     #add rental info to response
     try:
@@ -149,12 +149,12 @@ def cancel_rental(request):
     rental_id = request.GET["rental_id"]
     daos.RentalDao.update_rental_status(rental_id, "canceled")
     item_unit = daos.ItemUnitDao.get_item_unit(rental_id=rental_id)
-    rental_id_items = [] 
+    rental_id_items = []
     for i in item_unit:
         daos.ItemUnitDao.update_item_unit_rental(i.id, None)
-    return HttpResponse("Rental successfully canceled", status = 200)   
+    return HttpResponse("Rental successfully canceled", status = 200)
 
-# Logs a user in.  NOT SURE HOW TO STORE THAT A USER HAS LOGGED IN. 
+# Logs a user in.  NOT SURE HOW TO STORE THAT A USER HAS LOGGED IN.
 @csrf_exempt
 def login(request):
     req_body = request.POST
@@ -165,13 +165,13 @@ def login(request):
     if len(account) < 1:
         return HttpResponse("Username not found", status = 500)
     account = account[0] # "unwrap" the account such that it is not in a list.
-    
+
     if passw == account.password:
         return JsonResponse({"account_id" : account.id}, safe=False) # Successful login
     else:
         return HttpResponse("Login failed", status = 500) # Failed login
 
-# Gets user rentals based on a request with a valid account_id 
+# Gets user rentals based on a request with a valid account_id
 def getUserRentals(request):
     acc_id = request.GET["account_id"]
 
@@ -179,28 +179,28 @@ def getUserRentals(request):
 
     if len(rentals) < 1:
         return HttpResponse("No rentals found", status = 200)
-    
+
     rental_attributes = [(i.id, i.status, i.pickup_date_time, i.return_date_time, i.student_id) for i in rentals] #get list of tuples, each containing values of attributes of each rental
     columns = get_column_names("rental") #get list of column names
-    result = [] 
+    result = []
     for i in rental_attributes:
         rental_dict = dict(zip(columns, i)) # Zip together column names and the corresponding value
         result.append(rental_dict) #this creates a dictionary for each item, keys are column names and values are the actual attribute values
         # result is the final list of dictionaries each representing a rental
     return JsonResponse(result, safe=False) #return a Json response with those items - see what this looks like at url inventory_rental_cs/exampleJson
 
-# Gets Account details based on a request with an account_id  
+# Gets Account details based on a request with an account_id
 def getAccountDetails(request):
     acc_id = request.GET["account_id"]
     accounts = daos.AccountDao.get_account(account_id = acc_id)
 
     if len(accounts) < 1:
-        return HttpResponse("Account not found", status = 500) 
-    
+        return HttpResponse("Account not found", status = 500)
+
     account_attributes = [(i.id, i.username, i.password, i.email, i.first_name, i.last_name, i.address, i.admin, i.student, i.status, i.balance) for i in accounts]
     columns = get_column_names("account")
     result = []
-    
+
     for acc in account_attributes:
         result.append(dict(zip(columns, acc)))
     return JsonResponse(result, safe=False)
@@ -220,7 +220,7 @@ def createRental(request):
     # Check if there is nothing in cart
     if len(cart_items) < 1:
         return HttpResponse("Nothing in cart", status = 500)
-    
+
     # Go through each item type in cart, and ensure that there are enough items to rent out.
     for cart_item in cart_items:
         # Get all available units
@@ -230,9 +230,9 @@ def createRental(request):
         if len(relevant_units) < cart_item.quantity:
             item_name = daos.ItemDao.get_item(item_id = cart_item.item_id)[0].name
             return HttpResponse(f"Not enough of {item_name}", status = 500)
-    
+
     # After ensuring that there are enough items to rent out, start creating the rental.
-    
+
     # TODO Date time getting testing.
     pickup_time = req_body["pickup"]
     return_time = req_body["return"]
@@ -262,10 +262,151 @@ def createRental(request):
 
     # Success
     return HttpResponse("Successfully created rental", status = 200)
-               
+
 #helper method to get list of column names for a table
 def get_column_names(table_name):
     cursor = connection.cursor()
     cursor.execute(f"SELECT * FROM {table_name} LIMIT 1")
     column_names = [c[0] for c in cursor.description]
     return column_names
+
+
+#ADMIN ENDPOINTS
+
+# Get all existing rentals with their respective account info and list of item units
+def get_all_rentals(request):
+    # combine each rental info with its account info
+    # get list of items for each rental, combine with the rest
+
+    # get column names for rental, item_unit, and account
+    rental_columns = get_column_names("rental")
+    item_unit_columns = get_column_names("item_unit")
+    account_columns = get_column_names("account")
+    account_columns.remove("username")
+    account_columns.remove("password")
+    account_columns.remove("admin")
+    account_columns.remove("student")
+    account_columns.remove("status")
+    account_columns.remove("balance")
+
+    response = []
+
+    #get all rentals
+    rentals = daos.RentalDao.get_all_rentals()
+
+    #add rentals with their respecitve account info to resposne
+    for r in rentals:
+        #add rental info to a dict
+        rental_attributes = [r.id, r.status, r.pickup_date_time, r.return_date_time, r.student_id]
+        rental_info = dict(zip(rental_columns, rental_attributes))
+        #add account info to a dict
+        account = daos.AccountDao.get_account(account_id=r.student_id)[0]
+        account_attributes = [account.id, account.email, account.first_name, account.last_name, account.address]
+        account_info = dict(zip(account_columns, account_attributes))
+
+        #join rental and account info
+        rental_info.update(account_info)
+
+        #get items associated with rental
+        items_in_rental = daos.ItemUnitDao.get_item_unit(rental_id=r.id)
+        item_list = []
+
+        for i in items_in_rental:
+            #get item unit info and add it to list
+            item_unit_attributes = [i.id, i.rental_id, i.item_id, i.status]
+            item_unit_info = dict(zip(item_unit_columns, item_unit_attributes))
+            item_name = daos.ItemDao.get_item(item_id=i.item_id)[0].name
+            item_unit_info["item_name"] = item_name #add item name in addition to item unit info
+            item_list.append(item_unit_info)
+
+        # item list complete, add it to rental info
+        rental_info["items"] = item_list
+
+        # add complete rental info to response
+        response.append(rental_info)
+
+    # rental list complete, return response
+    return JsonResponse(response, safe=False)
+
+
+# Change quantity of an item in inventory
+def change_inventory_quantity(request):
+    #QUERY PARAMS: item_id, new_quantity
+    item_id = request.GET["item_id"]
+    new_quantity = int(request.GET["new_quantity"])
+
+    # get existing units of item and current_quantity
+    existing_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
+    current_quantity = len(existing_units)
+
+    #Send message if new quantity is the same as current
+    if current_quantity == new_quantity:
+        return HttpResponse("Quantity not changed", status=200)
+
+    #check if increase or decrease
+    if new_quantity > current_quantity: #Increase quantity
+        for i in range(new_quantity - current_quantity):
+            new_item_unit = models.ItemUnit(0, None, item_id, "normal")
+            daos.ItemUnitDao.insert_item_unit(new_item_unit)
+        return HttpResponse(f"Inventory quantity increased for item_id {item_id}", status=200)
+    else: #Decrease quantity
+        # Check if possible to delete desired quantity
+        # First, check how many units are not assigned to rentals
+        can_be_deleted = list(filter(lambda i: i.rental_id == None, existing_units))
+
+        if current_quantity - new_quantity > len(can_be_deleted):
+            # Send message if new quantity too low
+            return HttpResponse("New quantity too low. Not enough units available for deletion.", status=500)
+        
+        # Quantity checked, delete item units from DB
+        quantity_to_be_deleted = current_quantity - new_quantity
+        count_deleted = 0 #counter to check how many are deleted and when to stop
+        while count_deleted < quantity_to_be_deleted:
+            item_to_delete = can_be_deleted.pop()
+            daos.ItemUnitDao.delete_item_unit(item_to_delete.id)
+            count_deleted += 1
+
+        # To avoid inconsistencies, when quantity is decreased we remove that item from all carts
+        cart_items_to_delete = daos.CartItemDao.get_cart_item(item_id=item_id)
+        for i in cart_items_to_delete:
+            daos.CartItemDao.delete_cart_item(i.id)
+
+        # Item units deleted, return response
+        return HttpResponse("Item units successfully deleted from inventory", status=200)
+
+#GET ALL UNITS FOR A GIVEN ITEM
+def get_item_units_for_item(request):
+    # QUERY PARAMS: item_id
+    item_id = request.GET["item_id"]
+
+    item_unit_columns = get_column_names("item_unit")
+    #get list of ItemUnits
+    item_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
+
+    response = []
+
+    #add each item unit to response
+    for i in item_units:
+        item_unit_attributes = [i.id, i.rental_id, i.item_id, i.status]
+        item_unit_data = dict(zip(item_unit_columns, item_unit_attributes))
+        response.append(item_unit_data)
+
+    if len(response) == 0:
+        #Send message if no item units exist with given item ID
+        return HttpResponse("Item not in inventory", status=500)
+
+    return JsonResponse(response, safe=False)
+
+# Get ALL item data + total quantity, not just available for rental
+def get_all_items_admin(request):
+    response = []
+    items = daos.ItemDao.get_all_items()
+    item_columns = get_column_names("item")
+    item_columns.remove("category")
+    for i in items:
+        total_quantity = len(daos.ItemUnitDao.get_item_unit(item_id=i.id))
+        item_attrbts = [i.id, i.name, i.description]
+        item_json = dict(zip(item_columns, item_attrbts))
+        item_json["total_quantity"] = total_quantity
+        response.append(item_json)
+    return JsonResponse(response, safe=False)

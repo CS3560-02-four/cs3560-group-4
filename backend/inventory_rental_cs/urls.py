@@ -14,4 +14,8 @@ urlpatterns = [
     path("rentalDetails/", views.getUserRentals),  # Gets all rentals associated with a user, use ?account_id=___ in url
     path("createAppointment/", views.createRental), # Creates a rental using a user's cart, use ?account_id=___ in url
     path("rentalCancel/", views.cancel_rental),
+    path("get-all-rentals/", views.get_all_rentals), # Gets all rentals with their respective account info and list of items, no params needed
+    path("change-inventory-quantity/", views.change_inventory_quantity), # Changes the inventory quantity of given item, QUERY PARAMS: item_id, new_quantity
+    path("get-item-units/", views.get_item_units_for_item), #Get all units of a given item, QUERY PARAMS: item_id
+    path("get-all-items-admin/", views.get_all_items_admin) #For admin usage - get list of all items with their info and quantity in inventory, no params needed
 ]
