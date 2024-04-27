@@ -360,7 +360,7 @@ def change_inventory_quantity(request):
         
         # Quantity checked, delete item units from DB
         quantity_to_be_deleted = current_quantity - new_quantity
-        count_deleted = 0
+        count_deleted = 0 #counter to check how many are deleted and when to stop
         while count_deleted < quantity_to_be_deleted:
             item_to_delete = can_be_deleted.pop()
             daos.ItemUnitDao.delete_item_unit(item_to_delete.id)
