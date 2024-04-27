@@ -33,6 +33,11 @@ export async function logoutAction() {
     redirect("/student-login");
 }
 
+export async function logoutAdmin() {
+    logout();
+    redirect("/admin-login");
+}
+
 //add error handling
 export async function confirmRentalAction(formState: FormState, formData: FormData): Promise<FormState> {
     console.log(formData);

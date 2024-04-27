@@ -208,3 +208,7 @@ export async function getRental(rentalId: number): Promise<DataResponse> {
         redirect("/student/account");
     }
 }
+
+export async function authenticateAdmin() {
+    
+}
