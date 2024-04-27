@@ -1,4 +1,4 @@
-import { Item } from "../../lib/interfaces";
+import { Item } from "../../../lib/interfaces";
 import AddToCartButton from "./AddToCartButton";
 
 export default function ItemField({ item, accountId } : { item: Item, accountId: number }) {

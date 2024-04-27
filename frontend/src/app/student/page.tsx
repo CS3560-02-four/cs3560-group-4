@@ -4,7 +4,7 @@ import { fetchAllItems } from "../lib/data";
 import { logoutAction } from "../lib/actions";
 import { DataResponse } from "../lib/interfaces";
 import { getAccountId } from "../lib/cookies";
-import HomePageItemContainer from "../ui/home/HomePageItemContainer";
+import HomePageItemContainer from "../ui/student/student-home/HomePageItemContainer";
 
 export default async function Page() {
     const response: DataResponse = await fetchAllItems();

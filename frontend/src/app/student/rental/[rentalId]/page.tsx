@@ -1,9 +1,9 @@
 import { getAccountId, logout } from "@/app/lib/cookies";
 import { cancelRental, getRental } from "@/app/lib/data";
-import RentalItemContainer from "@/app/ui/rentals/RentalItemContainer";
+import RentalItemContainer from "@/app/ui/student/student-rentals/RentalItemContainer";
 import { redirect } from "next/navigation";
 import { Rental } from "@/app/lib/interfaces";
-import RentalTitleField from "@/app/ui/rentals/RentalTitleField";
+import RentalTitleField from "@/app/ui/student/student-rentals/RentalTitleField";
 import { formatDatetime } from "@/app/lib/utils";
 
 export default async function Page({ params }: { params: { rentalId: string }}) {

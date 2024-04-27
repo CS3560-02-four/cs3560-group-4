@@ -2,8 +2,8 @@ import { logoutAction } from "@/app/lib/actions";
 import { fetchAccountData, getRentals } from "@/app/lib/data";
 import { DataResponse, Rental, Account } from "@/app/lib/interfaces";
 import { getAccountId } from "@/app/lib/cookies";
-import RentalContainer from "@/app/ui/account/RentalContainer";
-import AccountInfoField from "@/app/ui/account/AccountInfoField";
+import RentalContainer from "@/app/ui/student/student-account/RentalContainer";
+import AccountInfoField from "@/app/ui/student/student-account/AccountInfoField";
 
 export default async function Page() {
     const accountIdCookieValue = getAccountId();
