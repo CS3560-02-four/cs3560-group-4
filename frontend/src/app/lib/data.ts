@@ -208,8 +208,27 @@ export async function getRental(rentalId: number): Promise<DataResponse> {
 }
 
 //finish this later
-export async function authenticateAdmin() {
-    
+export async function authenticateAdmin(username: string, password: string): Promise<DataResponse> {
+    const formBody = [encodeURIComponent("username") + "=" + encodeURIComponent(username), encodeURIComponent("password") + "=" + encodeURIComponent(password)].join("&");
+    const response = await fetch("http://127.0.0.1:8000/inventory_rental/admin-login/", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formBody
+    });
+    const status = response.status;
+    if (status === 200) {
+        const data = await response.json();
+        return {
+            data: data
+        }
+    }
+    else {
+        return {
+            error: "Failed to authenticate administrator."
+        }
+    }
 }
 
 export async function fetchAllItemsAdmin(): Promise<DataResponse> {

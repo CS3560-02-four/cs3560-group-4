@@ -1,8 +1,8 @@
 'use server';
 
 import { FormState } from "./interfaces";
-import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData } from "./data";
-import { login, logout, getAccountId } from "./cookies";
+import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData, authenticateAdmin } from "./data";
+import { login, logout, getAccountId, loginAdmin } from "./cookies";
 import { redirect } from "next/navigation";
 
 export async function authenticateUserAction(formState: FormState, formData: FormData): Promise<FormState> {
@@ -56,4 +56,27 @@ export async function confirmRentalAction(formState: FormState, formData: FormDa
     }
 
     redirect("/student/account");
+}
+
+export async function authenticateAdminAction(formState: FormState, formData: FormData): Promise<FormState> {
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    if (!username || !password) {
+        return {
+            error: "Username or password is missing.",
+        };
+    }
+
+    const response = await authenticateAdmin(username.toString(), password.toString());
+    if (response.error) {
+        return {
+            error: "Failed to authenticate user."
+        };
+    }
+    else {
+        const accountData = response.data;
+        loginAdmin(accountData.account_id);
+        redirect("/admin");
+    }
 }
