@@ -396,3 +396,17 @@ def get_item_units_for_item(request):
         return HttpResponse("Item not in inventory", status=500)
 
     return JsonResponse(response, safe=False)
+
+# Get ALL item data + total quantity, not just available for rental
+def get_all_items_admin(request):
+    response = []
+    items = daos.ItemDao.get_all_items()
+    item_columns = get_column_names("item")
+    item_columns.remove("category")
+    for i in items:
+        total_quantity = len(daos.ItemUnitDao.get_item_unit(item_id=i.id))
+        item_attrbts = [i.id, i.name, i.description]
+        item_json = dict(zip(item_columns, item_attrbts))
+        item_json["total_quantity"] = total_quantity
+        response.append(item_json)
+    return JsonResponse(response, safe=False)
