@@ -209,6 +209,31 @@ export async function getRental(rentalId: number): Promise<DataResponse> {
     }
 }
 
+//finish this later
 export async function authenticateAdmin() {
     
+}
+
+export async function fetchAllItemsAdmin(): Promise<DataResponse> {
+    try {
+        const response = await fetch("http://localhost:8000/inventory_rental/get-all-items-admin");
+        const data = await response.json();
+        const items: Array<Item> = data.map((data: any) => {
+            const item: Item = {
+                id: data.item_id,
+                name: data.name,
+                description: data.description,
+                inventoryQuantity: data.total_quantity
+            };
+            return item;
+        });
+        return {
+            data: items
+        };
+    }
+    catch (error) {
+        return {
+            error: "An error has occured while fetching inventory items."
+        }
+    }
 }
