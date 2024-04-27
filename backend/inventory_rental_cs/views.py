@@ -154,9 +154,9 @@ def cancel_rental(request):
         daos.ItemUnitDao.update_item_unit_rental(i.id, None)
     return HttpResponse("Rental successfully canceled", status = 200)
 
-# Logs a user in.  NOT SURE HOW TO STORE THAT A USER HAS LOGGED IN.
+# Logs a student in.
 @csrf_exempt
-def login(request):
+def studentLogin(request):
     req_body = request.POST
     user = req_body["username"]
     passw = req_body["password"]
@@ -167,7 +167,27 @@ def login(request):
     account = account[0] # "unwrap" the account such that it is not in a list.
 
     if passw == account.password:
-        return JsonResponse({"account_id" : account.id}, safe=False) # Successful login
+        return JsonResponse({"account_id" : account.id}) # Successful login
+    else:
+        return HttpResponse("Login failed", status = 500) # Failed login
+
+# Logs an admin in.
+@csrf_exempt
+def adminLogin(request):
+    req_body = request.POST
+    user = req_body["username"]
+    passw = req_body["password"]
+
+    account = daos.AccountDao.get_account(username = user)
+    if len(account) < 1:
+        return HttpResponse("Username not found", status = 500)
+    account = account[0] # "unwrap" the account such that it is not in a list.
+
+    if passw == account.password:
+        if account.admin == 1:
+            return JsonResponse({"account_id" : account.id}, safe=False) # Successful login
+        else:
+            return HttpResponse("Not admin", status = 500) # Not an admin login.
     else:
         return HttpResponse("Login failed", status = 500) # Failed login
 
@@ -215,7 +235,13 @@ def createRental(request):
     # Get account id from url
     acc_id = request.GET["account_id"]
 
-    # First, ensure that there are items in the cart
+    # First, check if the user has a hold.
+    user = daos.AccountDao.get_account(account_id = acc_id)
+    
+    if user[0].status == 'hold':
+        return HttpResponse("User on hold", status = 500)
+
+    # Second, ensure that there are items in the cart
     cart_items = daos.CartItemDao.get_cart_item(account_id = acc_id)
 
     # Check if there is nothing in cart
