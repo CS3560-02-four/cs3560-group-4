@@ -212,7 +212,7 @@ class ItemUnitDao:
 
     # Insert a rental item into a rental appointment - Create
     # rental_item: Instance of the RentalItem Model Class
-    def insert_rental_item(item_unit: models.ItemUnit):
+    def insert_item_unit(item_unit: models.ItemUnit):
         if item_unit.rental_id == None:
             item_unit.rental_id = "null"
         cursor = connection.cursor()

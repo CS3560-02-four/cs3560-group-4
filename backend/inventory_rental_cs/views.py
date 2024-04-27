@@ -329,27 +329,47 @@ def get_all_rentals(request):
     return JsonResponse(response, safe=False)
 
 
-# # Change quantity of an item in inventory
-# def change_inventory_quantity(request):
-#     #QUERY PARAMS: item_id, new_quantity
-#     item_id = request.GET["item_id"]
-#     new_quantity = request.GET["new_quantity"]
+# Change quantity of an item in inventory
+def change_inventory_quantity(request):
+    #QUERY PARAMS: item_id, new_quantity
+    item_id = request.GET["item_id"]
+    new_quantity = int(request.GET["new_quantity"])
 
-#     # get existing units of item and current_quantity
-#     existing_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
-#     current_quantity = len(existing_units)
+    # get existing units of item and current_quantity
+    existing_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
+    current_quantity = len(existing_units)
 
-#     #Send message if new quantity is the same as current
-#     if current_quantity == new_quantity:
-#         return HttpResponse("Quantity not changed", status=200)
+    #Send message if new quantity is the same as current
+    if current_quantity == new_quantity:
+        return HttpResponse("Quantity not changed", status=200)
 
-#     #check if increase or decrease
-#     if new_quantity > current_quantity: #Increase quantity
-#         for i in range(new_quantity):
-#             new_item_unit = models.ItemUnit(0, None, item_id, "normal")
-#             daos.ItemUnitDao.insert_item_unit(new_item_unit)
-#         return HttpResponse(f"Inventory quantity increased for item_id {item_id}", status=200)
-#     else: #Decrease quantity
-#         # Check if possible to delete desired quantity
-#         # First, check how many units are not assigned to rentals
+    #check if increase or decrease
+    if new_quantity > current_quantity: #Increase quantity
+        for i in range(new_quantity - current_quantity):
+            new_item_unit = models.ItemUnit(0, None, item_id, "normal")
+            daos.ItemUnitDao.insert_item_unit(new_item_unit)
+        return HttpResponse(f"Inventory quantity increased for item_id {item_id}", status=200)
+    else: #Decrease quantity
+        # Check if possible to delete desired quantity
+        # First, check how many units are not assigned to rentals
+        can_be_deleted = list(filter(lambda i: i.rental_id == None, existing_units))
 
+        if current_quantity - new_quantity > len(can_be_deleted):
+            # Send message if new quantity too low
+            return HttpResponse("New quantity too low. Not enough units available for deletion.", status=500)
+        
+        # Quantity checked, delete item units from DB
+        quantity_to_be_deleted = current_quantity - new_quantity
+        count_deleted = 0
+        while count_deleted < quantity_to_be_deleted:
+            item_to_delete = can_be_deleted.pop()
+            daos.ItemUnitDao.delete_item_unit(item_to_delete.id)
+            count_deleted += 1
+
+        # To avoid inconsistencies, when quantity is decreased we remove that item from all carts
+        cart_items_to_delete = daos.CartItemDao.get_cart_item(item_id=item_id)
+        for i in cart_items_to_delete:
+            daos.CartItemDao.delete_cart_item(i.id)
+
+        # Item units deleted, return response
+        return HttpResponse("Item units successfully deleted from inventory", status=200)
