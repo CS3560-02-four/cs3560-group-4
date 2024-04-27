@@ -7,9 +7,8 @@ import { Item, CartItem, Account, DataResponse, Rental } from "./interfaces";
 import { redirect } from "next/navigation";
 
 export async function fetchAllItems(): Promise<DataResponse> {
-    const response = await fetch('http://localhost:8000/inventory_rental/get-available-items');
+    const response = await fetch('http://127.0.0.1:8000/inventory_rental/get-available-items');
     const data = await response.json();
-
     const items = data.map((data: any) => {
         const item: Item = {
             id: data.item_id,
@@ -26,7 +25,7 @@ export async function fetchAllItems(): Promise<DataResponse> {
 }
 
 export async function fetchCartItems(accountId: number): Promise<DataResponse> {
-    const response = await fetch(`http://localhost:8000/inventory_rental/get-cart-items?account_id=${accountId}`);
+    const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-cart-items?account_id=${accountId}`);
     const data = await response.json();
     const cartItems: Array<CartItem> = data.map((data: any) => {
         const item: CartItem = {
@@ -49,7 +48,7 @@ export async function fetchCartItems(accountId: number): Promise<DataResponse> {
 
 export async function authenticateUser(username: string, password: string): Promise<DataResponse> {
     const formBody = [encodeURIComponent("username") + "=" + encodeURIComponent(username), encodeURIComponent("password") + "=" + encodeURIComponent(password)].join("&");
-    const response = await fetch("http://localhost:8000/inventory_rental/login", {
+    const response = await fetch("http://127.0.0.1:8000/inventory_rental/login", {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -64,7 +63,7 @@ export async function authenticateUser(username: string, password: string): Prom
 
 export async function fetchAccountData(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/accountInfo?account_id=${accountId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/accountInfo?account_id=${accountId}`);
         const data = await response.json();
         const account: Account = {
             id: data[0].account_id,
@@ -90,7 +89,7 @@ export async function fetchAccountData(accountId: number): Promise<DataResponse>
 //temp
 export async function updateCartItemQuantity(cartItemId: number, quantity: number) {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/update-cart-item-quantity?cart_item_id=${cartItemId}&new_quantity=${quantity}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/update-cart-item-quantity?cart_item_id=${cartItemId}&new_quantity=${quantity}`);
         const status = response.status;
         if (status !== 200) {
             throw new Error();
@@ -105,7 +104,7 @@ export async function updateCartItemQuantity(cartItemId: number, quantity: numbe
 //temp
 export async function removeCartItem(cartItemId: number) {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/delete-from-cart?cart_item_id=${cartItemId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/delete-from-cart?cart_item_id=${cartItemId}`);
         const status = response.status;
         if (status !== 200) {
             throw new Error();
@@ -121,7 +120,7 @@ export async function removeCartItem(cartItemId: number) {
 export async function addToCart(accountId: number, itemId: number) {
         //temp
         //check if item already in cart
-        const response = await fetch(`http://localhost:8000/inventory_rental/add-to-cart?account_id=${accountId}&item_id=${itemId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/add-to-cart?account_id=${accountId}&item_id=${itemId}`);
         const status = response.status;
         if (status !== 200) {
             return {
@@ -132,7 +131,7 @@ export async function addToCart(accountId: number, itemId: number) {
 
 export async function getRentals(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/rentalDetails?account_id=${accountId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/rentalDetails?account_id=${accountId}`);
         const data = await response.json();
         const rentals: Array<Rental> = data.map((data: any) => {
             const rental: Rental = {
@@ -157,7 +156,7 @@ export async function getRentals(accountId: number): Promise<DataResponse> {
 export async function confirmRental(accountId: number, pickupDatetime: string, returnDatetime: string) {
     try {
         const formBody = [encodeURIComponent("pickup") + "=" + encodeURIComponent(pickupDatetime), encodeURIComponent("return") + "=" + encodeURIComponent(returnDatetime)].join("&");
-        const response = await fetch(`http://localhost:8000/inventory_rental/createAppointment/?account_id=${accountId}`, {
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/createAppointment/?account_id=${accountId}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -176,7 +175,7 @@ export async function confirmRental(accountId: number, pickupDatetime: string, r
 
 export async function cancelRental(rentalId: number) {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/rentalCancel?rental_id=${rentalId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/rentalCancel?rental_id=${rentalId}`);
         const status = response.status;
         if (status !== 200) {
             throw new Error();
@@ -190,7 +189,7 @@ export async function cancelRental(rentalId: number) {
 //add getting individual rental
 export async function getRental(rentalId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://localhost:8000/inventory_rental/get-rental?rental_id=${rentalId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`);
         const data = await response.json();
         const rental: Rental = {
             id: data.rental_id,
@@ -215,7 +214,7 @@ export async function authenticateAdmin() {
 
 export async function fetchAllItemsAdmin(): Promise<DataResponse> {
     try {
-        const response = await fetch("http://localhost:8000/inventory_rental/get-all-items-admin");
+        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-items-admin");
         const data = await response.json();
         const items: Array<Item> = data.map((data: any) => {
             const item: Item = {
