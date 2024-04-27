@@ -1,5 +1,5 @@
 'use server';
-import AdminLogin from "../ui/AdminLogin";
+import AdminLogin from "../ui/admin/AdminLogin";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

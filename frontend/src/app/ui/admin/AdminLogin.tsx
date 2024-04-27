@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState, useFormStatus } from "react-dom";
-import { authenticateUserAction } from "../lib/actions";
+import { authenticateUserAction } from "@/app/lib/actions";
 import Link from "next/link";
 
 export default function AdminLogin() {
