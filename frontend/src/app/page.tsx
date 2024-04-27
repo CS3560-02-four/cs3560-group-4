@@ -1,15 +1,16 @@
-'use server';
+import Link from "next/link";;
 
-import Link from "next/link";
-import { redirect } from "next/navigation";
-
-export default async function Page() {
-  //Admin page is not done yet so redirect to student login page
-  redirect("/student-login");
+export default function Page() {
   return (
-    <div>
-      <Link href="/student-login">Login as Student</Link>
-      <Link href="">Login as Admin</Link>
+    <div className="flex w-[100vw] h-[100vh] justify-center items-center">
+      <div className="flex flex-col gap-4 items-center">
+        <div className="text-5xl text-green-900">Cal Poly Pomona</div>
+        <div className="text-2xl">Computer Science Department Rental Service</div>
+        <div className="flex gap-5">
+          <Link href="/student-login"><button className="bg-green-900 text-white rounded text-l p-2 font-medium">Login as Student</button></Link>
+          <Link href="/admin-login"><button className="bg-green-900 text-white rounded text-l p-2 font-medium">Login as Admin</button></Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ export interface Item {
     category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
     availableQuantity: number;
     image?: any;
+    inventoryQuantity?: number;
 }
 
 export interface CartItem {
@@ -23,8 +24,11 @@ export interface Rental {
 
 export interface ItemUnit {
     id: number;
-    item: Item;
-    status: string;
+    name?: string;
+    description?: string;
+    category?: string;
+    rentalId?: number;
+    status: "normal" | "damaged";
 }
 
 export interface Account {
