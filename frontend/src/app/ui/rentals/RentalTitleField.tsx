@@ -11,7 +11,7 @@ export default function RentalTitleField({ rentalId, rentalStatus, pickupDatetim
     }
 
     return (
-        <div className="flex items-center flex-col">
+        <div className="flex items-center flex-col gap-5">
             <div className="flex gap-5">
                 <div className="text-xl text-green-900 font-medium">Rental {rentalId}</div>
                 <div className="text-xl text-green-900 font-medium">Status: {rentalStatus[0].toUpperCase()}{rentalStatus.slice(1)}</div>
