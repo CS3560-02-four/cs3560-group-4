@@ -2,8 +2,8 @@ export interface Item {
     id: number;
     name: string;
     description: string;
-    category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
-    availableQuantity: number;
+    category?: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
+    availableQuantity?: number;
     image?: any;
     inventoryQuantity?: number;
 }
