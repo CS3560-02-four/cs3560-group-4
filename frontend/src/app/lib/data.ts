@@ -3,8 +3,9 @@
  * Add error handling later.
 */
 'use server';
-import { Item, CartItem, Account, DataResponse, Rental, ItemUnit } from "./interfaces";
+import { Item, CartItem, Account, DataResponse, Rental, ItemUnit, AdminRental } from "./interfaces";
 import { redirect } from "next/navigation";
+import { formatDatetime } from "./utils";
 
 export async function fetchAllItems(): Promise<DataResponse> {
     const response = await fetch('http://127.0.0.1:8000/inventory_rental/get-available-items');
@@ -292,6 +293,64 @@ export async function fetchItemUnits(itemId: string): Promise<DataResponse> {
     catch (error) {
         return {
             error: "An error occured while fetching item units."
+        };
+    }
+}
+
+export async function fetchAllRentals(): Promise<DataResponse> {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-rentals", {
+            "cache": "no-cache"
+        });
+        const data = await response.json();
+        const rentals: Array<AdminRental> = data.map((data: any) => {
+            const rental: AdminRental = {
+                id: data.rental_id,
+                status: data.status,
+                pickupDatetime: formatDatetime(data.pickup_datetime),
+                returnDatetime: formatDatetime(data.return_datetime),
+                accountId: data.account_id,
+                accountName: data.first_name + " " + data.last_name,
+                itemUnits: data.items.map((item: any) => {
+                    const itemUnit: ItemUnit = {
+                        id: item.item_unit_id,
+                        status: item.status,
+                        name: item.item_name
+                    };
+                    return itemUnit;
+                })
+            };
+            return rental;
+        });
+        return {
+            data: rentals
+        };
+    }
+    catch (error) {
+        return {
+            error: "An error occured while fetching rental data."
+        };
+    }
+}
+
+export async function confirmRentalPickup(rentalId: number) {
+    try {
+        await fetch(`http://127.0.0.1:8000/inventory_rental/confirm-pickup/?rental_id=${rentalId}`);
+    }   
+    catch (error) {
+        return {
+            error: "An error occured while confirming rental pickup"
+        };
+    }
+}
+
+export async function confirmRentalReturn(rentalId: number) {
+    try {
+        await fetch(`http://127.0.0.1:8000/inventory_rental/confirm-return/?rental_id=${rentalId}`);
+    }   
+    catch (error) {
+        return {
+            error: "An error occured while confirming rental return"
         };
     }
 }

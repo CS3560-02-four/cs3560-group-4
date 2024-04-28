@@ -42,6 +42,16 @@ export interface Account {
     balance: number;
 }
 
+export interface AdminRental {
+    id: number;
+    status: "reserved" | "active";
+    pickupDatetime: string;
+    returnDatetime: string;
+    accountId: number;
+    accountName: string;
+    itemUnits: Array<ItemUnit>;
+}
+
 export interface FormState {
     message?: string;
     error?: string;
