@@ -128,7 +128,7 @@ class AccountDao:
         cursor = connection.cursor()
         cursor.execute(f"UPDATE account\
                        SET balance={new_balance}\
-                        WHERE id={account_id}")
+                        WHERE account_id={account_id}")
         
     #Quickly update account status
     #Pass account ID and new status as arguments
@@ -136,14 +136,14 @@ class AccountDao:
         cursor = connection.cursor()
         cursor.execute(f"UPDATE account\
                        SET status={new_status}\
-                        WHERE id={account_id}")
+                        WHERE account_id={account_id}")
         
     #DELETE an account
     #find by ID - passed as argument
     def delete_account(account_id):
         cursor = connection.cursor()
         cursor.execute(f"DELETE FROM account\
-                       WHERE id={account_id}")
+                       WHERE account_id={account_id}")
         
     #SELECT account based on keyword args
     #returns list of Account objects which were found by the query

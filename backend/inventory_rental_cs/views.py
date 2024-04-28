@@ -161,7 +161,7 @@ def confirm_rental_pickup(request):
 
     # Check if rental exists
     try:
-        rental = daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+        daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
     except IndexError:
         return HttpResponse("Error: Rental does not exist", status=500)
     
@@ -177,7 +177,7 @@ def confirm_rental_return(request):
 
     # Check if rental exists
     try:
-        rental = daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+        daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
     except IndexError:
         return HttpResponse("Error: Rental does not exist", status=500)
     
@@ -215,7 +215,7 @@ def getUserRentals(request):
     rentals = daos.RentalDao.get_rental(account_id = acc_id)
 
     if len(rentals) < 1:
-        return HttpResponse("No rentals found", status = 200)
+        return HttpResponse("No rentals found", status = 500)
     
     rental_attributes = [(i.id, i.status, i.pickup_date_time, i.return_date_time, i.student_id) for i in rentals] #get list of tuples, each containing values of attributes of each rental
     columns = get_column_names("rental") #get list of column names
@@ -241,6 +241,22 @@ def getAccountDetails(request):
     for acc in account_attributes:
         result.append(dict(zip(columns, acc)))
     return JsonResponse(result, safe=False)
+
+# Update account balance 
+def update_account_balance(request):
+    #QUERY PARAMS: account_id, new_balance
+    acc_id = request.GET["account_id"]
+    new_balance = float(request.GET["new_balance"])
+    account = daos.AccountDao.get_account(account_id = acc_id)
+
+    # Check if account exists
+    if len(account) < 1:
+        return HttpResponse("Account not found", status = 500) 
+
+    # Update balance
+    daos.AccountDao.update_account_balance(acc_id, new_balance)
+    
+    return HttpResponse("Account balance updated successfully", status = 200) 
 
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
 @csrf_exempt
