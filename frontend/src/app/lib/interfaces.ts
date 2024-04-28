@@ -2,9 +2,10 @@ export interface Item {
     id: number;
     name: string;
     description: string;
-    category: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
-    availableQuantity: number;
+    category?: "Laptops" | "Calculators" | "Headsets" | "Chargers" | "Mice";
+    availableQuantity?: number;
     image?: any;
+    inventoryQuantity?: number;
 }
 
 export interface CartItem {
@@ -23,9 +24,10 @@ export interface Rental {
 
 export interface ItemUnit {
     id: number;
-    name: string;
-    description: string;
-    category: string;
+    name?: string;
+    description?: string;
+    category?: string;
+    rentalId?: number;
     status: "normal" | "damaged";
 }
 
