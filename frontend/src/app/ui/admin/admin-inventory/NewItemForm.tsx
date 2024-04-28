@@ -3,7 +3,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
 
 export default function NewItemForm() {
-    // const status = useFormStatus();
+    const status = useFormStatus();
     // const [state, action] = useFormState();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
