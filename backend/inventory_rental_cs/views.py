@@ -389,8 +389,12 @@ def get_all_rentals(request):
 
     response = []
 
-    #get all rentals
-    rentals = daos.RentalDao.get_all_rentals()
+    #get all reserved and active rentals
+    rentals_active = daos.RentalDao.get_rental(status="active")
+    rentals_reserved = daos.RentalDao.get_rental(status="reserved")
+    rentals = rentals_active
+    for r in rentals_reserved:
+        rentals.append(r)
 
     #add rentals with their respecitve account info to resposne
     for r in rentals:
