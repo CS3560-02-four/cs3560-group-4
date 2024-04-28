@@ -1,5 +1,4 @@
 'use server';
-import { logoutAdmin } from "@/app/lib/actions";
 import { fetchAllItemsAdmin } from "@/app/lib/data";
 import { Item } from "@/app/lib/interfaces";
 import { cookies } from "next/headers";
@@ -11,8 +10,10 @@ export default async function Page() {
     const items: Array<Item> = response.data;
     if (cookies().has('admin')) {
         return (
-            <div>
-                {items.map((item: Item) => <AdminItemField item={item} />)}
+            <div className="relative top-32">
+                <div className="flex flex-col gap-9 w-[60%]">
+                    {items.map((item: Item) => <AdminItemField key={item.id} item={item} />)}
+                </div>
             </div>
         );
     }

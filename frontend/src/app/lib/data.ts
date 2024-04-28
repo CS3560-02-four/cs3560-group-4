@@ -233,7 +233,9 @@ export async function authenticateAdmin(username: string, password: string): Pro
 
 export async function fetchAllItemsAdmin(): Promise<DataResponse> {
     try {
-        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-items-admin");
+        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-items-admin", {
+            "cache": "no-cache"
+        });
         const data = await response.json();
         const items: Array<Item> = data.map((data: any) => {
             const item: Item = {
@@ -253,4 +255,9 @@ export async function fetchAllItemsAdmin(): Promise<DataResponse> {
             error: "An error has occured while fetching inventory items."
         }
     }
+}
+
+export async function changeInventoryQuantity(itemId: number, newQuantity: number) {
+    const response = await fetch(`http://127.0.0.1:8000/inventory_rental/change-inventory-quantity/?item_id=${itemId}&new_quantity=${newQuantity}`);
+    return response.status;
 }

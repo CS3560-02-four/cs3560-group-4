@@ -26,7 +26,23 @@ export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availab
     }
 
     function handleTextInputChange(event: any) {
-        setQuantity(event.target.value);
+        const newQuantity = event.target.value;
+        if (newQuantity > quantity) {
+            if (newQuantity <= availableQuantity) {
+                setQuantity(newQuantity);
+                onUpdateQuantity(newQuantity);
+                if (newQuantity === availableQuantity) {
+                    setMaxReached(true);
+                }
+            }
+        }
+        else if (newQuantity < quantity) {
+            if (newQuantity > 0) {
+                setQuantity(newQuantity);
+                onUpdateQuantity(newQuantity);
+                setMaxReached(false);
+            }
+        }
     }
 
     return (
