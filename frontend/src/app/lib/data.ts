@@ -261,3 +261,20 @@ export async function changeInventoryQuantity(itemId: number, newQuantity: numbe
     const response = await fetch(`http://127.0.0.1:8000/inventory_rental/change-inventory-quantity/?item_id=${itemId}&new_quantity=${newQuantity}`);
     return response.status;
 }
+
+export async function createInventoryItem(name: string, description: string, category: string, quantity: string) {
+    const response = await fetch(`http://127.0.0.1:8000/inventory_rental/create-new-item/?item_name=${name}&item_description=${description}&item_category=${category}&item_quantity=${quantity}`);
+    return response.status;
+}
+
+export async function fetchItemUnits(itemId: string) {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-item-units/?item_id=${itemId}`);
+        const data = await response.json();
+    }
+    catch (error) {
+        return {
+            error: "An error occured while fetching item units."
+        };
+    }
+}
