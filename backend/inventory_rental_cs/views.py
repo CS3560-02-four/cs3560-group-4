@@ -281,7 +281,6 @@ def update_account_balance(request):
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
 @csrf_exempt
 def createRental(request):
-
     # Get request body
     req_body = request.POST
     print(req_body)
@@ -350,8 +349,27 @@ def get_column_names(table_name):
     column_names = [c[0] for c in cursor.description]
     return column_names
 
+# Create a new item and item units
+def create_new_item(request):
+    # QUERY PARAMS: item_name, item_description, item_category, item_quantity
+    item_name = request.GET["item_name"]
+    item_description = request.GET["item_description"]
+    item_category = request.GET["item_category"]
+    item_quantity = int(request.GET["item_quantity"])
 
-#ADMIN ENDPOINTS
+    # Create a new item and insert it into the database
+    new_item = models.Item(id=0, name=item_name, description=item_description, category=item_category)
+    daos.ItemDao.insert_item(new_item)
+
+    # Get the ID for the item that was just created to use for item units
+    new_item_id = daos.ItemDao.get_item(name=item_name)[0].id
+
+    # Create a new item unit for the quantity specified and insert into database
+    for _ in range(item_quantity):
+        new_item_unit = models.ItemUnit(id=0, rental_id=None, item_id=new_item_id, status="normal")
+        daos.ItemUnitDao.insert_rental_item(new_item_unit)
+
+    return HttpResponse("Successfully created new item and item units", status = 200)
 
 # Get all existing rentals with their respective account info and list of item units
 def get_all_rentals(request):
