@@ -472,28 +472,43 @@ def change_inventory_quantity(request):
         # Item units deleted, return response
         return HttpResponse("Item units successfully deleted from inventory", status=200)
 
-#GET ALL UNITS FOR A GIVEN ITEM
+#GET ALL UNITS FOR A GIVEN ITEM, RETURN ITEM INFO AND LIST OF ITEM UNITS
 def get_item_units_for_item(request):
     # QUERY PARAMS: item_id
     item_id = request.GET["item_id"]
 
-    item_unit_columns = get_column_names("item_unit")
+    #get item info
+    item_columns = get_column_names("item")
+    
+    try:
+        item = daos.ItemDao.get_item(item_id=item_id)[0]
+    except IndexError:
+        return HttpResponse("Item not found", status=500)
+    
+    item_attributes = [item.id, item.name, item.description, item.category]
+    item_info = dict(zip(item_columns, item_attributes))
+    
     #get list of ItemUnits
+    item_unit_columns = get_column_names("item_unit")
+    item_unit_columns.remove("item_id") # item_id not needed since it will be the same for all item units
     item_units = daos.ItemUnitDao.get_item_unit(item_id=item_id)
 
-    response = []
+    unit_list = []
 
     #add each item unit to response
     for i in item_units:
-        item_unit_attributes = [i.id, i.rental_id, i.item_id, i.status]
+        item_unit_attributes = [i.id, i.rental_id, i.status]
         item_unit_data = dict(zip(item_unit_columns, item_unit_attributes))
-        response.append(item_unit_data)
+        unit_list.append(item_unit_data)
 
-    if len(response) == 0:
+    if len(unit_list) == 0:
         #Send message if no item units exist with given item ID
         return HttpResponse("Item not in inventory", status=500)
 
-    return JsonResponse(response, safe=False)
+    #add item unit list to item_info
+    item_info["items_units"] = unit_list
+
+    return JsonResponse(item_info, safe=False)
 
 # Get ALL item data + total quantity, not just available for rental
 def get_all_items_admin(request):
