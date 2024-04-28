@@ -3,7 +3,7 @@
  * Add error handling later.
 */
 'use server';
-import { Item, CartItem, Account, DataResponse, Rental } from "./interfaces";
+import { Item, CartItem, Account, DataResponse, Rental, ItemUnit } from "./interfaces";
 import { redirect } from "next/navigation";
 
 export async function fetchAllItems(): Promise<DataResponse> {
@@ -267,10 +267,27 @@ export async function createInventoryItem(name: string, description: string, cat
     return response.status;
 }
 
-export async function fetchItemUnits(itemId: string) {
+export async function fetchItemUnits(itemId: string): Promise<DataResponse> {
     try {
         const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-item-units/?item_id=${itemId}`);
         const data = await response.json();
+        const item: Item = {
+            id: data.item_id,
+            name: data.name,
+            description: data.description,
+            category: data.category,
+        };
+        const itemUnits: Array<ItemUnit> = data.items_units.map((unit: any) => {
+            const itemUnit: ItemUnit = {
+                id: unit.item_unit_id,
+                rentalId: unit.rental_id,
+                status: unit.status
+            };
+            return itemUnit;
+        });
+        return {
+            data: [item, itemUnits]
+        };
     }
     catch (error) {
         return {

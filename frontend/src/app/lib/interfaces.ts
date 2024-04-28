@@ -27,7 +27,7 @@ export interface ItemUnit {
     name?: string;
     description?: string;
     category?: string;
-    rentalId?: number;
+    rentalId?: number | null;
     status: "normal" | "damaged";
 }
 
