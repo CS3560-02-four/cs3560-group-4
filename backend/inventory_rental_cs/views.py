@@ -154,6 +154,43 @@ def cancel_rental(request):
         daos.ItemUnitDao.update_item_unit_rental(i.id, None)
     return HttpResponse("Rental successfully canceled", status = 200)
 
+# Confirm rental pickup
+def confirm_rental_pickup(request):
+    #QUERY PARAMS: rental_id
+    rental_id = request.GET["rental_id"]  
+
+    # Check if rental exists
+    try:
+        daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+    except IndexError:
+        return HttpResponse("Error: Rental does not exist", status=500)
+    
+    daos.RentalDao.update_rental_status(rental_id, "active") # update status to active 
+    daos.RentalDao.update_pickup_datetime(rental_id) # update pickup datetime to current datetime
+
+    return HttpResponse("Rental successfully picked up", status = 200) 
+
+# Confirm rental return and free item units
+def confirm_rental_return(request):
+    #QUERY PARAMS: rental_id
+    rental_id = request.GET["rental_id"]  
+
+    # Check if rental exists
+    try:
+        daos.RentalDao.get_rental(rental_id=rental_id)[0] #get rental
+    except IndexError:
+        return HttpResponse("Error: Rental does not exist", status=500)
+    
+    daos.RentalDao.update_rental_status(rental_id, "complete") # update status to complete 
+    daos.RentalDao.update_return_datetime(rental_id) # update return datetime to current datetime
+
+    # free item units that were in the rental
+    item_unit = daos.ItemUnitDao.get_item_unit(rental_id=rental_id)
+    for i in item_unit:
+        daos.ItemUnitDao.update_item_unit_rental(i.id, None)
+
+    return HttpResponse("Rental successfully returned", status = 200) 
+
 # Logs a student in.
 @csrf_exempt
 def studentLogin(request):
@@ -198,8 +235,8 @@ def getUserRentals(request):
     rentals = daos.RentalDao.get_rental(account_id = acc_id)
 
     if len(rentals) < 1:
-        return HttpResponse("No rentals found", status = 200)
-
+        return HttpResponse("No rentals found", status = 500)
+    
     rental_attributes = [(i.id, i.status, i.pickup_date_time, i.return_date_time, i.student_id) for i in rentals] #get list of tuples, each containing values of attributes of each rental
     columns = get_column_names("rental") #get list of column names
     result = []
@@ -224,6 +261,22 @@ def getAccountDetails(request):
     for acc in account_attributes:
         result.append(dict(zip(columns, acc)))
     return JsonResponse(result, safe=False)
+
+# Update account balance 
+def update_account_balance(request):
+    #QUERY PARAMS: account_id, new_balance
+    acc_id = request.GET["account_id"]
+    new_balance = float(request.GET["new_balance"])
+    account = daos.AccountDao.get_account(account_id = acc_id)
+
+    # Check if account exists
+    if len(account) < 1:
+        return HttpResponse("Account not found", status = 500) 
+
+    # Update balance
+    daos.AccountDao.update_account_balance(acc_id, new_balance)
+    
+    return HttpResponse("Account balance updated successfully", status = 200) 
 
 # Makes a rental based on the cart of a given user (account_id is given) (NOT TRIED)
 @csrf_exempt

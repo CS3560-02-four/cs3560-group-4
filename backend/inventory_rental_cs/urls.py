@@ -18,5 +18,8 @@ urlpatterns = [
     path("get-all-rentals/", views.get_all_rentals), # Gets all rentals with their respective account info and list of items, no params needed
     path("change-inventory-quantity/", views.change_inventory_quantity), # Changes the inventory quantity of given item, QUERY PARAMS: item_id, new_quantity
     path("get-item-units/", views.get_item_units_for_item), #Get all units of a given item, QUERY PARAMS: item_id
-    path("get-all-items-admin/", views.get_all_items_admin) #For admin usage - get list of all items with their info and quantity in inventory, no params needed
+    path("get-all-items-admin/", views.get_all_items_admin), #For admin usage - get list of all items with their info and quantity in inventory, no params needed
+    path("confirm-pickup/", views.confirm_rental_pickup), # DONE Confirms rental pickup, QUERY PARAMS: rental_id
+    path("confirm-return/", views.confirm_rental_return), # DONE Confirms rental return, QUERY PARAMS: rental_id
+    path("update_balance", views.update_account_balance) # DONE Updates account balance, QUERY PARAMS: account_id, new_balance
 ]
