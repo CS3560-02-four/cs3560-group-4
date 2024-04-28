@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { logoutAdmin } from "../lib/actions";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Page() {
     if (cookies().has('admin')) {
@@ -16,6 +17,6 @@ export default function Page() {
         );
     }
     else {
-        logoutAdmin();
+        redirect("/admin-login");
     }
 }

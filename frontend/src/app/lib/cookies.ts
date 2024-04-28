@@ -36,7 +36,6 @@ export function getAccountId() {
         return cookies().get('account')?.value;
 }
 
-export function getAdminId() {
-    if (cookies().has('admin'))
-        return cookies().get('admin')?.value;
+export function isAdminLoggedIn() {
+    return cookies().has('account');
 }
