@@ -367,7 +367,7 @@ def create_new_item(request):
     # Create a new item unit for the quantity specified and insert into database
     for _ in range(item_quantity):
         new_item_unit = models.ItemUnit(id=0, rental_id=None, item_id=new_item_id, status="normal")
-        daos.ItemUnitDao.insert_rental_item(new_item_unit)
+        daos.ItemUnitDao.insert_item_unit(new_item_unit)
 
     return HttpResponse("Successfully created new item and item units", status = 200)
 
