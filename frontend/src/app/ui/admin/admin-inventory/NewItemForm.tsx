@@ -1,10 +1,9 @@
 'use client';
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { useState } from "react";
 import { createInventoryItemAction } from "@/app/lib/actions";
 
 export default function NewItemForm() {
-    const status = useFormStatus();
     const [state, action] = useFormState(createInventoryItemAction, { message: "", error: "" });
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -33,7 +32,7 @@ export default function NewItemForm() {
 
     return (
         <form action={action} className="flex flex-col gap-4 shadow-md px-5 py-7 fixed left-[75%]">
-            <div className="self-center text-xl text-green-900">Add an Item</div>
+            <div className="self-center text-2xl text-green-900 font-medium">Add an Item</div>
             <input className="p-2 shadow-md" type="text" placeholder="Item Name" value={name} onChange={onNameChange} name="name" />
             <textarea className="resize-none p-2 shadow-md" cols={30} rows={8} placeholder="Item Description" onChange={onDescriptionChange} name="description">{description}</textarea>
             <div className="flex gap-5 self-center">

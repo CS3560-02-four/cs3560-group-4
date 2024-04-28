@@ -27,7 +27,7 @@ export interface ItemUnit {
     name?: string;
     description?: string;
     category?: string;
-    rentalId?: number;
+    rentalId?: number | null;
     status: "normal" | "damaged";
 }
 
@@ -40,6 +40,16 @@ export interface Account {
     address: string;
     status: string;
     balance: number;
+}
+
+export interface AdminRental {
+    id: number;
+    status: "reserved" | "active";
+    pickupDatetime: string;
+    returnDatetime: string;
+    accountId: number;
+    accountName: string;
+    itemUnits: Array<ItemUnit>;
 }
 
 export interface FormState {
