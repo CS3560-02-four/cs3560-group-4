@@ -17,10 +17,10 @@ class Account():
 # EXAMPLE DAO DESIGN WITH ITEM CLASS    
 # THIS ITEM CLASS IS AN ENTITY AND ONLY HOLDS DATA    
 class Item():
-    def __init__(self, id, name, descritpion, category):
+    def __init__(self, id, name, description, category):
         self.id = id
         self.name = name
-        self.description = descritpion
+        self.description = description
         self.category = category
 
 
