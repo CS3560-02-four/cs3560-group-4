@@ -1,7 +1,7 @@
 'use server';
 
-import { FormState } from "./interfaces";
-import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData, authenticateAdmin, changeInventoryQuantity } from "./data";
+import { FormState, Item } from "./interfaces";
+import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData, authenticateAdmin, changeInventoryQuantity, createInventoryItem } from "./data";
 import { login, logout, getAccountId, loginAdmin } from "./cookies";
 import { redirect } from "next/navigation";
 
@@ -98,7 +98,7 @@ export async function updateInventoryQuantityAction(formState: FormState, formDa
         console.log(response);
         if (response === 200) {
             return {
-                message: "Success"
+                message: "Quantity successfully changed."
             };
         }
         else {
@@ -112,4 +112,19 @@ export async function updateInventoryQuantityAction(formState: FormState, formDa
             error: "An error occured. Please try again."
         };
     }
+}
+
+export async function createInventoryItemAction(formState: FormState, formData: FormData): Promise<FormState> {
+    const name = formData.get('name')?.toString();
+    const description = formData.get('description')?.toString();
+    const quantity = formData.get('quantity')?.toString();
+    const category = formData.get('category')?.toString();
+    if (!name || !description || !quantity || !category) {
+        return {
+            error: "Please fill all of the above fields."
+        };
+    }
+
+    await createInventoryItem(name, description, category, quantity);
+    redirect("/admin/inventory");
 }

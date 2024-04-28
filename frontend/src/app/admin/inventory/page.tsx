@@ -13,7 +13,7 @@ export default async function Page() {
         return (
             <div className="relative top-32 flex justify-between px-20">
                 <div className="flex flex-col gap-9 w-[60%]">
-                    {items.map((item: Item) => <AdminItemField key={item.id} item={item} />)}
+                    {items.filter((item: Item) => item.inventoryQuantity !== 0).map((item: Item) => <AdminItemField key={item.id} item={item} />)}
                 </div>
                 <NewItemForm />
             </div>

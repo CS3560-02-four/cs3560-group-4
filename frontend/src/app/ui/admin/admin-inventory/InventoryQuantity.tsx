@@ -20,7 +20,7 @@ export default function InventoryQuantity({ itemQuantity, itemId }: { itemQuanti
             <input className="w-5 text-center bg-gray-200 rounded text-[17px]" type="text" value={quantity} name="quantity" onChange={onQuantityChange}></input>
             <input type="submit" value={status.pending ? "Confirming..." : "Confirm Quantity"} className="cursor-pointer bg-green-900 text-white rounded h-8 px-2" />
             {state.error ? <div className="text-red-600">{state.error}</div> : null}
-            {state.message === "Success" ? <div className="text-green-900">{state.message}</div> : null}
+            {state.message ? <div className="text-green-900">{state.message}</div> : null}
             <input className="w-0 h-0" type="text" value={itemId} name="itemId" onChange={() => {}}/>
         </form>
     );
