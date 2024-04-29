@@ -377,3 +377,14 @@ export async function confirmRentalReturn(rentalId: number) {
         };
     }
 }
+
+export async function markItemDamaged(itemUnitId: number) {
+    try {
+        await fetch(`http://127.0.0.1:8000/inventory_rental/change-item-status/?item_unit_id=${itemUnitId}`);
+    }
+    catch (error) {
+        return {
+            error: "An error occured while marking item as damaged"
+        };
+    }
+}
