@@ -56,10 +56,19 @@ export async function authenticateUser(username: string, password: string): Prom
         },
         body: formBody
     });
-    const data = await response.json();
-    return {
-        data: data
+    const status = response.status;
+    if (status !== 200) {
+        return {
+            data: "Error occured"
+        };
     }
+    else {
+        const data = await response.json();
+        return {
+            data: data
+        };
+    }
+
 }
 
 export async function fetchAccountData(accountId: number): Promise<DataResponse> {
@@ -197,8 +206,18 @@ export async function getRental(rentalId: number): Promise<DataResponse> {
             status: data.status,
             pickupDatetime: data.pickup_datetime,
             returnDatetime: data.return_datetime,
-            itemUnits: data.items
+            itemUnits: data.items.map((item: any) => {
+                const itemUnit: ItemUnit = {
+                    id: item.item_unit_id,
+                    status: item.status,
+                    name: item.name,
+                    description: item.description,
+                    category: item.category
+                };
+                return itemUnit;
+            })
         };
+        console.log(rental);
         return {
             data: rental
         }

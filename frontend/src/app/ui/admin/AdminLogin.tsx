@@ -22,7 +22,7 @@ export default function AdminLogin() {
                 {state.error ? <div className="text-red-600">{state.error}</div> : null}
                 <input type="submit" value={status.pending ? "Logging in..." : "Login"} className="cursor-pointer bg-green-900 text-white rounded h-8" />
             </form>
-            <div>Are you aa student? <Link href="/student-login" className="text-green-900 underline">Login as Student</Link></div>
+            <div>Are you a student? <Link href="/student-login" className="text-green-900 underline">Login as Student</Link></div>
         </div>
     );
 }

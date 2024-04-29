@@ -139,6 +139,7 @@ def get_rental(request):
         item_attrbts = [item.id, item.name, item.description, item.category]
         item_info = dict(zip(item_columns, item_attrbts)) #add item general info to dict
         item_info["status"] = i.status #add item unit status to dict
+        item_info["item_unit_id"] = i.id
         items.append(item_info) #add to list of items
 
     response["items"] = items #add list of items to response
