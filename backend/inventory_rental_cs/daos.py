@@ -135,7 +135,7 @@ class AccountDao:
     def update_account_status(account_id, new_status):
         cursor = connection.cursor()
         cursor.execute(f"UPDATE account\
-                       SET status={new_status}\
+                       SET status='{new_status}'\
                         WHERE account_id={account_id}")
         
     #DELETE an account
