@@ -199,7 +199,9 @@ export async function cancelRental(rentalId: number) {
 //add getting individual rental
 export async function getRental(rentalId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`, {
+            "cache": "no-store"
+        });
         const data = await response.json();
         const rental: Rental = {
             id: data.rental_id,
@@ -254,7 +256,7 @@ export async function authenticateAdmin(username: string, password: string): Pro
 export async function fetchAllItemsAdmin(): Promise<DataResponse> {
     try {
         const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-items-admin", {
-            "cache": "no-cache"
+            "cache": "no-store"
         });
         const data = await response.json();
         const items: Array<Item> = data.map((data: any) => {
@@ -289,7 +291,9 @@ export async function createInventoryItem(name: string, description: string, cat
 
 export async function fetchItemUnits(itemId: string): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-item-units/?item_id=${itemId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-item-units/?item_id=${itemId}`, {
+            "cache": "no-store"
+        });
         const data = await response.json();
         const item: Item = {
             id: data.item_id,
@@ -319,7 +323,7 @@ export async function fetchItemUnits(itemId: string): Promise<DataResponse> {
 export async function fetchAllRentals(): Promise<DataResponse> {
     try {
         const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-rentals", {
-            "cache": "no-cache"
+            "cache": "no-store"
         });
         const data = await response.json();
         const rentals: Array<AdminRental> = data.map((data: any) => {
