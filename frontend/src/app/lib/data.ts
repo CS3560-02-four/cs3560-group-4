@@ -199,7 +199,9 @@ export async function cancelRental(rentalId: number) {
 //add getting individual rental
 export async function getRental(rentalId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`, {
+            "cache": "no-cache"
+        });
         const data = await response.json();
         const rental: Rental = {
             id: data.rental_id,
