@@ -527,3 +527,24 @@ def get_all_items_admin(request):
         item_json["total_quantity"] = total_quantity
         response.append(item_json)
     return JsonResponse(response, safe=False)
+
+def mark_item_unit_as_damaged(request):
+    # Retrieve the item_unit_id from the query parameters
+    item_unit_id = request.GET.get("item_unit_id")
+    status = "damaged"  # Assuming the status for marking as damaged is always "damaged"
+    try:
+        # Update the item unit status using the retrieved item_unit_id
+        daos.ItemUnitDao.update_item_unit_status(item_unit_id, status)
+        return JsonResponse({"message": f"Item unit {item_unit_id} marked as damaged successfully."})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+def put_account_on_hold(request):
+    account_id = request.GET.get("account_id")
+    status = 1  # Assuming 'hold' corresponds to a value of 1 in the database
+    try:
+        # Update the account status using the retrieved account_id
+        daos.AccountDao.update_account_status(account_id, status)
+        return JsonResponse({"message": f"Account {account_id} put on hold successfully."})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

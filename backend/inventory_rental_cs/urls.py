@@ -22,5 +22,7 @@ urlpatterns = [
     path("confirm-pickup/", views.confirm_rental_pickup), # DONE Confirms rental pickup, QUERY PARAMS: rental_id
     path("confirm-return/", views.confirm_rental_return), # DONE Confirms rental return, QUERY PARAMS: rental_id
     path("update-balance/", views.update_account_balance), # DONE Updates account balance, QUERY PARAMS: account_id, new_balance
-    path("create-new-item/", views.create_new_item) # DONE Creates a new item and item units, QUERY PARAMS: item_name, item_description, item_category, item_quantity
+    path("create-new-item/", views.create_new_item), # DONE Creates a new item and item units, QUERY PARAMS: item_name, item_description, item_category, item_quantity
+    path("change-item-status/", views.mark_item_unit_as_damaged), # Marks specified item_unit_id as "damaged"
+    path("put-account-on-hold/", views.put_account_on_hold) # Marks specified account as 1 which is "hold"
 ]
