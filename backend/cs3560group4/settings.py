@@ -80,9 +80,9 @@ WSGI_APPLICATION = "cs3560group4.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "inventory_rental",
+        "NAME": "CS3560",
         "USER": "postgres",
-        "PASSWORD": "udemy",
+        "PASSWORD": "admin123",
         "HOST": "localhost",
         "PORT": "5432"
     }
