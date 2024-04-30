@@ -4,7 +4,7 @@ import { AdminRental } from "@/app/lib/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function AdminRentalField({ adminRental }: { adminRental: AdminRental }) {
+export default function AdminRentalField({ adminRental, displayLinkToAccount }: { adminRental: AdminRental, displayLinkToAccount: boolean }) {
     const router = useRouter();
 
     function onConfirmPickup() {
@@ -26,7 +26,7 @@ export default function AdminRentalField({ adminRental }: { adminRental: AdminRe
                 <div className="text-green-900 text-lg">Return on {adminRental.returnDatetime}</div>
             </div>
             <div className="flex gap-4">
-                <Link href={`/admin/account/${adminRental.accountId}`}><button className="bg-green-900 text-white rounded text-l p-2 font-medium">Go to Account</button></Link>
+                {displayLinkToAccount ? <Link href={`/admin/accounts/${adminRental.accountId}`}><button className="bg-green-900 text-white rounded text-l p-2 font-medium">Go to Account</button></Link> : null}
                 <Link href={`/admin/rentals/${adminRental.id}`}><button className="bg-green-900 text-white rounded text-l p-2 font-medium">Rental Details</button></Link>
                 {adminRental.status === "reserved" ? <button className="bg-green-900 text-white rounded text-l p-2 font-medium" onClick={onConfirmPickup}>Confirm Pickup</button> : <button className="bg-green-900 text-white rounded text-l p-2 font-medium" onClick={onConfirmReturn}>Confirm Return</button>}
             </div>

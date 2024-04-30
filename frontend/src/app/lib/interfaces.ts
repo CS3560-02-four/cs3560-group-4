@@ -49,7 +49,7 @@ export interface AdminRental {
     returnDatetime: string;
     accountId: number;
     accountName: string;
-    itemUnits: Array<ItemUnit>;
+    itemUnits?: Array<ItemUnit>;
 }
 
 export interface FormState {

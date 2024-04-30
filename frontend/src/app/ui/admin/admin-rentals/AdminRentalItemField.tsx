@@ -17,7 +17,7 @@ export default function AdminRentalItemField({ itemUnit }: { itemUnit: ItemUnit 
             <div className="text-green-900 text-2xl font-medium">{itemUnit.name}</div>
             <div className="text-green-900 text-xl font-medium">Unit #{itemUnit.id}</div>
             <div className={`${statusTextColor} text-xl font-medium`}>Status: {damaged ? "Damaged" : "Normal"}</div>
-            {!damaged ? <button className="text-white rounded text-l p-2 font-medium bg-yellow-600" onClick={onMarkDamaged}>Mark as Damaged</button> : null}
+            {!damaged ? <button className="text-white rounded text-l p-2 font-medium bg-yellow-600 w-[20%]" onClick={onMarkDamaged}>Mark as Damaged</button> : null}
         </div>
     );
 }

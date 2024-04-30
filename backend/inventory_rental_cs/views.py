@@ -540,12 +540,13 @@ def mark_item_unit_as_damaged(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-def put_account_on_hold(request):
+def change_account_status(request):
     account_id = request.GET.get("account_id")
-    status = "hold"  # Assuming 'hold' corresponds to a value of 1 in the database
+    status = request.GET.get("status")
+    # Assuming 'hold' corresponds to a value of 1 in the database
     try:
         # Update the account status using the retrieved account_id
         daos.AccountDao.update_account_status(account_id, status)
-        return JsonResponse({"message": f"Account {account_id} put on hold successfully."})
+        return JsonResponse({"message": f"Account {account_id} status changed successfully."})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)

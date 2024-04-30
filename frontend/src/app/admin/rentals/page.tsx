@@ -12,7 +12,7 @@ export default async function Page() {
         return (
             <div className="relative top-32 flex justify-center">
                 <div className="flex flex-col w-[60%] gap-9">
-                    {rentals.map((rental: AdminRental) => <AdminRentalField key={rental.id} adminRental={rental} />)}
+                    {rentals.map((rental: AdminRental) => <AdminRentalField key={rental.id} adminRental={rental} displayLinkToAccount={true} />)}
                 </div>
             </div>
         );

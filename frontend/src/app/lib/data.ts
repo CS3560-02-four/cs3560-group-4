@@ -73,7 +73,9 @@ export async function authenticateUser(username: string, password: string): Prom
 
 export async function fetchAccountData(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/accountInfo?account_id=${accountId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/accountInfo?account_id=${accountId}`, {
+            "cache": "no-cache"
+        });
         const data = await response.json();
         const account: Account = {
             id: data[0].account_id,
@@ -386,5 +388,27 @@ export async function markItemDamaged(itemUnitId: number) {
         return {
             error: "An error occured while marking item as damaged"
         };
+    }
+}
+
+export async function changeAccountStatus(accountId: number, status: string) {
+    try {
+        await fetch(`http://127.0.0.1:8000/inventory_rental/change-account-status/?account_id=${accountId}&status=${status}`);
+    }
+    catch (error) {
+        return {
+            error: "An error ocured while putting account on hold"
+        };
+    }
+}
+
+export async function updateBalance(accountId: string, newBalance: string) {
+    try {
+        await fetch(`http://127.0.0.1:8000/inventory_rental/update-balance/?account_id=${accountId}&new_balance=${newBalance}`); 
+    }
+    catch (error) {
+        return {
+            error: "An error occured while updating account balance"
+        }
     }
 }

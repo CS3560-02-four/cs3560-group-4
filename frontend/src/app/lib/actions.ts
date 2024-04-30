@@ -1,7 +1,7 @@
 'use server';
 
 import { FormState, Item } from "./interfaces";
-import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData, authenticateAdmin, changeInventoryQuantity, createInventoryItem } from "./data";
+import { addToCart, authenticateUser, cancelRental, confirmRental, fetchAccountData, authenticateAdmin, changeInventoryQuantity, createInventoryItem, updateBalance } from "./data";
 import { login, logout, getAccountId, loginAdmin } from "./cookies";
 import { redirect } from "next/navigation";
 
@@ -127,4 +127,18 @@ export async function createInventoryItemAction(formState: FormState, formData: 
 
     await createInventoryItem(name, description, category, quantity);
     redirect("/admin/inventory");
+}
+
+export async function updateBalanceAction(formState: FormState, formData: FormData): Promise<FormState> {
+    const newBalance = formData.get("balance")?.toString();
+    const accountId = formData.get("accountId")?.toString();
+    if (!newBalance || !accountId) {
+        return {
+            error: "Please provide the account balance."
+        };
+    }
+    
+    await updateBalance(accountId, newBalance);
+    redirect(`/admin/accounts/${accountId}`);
+    
 }
