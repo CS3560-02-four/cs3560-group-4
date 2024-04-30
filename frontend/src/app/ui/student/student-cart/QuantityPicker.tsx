@@ -1,13 +1,13 @@
 'use client';
 import { useState } from "react";
 
-export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availableQuantity }: { itemQuantity: number, onUpdateQuantity: Function, availableQuantity: number }) {
+export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availableQuantity }: { itemQuantity: number, onUpdateQuantity: Function, availableQuantity?: number }) {
     const [quantity, setQuantity] = useState(itemQuantity);
     const [maxReached, setMaxReached] = useState(itemQuantity === availableQuantity);
 
     function incrementQuantity() {
         const newQuantity = quantity + 1;
-        if (newQuantity <= availableQuantity) {
+        if (availableQuantity !== undefined && newQuantity <= availableQuantity) {
             setQuantity(newQuantity);
             onUpdateQuantity(newQuantity);
             if (newQuantity === availableQuantity) {
@@ -27,7 +27,7 @@ export default function QuantityPicker({ itemQuantity, onUpdateQuantity, availab
 
     function handleTextInputChange(event: any) {
         const newQuantity = event.target.value;
-        if (newQuantity > quantity) {
+        if (availableQuantity !== undefined && newQuantity > quantity) {
             if (newQuantity <= availableQuantity) {
                 setQuantity(newQuantity);
                 onUpdateQuantity(newQuantity);
