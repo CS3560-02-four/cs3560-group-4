@@ -10,7 +10,7 @@ export default async function Page() {
     if (accountIdCookieValue !== undefined) {
         const rentalsResponse: DataResponse = await getRentals(parseInt(accountIdCookieValue)); 
         const accountResponse: DataResponse = await fetchAccountData(parseInt(accountIdCookieValue));
-        const rentals: Array<Rental> = rentalsResponse.data;
+        const rentals: Array<Rental> = rentalsResponse.data.filter((rental: Rental) => rental.status === "active" || rental.status === "reserved");
         const account: Account = accountResponse.data;
         return (
             <div className={rentals.length !== 0 ? "relative top-32 flex justify-between px-20" : "relative top-32 flex justify-center items-center flex-col gap-9"}>
