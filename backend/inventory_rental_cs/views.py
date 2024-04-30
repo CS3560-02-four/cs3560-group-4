@@ -10,7 +10,11 @@ def get_available_items(request):
     items = daos.ItemDao.get_all_items()
     item_columns = get_column_names("item")
     for i in items:
-        num_available = len(daos.ItemUnitDao.get_item_unit(item_id=i.id, rental_id=None))
+        units = daos.ItemUnitDao.get_item_unit(item_id=i.id, rental_id=None)
+        #get rid of damaged units
+        units = list(filter(lambda i: i.status != "damaged", units))
+        #get number of available units
+        num_available = len(units)
         if num_available != 0:
             item_attrbts = [i.id, i.name, i.description, i.category]
             item_json = dict(zip(item_columns, item_attrbts))
