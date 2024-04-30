@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    #urls for testing
     path("get-available-items/", views.get_available_items), #DONE, get all items available for rental and their quantities
     path("get-cart-items/", views.get_cart_items), #DONE, get all cart items for account, account_id is passed as QUERY PARAMETER
     path("add-to-cart/", views.add_to_cart), #DONE, add item to an account's cart, account_id and item_id passed as QUERY PARAMETERS
@@ -14,7 +13,7 @@ urlpatterns = [
     path("accountInfo/", views.getAccountDetails), # Gets account info, use ?account_id=___ in url
     path("rentalDetails/", views.getUserRentals),  # Gets all rentals associated with a user, use ?account_id=___ in url
     path("createAppointment/", views.createRental), # Creates a rental using a user's cart, use ?account_id=___ in url
-    path("rentalCancel/", views.cancel_rental),
+    path("rentalCancel/", views.cancel_rental), # Change a rental's status to "canceled", QUERY PARAMS: rental_id
     path("get-all-rentals/", views.get_all_rentals), # Gets all rentals with their respective account info and list of items, no params needed
     path("change-inventory-quantity/", views.change_inventory_quantity), # Changes the inventory quantity of given item, QUERY PARAMS: item_id, new_quantity
     path("get-item-units/", views.get_item_units_for_item), #Get all units of a given item, QUERY PARAMS: item_id

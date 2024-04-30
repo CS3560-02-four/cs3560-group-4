@@ -1,5 +1,3 @@
-from django.db import models
-
 class Account():
     def __init__(self, id, username, password, email, first_name, last_name, address, admin, student, status='normal', balance=0):
         self.id = id
@@ -14,8 +12,6 @@ class Account():
         self.status = status
         self.balance = balance
 
-# EXAMPLE DAO DESIGN WITH ITEM CLASS    
-# THIS ITEM CLASS IS AN ENTITY AND ONLY HOLDS DATA    
 class Item():
     def __init__(self, id, name, description, category):
         self.id = id

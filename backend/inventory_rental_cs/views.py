@@ -1,9 +1,6 @@
-from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from . import daos, models
-import datetime
 from django.db import IntegrityError, connection
-from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 
 # GET ALL ITEMS AVAILABLE FOR RENTAL
@@ -112,7 +109,7 @@ def update_cart_item_quantity(request):
             return HttpResponse("Desired quantity not available", status=500)
 
     daos.CartItemDao.update_cart_item_quantity(cart_item_id, new_quantity) #update cart item quantity in DB
-    return HttpResponse("Quantity updated", status=201) # TODO: STATUS REPONSE
+    return HttpResponse("Quantity updated", status=201)
 
 #GET RENTAL BY RENTAL ID WITH ALL ITEMS WITH INFO
 def get_rental(request):
@@ -313,7 +310,6 @@ def createRental(request):
 
     # After ensuring that there are enough items to rent out, start creating the rental.
 
-    # TODO Date time getting testing.
     pickup_time = req_body["pickup"]
     return_time = req_body["return"]
 
@@ -377,7 +373,7 @@ def get_all_rentals(request):
     # combine each rental info with its account info
     # get list of items for each rental, combine with the rest
 
-    # get column names for rental, item_unit, and account
+    # get column names for rental, item_unit, and account, removing unnecessary columns as well
     rental_columns = get_column_names("rental")
     item_unit_columns = get_column_names("item_unit")
     account_columns = get_column_names("account")

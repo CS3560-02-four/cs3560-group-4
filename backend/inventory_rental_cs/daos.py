@@ -8,7 +8,6 @@ from . import models
 #just set the id to 0. I would put 0 as a default value but python doesn't let me 
 #since id is the first parameter of all constructors
 
-#EXAMPLE DATA ACCESS OBJECT FOR ITEM - INCLUDES ALL CRUD METHODS
 class ItemDao:
     #add new item, pass instance of Item class
     def insert_item(item: models.Item):
@@ -273,8 +272,7 @@ class ItemUnitDao:
         result = [models.ItemUnit(r[0], r[1], r[2], r[3]) for r in rows]
         return result
     
-    # Mark Item As Damaged Use Case (good or damaged) - Update (Question for Milosz: Shouldn the Item Class do this instead, 
-    # since we'd want to keep track of the status of individual items??)
+    # Mark Item As Damaged Use Case (good or damaged)
     # item_unit_id: ID of rental item to be updated
     # status: New status of the rental item (good or damaged)
     def update_item_unit_status(item_unit_id, status):
