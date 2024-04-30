@@ -14,19 +14,22 @@ export default async function Page({ params }: { params: { account: string } }) 
     const accountResponse = await fetchAccountData(parseInt(params.account));
     const account: Account = accountResponse.data;
     const rentalsResponse = await getRentals(parseInt(params.account));
-    const rentals: Array<AdminRental> = rentalsResponse.data.filter((rental: Rental) => rental.status === "reserved" || rental.status === "active").map((rental: Rental) => {
-        const adminRental: AdminRental = {
-            id: rental.id,
-            pickupDatetime: formatDatetime(rental.pickupDatetime),
-            returnDatetime: formatDatetime(rental.returnDatetime),
-            status: rental.status === "reserved" ? "reserved" : "active",
-            accountId: account.id,
-            accountName: account.firstName + " " + account.lastName
-        };
-        return adminRental;
-    });
+    let rentals: Array<AdminRental> = [];
+    if (rentalsResponse.data) {
+        rentals = rentalsResponse.data.filter((rental: Rental) => rental.status === "reserved" || rental.status === "active").map((rental: Rental) => {
+            const adminRental: AdminRental = {
+                id: rental.id,
+                pickupDatetime: formatDatetime(rental.pickupDatetime),
+                returnDatetime: formatDatetime(rental.returnDatetime),
+                status: rental.status === "reserved" ? "reserved" : "active",
+                accountId: account.id,
+                accountName: account.firstName + " " + account.lastName
+            };
+            return adminRental;
+        });
+    }
 
-    const statusTextColor =  account.status === "normal" ? "text-green-900" : "text-yellow-600";
+    const statusTextColor = account.status === "normal" ? "text-green-900" : "text-yellow-600";
 
 
     if (cookies().has('admin')) {
@@ -41,9 +44,7 @@ export default async function Page({ params }: { params: { account: string } }) 
                     <Link href={`/admin/accounts/balance/${params.account}`}><button className="text-white rounded text-l p-2 font-medium bg-green-900">Change Balance</button></Link>
                     <AccountStatusButton accountId={account.id} status={account.status} />
                 </div>
-                <div className="flex flex-col gap-9 w-[60%]">
-                    {rentals.map((rental: AdminRental) => <AdminRentalField key={rental.id} adminRental={rental} displayLinkToAccount={false} />)}
-                </div>
+                {rentals.length !== 0 ? <div className="flex flex-col gap-9 w-[60%]">{rentals.map((rental: AdminRental) => <AdminRentalField key={rental.id} adminRental={rental} displayLinkToAccount={false} />)}</div> : <div>There are no rentals for this account.</div>}
             </div>
         );
     }
