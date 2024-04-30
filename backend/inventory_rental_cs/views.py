@@ -51,8 +51,9 @@ def add_to_cart(request):
 
     #check how many available
     item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None) #get units not associated with a rental
-    print(item_units_check)
+    item_units_check = list(filter(lambda i: i.status != "damaged", item_units_check))
     sum_available = len(item_units_check) #get total number of available units
+    
     if sum_available == 0:
         return HttpResponse("Item not available", status=500)
 
