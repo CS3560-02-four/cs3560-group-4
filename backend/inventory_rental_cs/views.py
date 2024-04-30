@@ -541,7 +541,7 @@ def mark_item_unit_as_damaged(request):
     
 def put_account_on_hold(request):
     account_id = request.GET.get("account_id")
-    status = 1  # Assuming 'hold' corresponds to a value of 1 in the database
+    status = "hold"  # Assuming 'hold' corresponds to a value of 1 in the database
     try:
         # Update the account status using the retrieved account_id
         daos.AccountDao.update_account_status(account_id, status)
