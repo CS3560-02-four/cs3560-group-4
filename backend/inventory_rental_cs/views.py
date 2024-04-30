@@ -550,3 +550,23 @@ def change_account_status(request):
         return JsonResponse({"message": f"Account {account_id} status changed successfully."})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+#Get all accounts - all info except username, password, and admin status
+def get_all_accounts(request):
+    #get column names and remove unnecessary ones
+    account_columns = get_column_names("account")
+    account_columns.remove("username")
+    account_columns.remove("password")
+    account_columns.remove("admin")
+    account_columns.remove("student")
+
+    response = []
+
+    #get all accounts and add them to response
+    accounts = daos.AccountDao.get_all_accounts()
+    for a in accounts:
+        account_attributes = [a.id, a.email, a.first_name, a.last_name, a.address, a.status, a.balance]
+        account_data = dict(zip(account_columns, account_attributes))
+        response.append(account_data)
+
+    return JsonResponse(response, safe=False)

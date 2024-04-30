@@ -157,6 +157,15 @@ class AccountDao:
         rows = cursor.fetchall() #returns list of tuples
         result = [models.Account(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10]) for r in rows]
         return result
+    
+    #SELECT all accounts
+    def get_all_accounts() -> list[models.Account]:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM account")
+        rows = cursor.fetchall()
+        result = [models.Account(r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10]) for r in rows]
+        return result
+
 
 # DAO for Rental Appointment/Reservation
 class RentalDao:
