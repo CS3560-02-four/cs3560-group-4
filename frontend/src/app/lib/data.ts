@@ -409,7 +409,7 @@ export async function updateBalance(accountId: string, newBalance: string) {
 
 export async function fetchAllAccounts(): Promise<DataResponse> {
     try {
-        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-accounts/", {
+        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-student-accounts/", {
             "cache": "no-store"
         });
         const data = await response.json();
