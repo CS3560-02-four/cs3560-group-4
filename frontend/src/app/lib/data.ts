@@ -1,7 +1,3 @@
-/** 
- * All function are temp using the mock api.
- * Add error handling later.
-*/
 'use server';
 import { Item, CartItem, Account, DataResponse, Rental, ItemUnit, AdminRental } from "./interfaces";
 import { redirect } from "next/navigation";
@@ -198,7 +194,6 @@ export async function cancelRental(rentalId: number) {
     }
 }
 
-//add getting individual rental
 export async function getRental(rentalId: number): Promise<DataResponse> {
     try {
         const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-rental?rental_id=${rentalId}`, {
@@ -231,7 +226,6 @@ export async function getRental(rentalId: number): Promise<DataResponse> {
     }
 }
 
-//finish this later
 export async function authenticateAdmin(username: string, password: string): Promise<DataResponse> {
     const formBody = [encodeURIComponent("username") + "=" + encodeURIComponent(username), encodeURIComponent("password") + "=" + encodeURIComponent(password)].join("&");
     const response = await fetch("http://127.0.0.1:8000/inventory_rental/admin-login/", {
@@ -410,5 +404,35 @@ export async function updateBalance(accountId: string, newBalance: string) {
         return {
             error: "An error occured while updating account balance"
         }
+    }
+}
+
+export async function fetchAllAccounts(): Promise<DataResponse> {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/inventory_rental/get-all-accounts/", {
+            "cache": "no-store"
+        });
+        const data = await response.json();
+        const accounts: Array<Account> = data.map((data: any) => {
+            const account: Account = {
+                username: "", // no username needed here
+                id: data.account_id,
+                email: data.email,
+                firstName: data.first_name,
+                lastName: data.last_name,
+                address: data.address,
+                status: data.status,
+                balance: data.balance
+            };
+            return account;
+        });
+        return {
+            data: accounts
+        };
+    }
+    catch (error) {
+        return {
+            error: "An error occured while fetching account data."
+        };
     }
 }
