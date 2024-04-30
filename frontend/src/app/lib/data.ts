@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { formatDatetime } from "./utils";
 
 export async function fetchAllItems(): Promise<DataResponse> {
-    const response = await fetch('http://127.0.0.1:8000/inventory_rental/get-available-items');
+    const response = await fetch('http://127.0.0.1:8000/inventory_rental/get-available-items', {
+        "cache": "no-store"
+    });
     const data = await response.json();
     const items = data.map((data: any) => {
         const item: Item = {
@@ -22,7 +24,9 @@ export async function fetchAllItems(): Promise<DataResponse> {
 }
 
 export async function fetchCartItems(accountId: number): Promise<DataResponse> {
-    const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-cart-items?account_id=${accountId}`);
+    const response = await fetch(`http://127.0.0.1:8000/inventory_rental/get-cart-items?account_id=${accountId}`, {
+        "cache": "no-store"
+    });
     const data = await response.json();
     const cartItems: Array<CartItem> = data.map((data: any) => {
         const item: CartItem = {
@@ -139,7 +143,9 @@ export async function addToCart(accountId: number, itemId: number) {
 
 export async function getRentals(accountId: number): Promise<DataResponse> {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/rentalDetails?account_id=${accountId}`);
+        const response = await fetch(`http://127.0.0.1:8000/inventory_rental/rentalDetails?account_id=${accountId}`, {
+            "cache": "no-store"
+        });
         const data = await response.json();
         const rentals: Array<Rental> = data.map((data: any) => {
             const rental: Rental = {
