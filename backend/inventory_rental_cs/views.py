@@ -35,7 +35,14 @@ def get_cart_items(request):
         item = daos.ItemDao.get_item(item_id=i.item_id)[0] #get Item associated with this CartItem
         item_attrbts = [item.id, item.name, item.description, item.category]
         cart_item_attrbts = [i.id, i.item_id, i.quantity, i.account_id]
-        num_available = len(daos.ItemUnitDao.get_item_unit(item_id=item.id, rental_id=None))
+
+        units = daos.ItemUnitDao.get_item_unit(item_id=item.id, rental_id=None)
+        #get rid of damaged units
+        units = list(filter(lambda i: i.status != "damaged", units))
+
+        #get # of available units
+        num_available = len(units)
+
         cart_item_json = dict(zip(cart_item_columns, cart_item_attrbts))
         cart_item_json.update(dict(zip(item_columns, item_attrbts)))
         cart_item_json["available_quantity"] = num_available
@@ -108,6 +115,8 @@ def update_cart_item_quantity(request):
     #quantity check if increasing
     if new_quantity > cart_item.quantity:
         item_units_check = daos.ItemUnitDao.get_item_unit(item_id=item_id, rental_id=None) #get units not associated with a rental
+        # get rid of damaged units
+        item_units_check = list(filter(lambda i: i.status != "damaged", item_units_check))
         sum_available = len(item_units_check) #get total number of available units
 
         if new_quantity > sum_available:
