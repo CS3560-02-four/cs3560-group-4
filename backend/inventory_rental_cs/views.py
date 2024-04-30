@@ -547,8 +547,8 @@ def change_account_status(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-#Get all accounts - all info except username, password, and admin status
-def get_all_accounts(request):
+#Get all student accounts - all info except username, password, and admin status
+def get_all_student_accounts(request):
     #get column names and remove unnecessary ones
     account_columns = get_column_names("account")
     account_columns.remove("username")
@@ -559,7 +559,7 @@ def get_all_accounts(request):
     response = []
 
     #get all accounts and add them to response
-    accounts = daos.AccountDao.get_all_accounts()
+    accounts = daos.AccountDao.get_account(student=1)
     for a in accounts:
         account_attributes = [a.id, a.email, a.first_name, a.last_name, a.address, a.status, a.balance]
         account_data = dict(zip(account_columns, account_attributes))

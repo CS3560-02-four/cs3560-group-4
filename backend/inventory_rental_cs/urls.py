@@ -24,5 +24,5 @@ urlpatterns = [
     path("create-new-item/", views.create_new_item), # DONE Creates a new item and item units, QUERY PARAMS: item_name, item_description, item_category, item_quantity
     path("change-item-status/", views.mark_item_unit_as_damaged), # Marks specified item_unit_id as "damaged"
     path("change-account-status/", views.change_account_status), # Marks specified account as 1 which is "hold"
-    path("get-all-accounts/", views.get_all_accounts) # Gets info of all accounts in the DB, excludign the username,password, and admin/student status, no params needed
+    path("get-all-student-accounts/", views.get_all_student_accounts) # Gets info of all accounts in the DB, excludign the username,password, and admin/student status, no params needed
 ]
