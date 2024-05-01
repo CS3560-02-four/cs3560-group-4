@@ -6,6 +6,16 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { item: string } }) {
+
+    function sortFn(a: ItemUnit, b: ItemUnit) {
+        if (a.rentalId !== null && b.rentalId === null)
+            return -1;
+        else if (a.rentalId === null && b.rentalId !== null)
+            return 1;
+        else
+            return 0;
+    }
+
     const response: DataResponse = await fetchItemUnits(params.item);
     const [item, itemUnits] = response.data;
     if (cookies().has('admin')) {
@@ -21,7 +31,7 @@ export default async function Page({ params }: { params: { item: string } }) {
                 </div>
                 <div className="flex flex-col gap-9 w-[60%]">
                     {/**Map item units here*/}
-                    {itemUnits.map((unit: ItemUnit) => <ItemUnitField key={unit.id} itemUnit={unit} />)}
+                    {itemUnits.sort(sortFn).map((unit: ItemUnit) => <ItemUnitField key={unit.id} itemUnit={unit} />)}
                 </div>
             </div>
         );

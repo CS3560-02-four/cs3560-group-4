@@ -8,7 +8,7 @@ export default function AdminAccountField({ account }: { account: Account }) {
 
     return (
         <div className="rounded shadow-md p-4 flex flex-col gap-3 w-[100%]">
-            <div className={`${statusTextColor} text-2xl font-medium`}>{account.firstName} {account.lastName} - account #{account.id}</div>
+            <div className={`${statusTextColor} text-2xl font-medium`}>{account.firstName} {account.lastName} - Account #{account.id}</div>
             <div className={`${statusTextColor} text-xl font-medium`}>Status: {account.status[0].toUpperCase()}{account.status.slice(1)}</div>
             <div className={`${statusTextColor} text-xl font-medium`}>Balance: ${account.balance}</div>
             <div className="flex gap-4">
