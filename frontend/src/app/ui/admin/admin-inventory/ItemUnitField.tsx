@@ -1,5 +1,5 @@
 'use client';
-import { markItemDamaged } from "@/app/lib/data";
+import { markItemDamaged, markItemNotDamaged } from "@/app/lib/data";
 import { ItemUnit } from "@/app/lib/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,8 @@ export default function ItemUnitField({ itemUnit }: { itemUnit: ItemUnit }) {
     }
 
     function onUnmarkDamaged() {
-        
+        markItemNotDamaged(itemUnit.id);
+        setDamaged(false);
     }
 
     return (

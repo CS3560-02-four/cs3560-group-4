@@ -82,7 +82,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "inventory_rental",
         "USER": "postgres",
-        "PASSWORD": "1234",
+        "PASSWORD": "udemy",
         "HOST": "localhost",
         "PORT": "5432"
     }

@@ -393,7 +393,7 @@ export async function markItemDamaged(itemUnitId: number) {
 
 export async function markItemNotDamaged(itemUnitId: number) {
     try {
-        await fetch(`http://127.0.0.1:8000/inventory_rental/change-item-status/?item_unit_id=${itemUnitId}`);
+        await fetch(`http://127.0.0.1:8000/inventory_rental/mark-item-as-normal/?item_unit_id=${itemUnitId}`);
     }
     catch (error) {
         return {

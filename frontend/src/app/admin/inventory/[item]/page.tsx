@@ -8,9 +8,9 @@ import { redirect } from "next/navigation";
 export default async function Page({ params }: { params: { item: string } }) {
 
     function sortFn(a: ItemUnit, b: ItemUnit) {
-        if (a.rentalId !== null && b.rentalId === null)
+        if ((a.rentalId !== null && b.rentalId === null) || (a.status === "normal" && b.status === "damaged"))
             return -1;
-        else if (a.rentalId === null && b.rentalId !== null)
+        else if ((a.rentalId === null && b.rentalId !== null) || (a.status === "damaged" && b.status === "normal"))
             return 1;
         else
             return 0;
