@@ -539,10 +539,11 @@ def get_all_items_admin(request):
         response.append(item_json)
     return JsonResponse(response, safe=False)
 
+# Marks the given item unit as damaged
 def mark_item_unit_as_damaged(request):
     # Retrieve the item_unit_id from the query parameters
     item_unit_id = request.GET.get("item_unit_id")
-    status = "damaged"  # Assuming the status for marking as damaged is always "damaged"
+    status = "damaged"  # set the item status as "damaged"
     try:
         # Update the item unit status using the retrieved item_unit_id
         daos.ItemUnitDao.update_item_unit_status(item_unit_id, status)
@@ -550,6 +551,19 @@ def mark_item_unit_as_damaged(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
+# Marks the given item unit as normal
+def mark_item_unit_as_normal(request):
+    # Retrieve the item_unit_id from the query parameters
+    item_unit_id = request.GET.get("item_unit_id")
+    status = "normal"  # set the item status as "normal"
+    try:
+        # Update the item unit status using the retrieved item_unit_id
+        daos.ItemUnitDao.update_item_unit_status(item_unit_id, status)
+        return JsonResponse({"message": f"Item unit {item_unit_id} marked as normal successfully."})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+# Changes account status to given status (normal or hold)
 def change_account_status(request):
     account_id = request.GET.get("account_id")
     status = request.GET.get("status")
